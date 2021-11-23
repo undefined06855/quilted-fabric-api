@@ -2,6 +2,8 @@ archivesBaseName = "fabric-api-base"
 version = getSubprojectVersion(project)
 
 dependencies {
+	modApi getQslModule("core", "qsl_base", "1.0.0")
+
 	testmodImplementation project(path: ':fabric-command-api-v1', configuration: 'namedElements')
 	testmodImplementation project(path: ':fabric-lifecycle-events-v1', configuration: 'namedElements')
 }

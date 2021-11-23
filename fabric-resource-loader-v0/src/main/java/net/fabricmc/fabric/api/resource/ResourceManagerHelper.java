@@ -16,6 +16,9 @@
 
 package net.fabricmc.fabric.api.resource;
 
+import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
+import org.quiltmc.qsl.resource.loader.impl.ResourceLoaderImpl;
+
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -26,6 +29,7 @@ import net.fabricmc.loader.api.ModContainer;
 /**
  * Helper for working with {@link ResourceManager} instances, and other resource loader generalities.
  */
+@Deprecated
 public interface ResourceManagerHelper {
 	/**
 	 * Add a resource reload listener for a given registry.
@@ -72,7 +76,7 @@ public interface ResourceManagerHelper {
 	 * @return {@code true} if successfully registered the resource pack, else {@code false}
 	 */
 	static boolean registerBuiltinResourcePack(Identifier id, ModContainer container, ResourcePackActivationType activationType) {
-		return ResourceManagerHelperImpl.registerBuiltinResourcePack(id, "resourcepacks/" + id.getPath(), container, activationType);
+		return ResourceLoader.registerBuiltinResourcePack(id, container, activationType.getQuiltEquivalent());
 	}
 
 	/**
@@ -98,7 +102,8 @@ public interface ResourceManagerHelper {
 	 */
 	@Deprecated
 	static boolean registerBuiltinResourcePack(Identifier id, String subPath, ModContainer container, boolean enabledByDefault) {
-		return ResourceManagerHelperImpl.registerBuiltinResourcePack(id, subPath, container,
-				enabledByDefault ? ResourcePackActivationType.DEFAULT_ENABLED : ResourcePackActivationType.NORMAL);
+		return ResourceLoaderImpl.registerBuiltinResourcePack(id, subPath, container,
+				enabledByDefault ? org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.DEFAULT_ENABLED
+						: org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.NORMAL);
 	}
 }

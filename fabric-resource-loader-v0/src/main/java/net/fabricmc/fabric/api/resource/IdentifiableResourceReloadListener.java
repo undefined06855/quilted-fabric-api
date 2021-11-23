@@ -19,6 +19,8 @@ package net.fabricmc.fabric.api.resource;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
+
 import net.minecraft.resource.ResourceReloader;
 import net.minecraft.util.Identifier;
 
@@ -31,7 +33,8 @@ import net.minecraft.util.Identifier;
  *
  * @see ResourceReloadListenerKeys
  */
-public interface IdentifiableResourceReloadListener extends ResourceReloader {
+@Deprecated
+public interface IdentifiableResourceReloadListener extends ResourceReloader, IdentifiableResourceReloader {
 	/**
 	 * @return The unique identifier of this listener.
 	 */
@@ -44,5 +47,17 @@ public interface IdentifiableResourceReloadListener extends ResourceReloader {
 	 */
 	default Collection<Identifier> getFabricDependencies() {
 		return Collections.emptyList();
+	}
+
+	/* Quilt */
+
+	@Override
+	default Identifier getQuiltId() {
+		return this.getFabricId();
+	}
+
+	@Override
+	default Collection<Identifier> getQuiltDependencies() {
+		return this.getFabricDependencies();
 	}
 }

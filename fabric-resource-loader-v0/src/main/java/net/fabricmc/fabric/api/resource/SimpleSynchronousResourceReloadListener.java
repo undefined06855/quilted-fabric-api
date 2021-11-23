@@ -22,5 +22,6 @@ import net.minecraft.resource.SynchronousResourceReloader;
  * A simplified version of the "resource reload listener" interface, hiding the
  * peculiarities of the API and ensuring all data is loaded on the main thread.
  */
+@Deprecated
 public interface SimpleSynchronousResourceReloadListener extends IdentifiableResourceReloadListener, SynchronousResourceReloader {
 }

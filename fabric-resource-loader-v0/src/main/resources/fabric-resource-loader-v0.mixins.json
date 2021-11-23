@@ -4,21 +4,12 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "FileResourcePackProviderAccessor",
-    "DefaultResourcePackMixin",
     "KeyedResourceReloadListenerMixin",
-    "MinecraftServerMixin",
-    "NamespaceResourceManagerAccessor",
-    "NamespaceResourceManagerMixin",
-    "ReloadableResourceManagerImplMixin",
-    "ResourcePackManagerMixin",
-    "ResourcePackManagerAccessor",
-    "ResourcePackProfileAccessor"
+    "ModResourcePackProviderMixin",
+    "NamespaceResourceManagerAccessor"
   ],
   "client": [
-    "client.ClientBuiltinResourcePackProviderMixin",
-    "client.CreateWorldScreenMixin",
     "client.FontManagerResourceReloadListenerMixin",
-    "client.GameOptionsMixin",
     "client.KeyedResourceReloadListenerClientMixin"
   ],
   "injectors": {

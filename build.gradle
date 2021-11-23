@@ -22,7 +22,32 @@ def ENV = System.getenv()
 version = project.version + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch()
 logger.lifecycle("Building Fabric: " + version)
 
+
 import org.apache.commons.codec.digest.DigestUtils
+import org.kohsuke.github.GHReleaseBuilder
+
+def isMinecraftVersionNonRelease() {
+	return project.minecraft_version.matches("^\\d\\dw\\d\\d[a-z]\$");
+}
+
+def getMinecraftVersionFancyString() {
+	if (isMinecraftVersionNonRelease()) {
+		return project.minecraft_version;
+	}
+
+	String[] version = project.minecraft_version.split("\\.");
+
+	int index;
+	if ((index = version[1].indexOf("-pre")) != -1 || (index = version[1].indexOf("-rc")) != -1) {
+		version[1] = version[1].substring(0, index);
+	}
+
+	return version[0] + '.' + version[1];
+}
+
+def getQslModule(String library, String module, String version) {
+	return "org.quiltmc.qsl.${library}:${module}:${version}+${getMinecraftVersionFancyString()}-SNAPSHOT";
+}
 
 def getSubprojectVersion(project) {
 	// Get the version from the gradle.properties file
@@ -119,6 +144,10 @@ allprojects {
 
 	repositories {
 		mavenLocal()
+		maven {
+			name = "Quilt"
+			url = "https://maven.quiltmc.org/repository/snapshot"
+		}
 	}
 
 	processResources {
@@ -359,7 +388,7 @@ curseforge {
 	}
 }
 
-import org.kohsuke.github.GHReleaseBuilder
+
 import org.kohsuke.github.GitHub
 
 task github(dependsOn: remapMavenJar) {

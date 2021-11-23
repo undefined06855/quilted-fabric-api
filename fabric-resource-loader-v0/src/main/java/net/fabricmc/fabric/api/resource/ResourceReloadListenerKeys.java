@@ -16,6 +16,8 @@
 
 package net.fabricmc.fabric.api.resource;
 
+import org.quiltmc.qsl.resource.loader.api.reloader.ResourceReloaderKeys;
+
 import net.minecraft.util.Identifier;
 
 /**
@@ -23,20 +25,22 @@ import net.minecraft.util.Identifier;
  *
  * @see IdentifiableResourceReloadListener
  */
+@Deprecated
 public final class ResourceReloadListenerKeys {
 	// client
-	public static final Identifier SOUNDS = new Identifier("minecraft:sounds");
-	public static final Identifier FONTS = new Identifier("minecraft:fonts");
-	public static final Identifier MODELS = new Identifier("minecraft:models");
-	public static final Identifier LANGUAGES = new Identifier("minecraft:languages");
-	public static final Identifier TEXTURES = new Identifier("minecraft:textures");
+	public static final Identifier SOUNDS = ResourceReloaderKeys.Client.SOUNDS;
+	public static final Identifier FONTS = ResourceReloaderKeys.Client.FONTS;
+	public static final Identifier MODELS = ResourceReloaderKeys.Client.MODELS;
+	public static final Identifier LANGUAGES = ResourceReloaderKeys.Client.LANGUAGES;
+	public static final Identifier TEXTURES = ResourceReloaderKeys.Client.TEXTURES;
 
 	// server
-	public static final Identifier TAGS = new Identifier("minecraft:tags");
-	public static final Identifier RECIPES = new Identifier("minecraft:recipes");
-	public static final Identifier ADVANCEMENTS = new Identifier("minecraft:advancements");
-	public static final Identifier FUNCTIONS = new Identifier("minecraft:functions");
-	public static final Identifier LOOT_TABLES = new Identifier("minecraft:loot_tables");
+	public static final Identifier TAGS = ResourceReloaderKeys.Server.TAGS;
+	public static final Identifier RECIPES = ResourceReloaderKeys.Server.RECIPES;
+	public static final Identifier ADVANCEMENTS = ResourceReloaderKeys.Server.ADVANCEMENTS;
+	public static final Identifier FUNCTIONS = ResourceReloaderKeys.Server.FUNCTIONS;
+	public static final Identifier LOOT_TABLES = ResourceReloaderKeys.Server.LOOT_TABLES;
 
-	private ResourceReloadListenerKeys() { }
+	private ResourceReloadListenerKeys() {
+	}
 }

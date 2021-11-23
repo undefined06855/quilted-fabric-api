@@ -43,11 +43,12 @@ import net.minecraft.util.profiler.Profiler;
  *
  * @param <T> The data object.
  */
+@Deprecated
 public interface SimpleResourceReloadListener<T> extends IdentifiableResourceReloadListener {
 	@Override
 	default CompletableFuture<Void> reload(ResourceReloader.Synchronizer helper, ResourceManager manager, Profiler loadProfiler, Profiler applyProfiler, Executor loadExecutor, Executor applyExecutor) {
 		return load(manager, loadProfiler, loadExecutor).thenCompose(helper::whenPrepared).thenCompose(
-			(o) -> apply(o, manager, applyProfiler, applyExecutor)
+				(o) -> apply(o, manager, applyProfiler, applyExecutor)
 		);
 	}
 

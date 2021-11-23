@@ -23,6 +23,7 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 /**
  * Interface implemented by mod-provided resource packs.
  */
+@Deprecated
 public interface ModResourcePack extends ResourcePack {
 	/**
 	 * @return The ModMetadata object associated with the mod providing this

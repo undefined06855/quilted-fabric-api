@@ -19,21 +19,28 @@ package net.fabricmc.fabric.api.resource;
 /**
  * Represents the resource pack activation type.
  */
+@Deprecated
 public enum ResourcePackActivationType {
 	/**
 	 * Normal activation. The user has full control over the activation of the resource pack.
 	 */
-	NORMAL,
+	NORMAL(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.NORMAL),
 	/**
 	 * Enabled by default. The user has still full control over the activation of the resource pack.
 	 *
 	 * <p>Note: this setting can only be satisfied on data packs, client resource packs cannot be by default enabled.
 	 */
-	DEFAULT_ENABLED,
+	DEFAULT_ENABLED(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.DEFAULT_ENABLED),
 	/**
 	 * Always enabled. The user cannot disable the resource pack.
 	 */
-	ALWAYS_ENABLED;
+	ALWAYS_ENABLED(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.ALWAYS_ENABLED);
+
+	private final org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType quiltEquivalent;
+
+	ResourcePackActivationType(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType quiltEquivalent) {
+		this.quiltEquivalent = quiltEquivalent;
+	}
 
 	/**
 	 * Returns whether this resource pack will be enabled by default or not.
@@ -42,5 +49,9 @@ public enum ResourcePackActivationType {
 	 */
 	public boolean isEnabledByDefault() {
 		return this == DEFAULT_ENABLED || this == ALWAYS_ENABLED;
+	}
+
+	public org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType getQuiltEquivalent() {
+		return this.quiltEquivalent;
 	}
 }

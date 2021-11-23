@@ -16,24 +16,18 @@
 
 package net.fabricmc.fabric.impl.resource.loader;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 import net.minecraft.resource.ResourcePackProfile;
 import net.minecraft.resource.ResourcePackProvider;
-import net.minecraft.resource.ResourcePackSource;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.text.TranslatableText;
-
-import net.fabricmc.fabric.api.resource.ModResourcePack;
 
 /**
  * Represents a resource pack provider for mods and built-in mods resource packs.
  */
 public class ModResourcePackCreator implements ResourcePackProvider {
-	public static final ResourcePackSource RESOURCE_PACK_SOURCE = text -> new TranslatableText("pack.nameAndSource", text, new TranslatableText("pack.source.fabricmod"));
 	public static final ModResourcePackCreator CLIENT_RESOURCE_PACK_PROVIDER = new ModResourcePackCreator(ResourceType.CLIENT_RESOURCES);
+	public static final ModResourcePackCreator SERVER_RESOURCE_PACK_PROVIDER = new ModResourcePackCreator(ResourceType.SERVER_DATA);
 	private final ResourcePackProfile.Factory factory;
 	private final ResourceType type;
 
@@ -54,37 +48,7 @@ public class ModResourcePackCreator implements ResourcePackProvider {
 
 	@Override
 	public void register(Consumer<ResourcePackProfile> consumer, ResourcePackProfile.Factory factory) {
-		/*
-			Register order rule in this provider:
-			1. Mod resource packs
-			2. Mod built-in resource packs
-
-			Register order rule globally:
-			1. Default and Vanilla built-in resource packs
-			2. Mod resource packs
-			3. Mod built-in resource packs
-			4. User resource packs
-		 */
-
-		// Build a list of mod resource packs.
-		List<ModResourcePack> packs = new ArrayList<>();
-		ModResourcePackUtil.appendModResourcePacks(packs, type, null);
-
-		if (!packs.isEmpty()) {
-			// Make the resource pack profile for mod resource packs.
-			// Mod resource packs must always be enabled to avoid issues
-			// and inserted on top to ensure that they are applied before user resource packs and after default/programmer art resource pack.
-			// @TODO: "inserted on top" comment is deprecated, it does not guarantee the condition "applied before user resource packs".
-			ResourcePackProfile resourcePackProfile = ResourcePackProfile.of("Fabric Mods",
-					true, () -> new FabricModResourcePack(this.type, packs), factory, ResourcePackProfile.InsertionPosition.TOP,
-					RESOURCE_PACK_SOURCE);
-
-			if (resourcePackProfile != null) {
-				consumer.accept(resourcePackProfile);
-			}
-		}
-
-		// Register all built-in resource packs provided by mods.
-		ResourceManagerHelperImpl.registerBuiltinResourcePacks(this.type, consumer, factory);
+		// This should stay as it's been used in *some* mods, it's bad I know, but it's an easy way to inject resource
+		// packs, it highlights the need for an API.
 	}
 }
