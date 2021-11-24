@@ -1,2 +1,6 @@
 archivesBaseName = "fabric-crash-report-info-v1"
 version = getSubprojectVersion(project)
+
+dependencies {
+	include modApi(getQslModule("core", "crash_info", "1.0.0"))
+}
