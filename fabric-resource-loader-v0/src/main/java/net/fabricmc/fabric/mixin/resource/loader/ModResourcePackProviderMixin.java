@@ -32,7 +32,7 @@ import net.minecraft.resource.ResourceType;
 import net.fabricmc.fabric.impl.resource.loader.ModResourcePackCreator;
 
 @SuppressWarnings("UnstableApiUsage")
-@Mixin(value = ModResourcePackProvider.class, remap = false)
+@Mixin(ModResourcePackProvider.class)
 public class ModResourcePackProviderMixin {
 	@Shadow
 	@Final
