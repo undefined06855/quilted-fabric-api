@@ -7,6 +7,8 @@ moduleDependencies(project, [
 ])
 
 dependencies {
+	include modApi(getQslModule("data", "tags", "1.0.0"))
+
 	testmodImplementation project(path: ':fabric-command-api-v1', configuration: 'namedElements')
 	testmodImplementation project(path: ':fabric-key-binding-api-v1', configuration: 'namedElements')
 	testmodImplementation project(path: ':fabric-lifecycle-events-v1', configuration: 'namedElements')

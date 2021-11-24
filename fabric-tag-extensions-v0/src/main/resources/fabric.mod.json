@@ -18,7 +18,8 @@
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric-api-base": "*",
-    "fabric-resource-loader-v0": "*"
+    "fabric-resource-loader-v0": "*",
+    "quilt_tags": ">=1.0.0"
   },
   "description": "Hooks for tags.",
   "mixins": [

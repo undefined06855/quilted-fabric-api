@@ -26,8 +26,6 @@ import net.minecraft.tag.Tag;
 import net.minecraft.tag.TagGroup;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.impl.tag.extension.TagDelegate;
-
 /**
  * Helper methods for registering Tags.
  *
@@ -35,10 +33,11 @@ import net.fabricmc.fabric.impl.tag.extension.TagDelegate;
  */
 @Deprecated
 public final class TagRegistry {
-	private TagRegistry() { }
+	private TagRegistry() {
+	}
 
 	public static <T> Tag.Identified<T> create(Identifier id, Supplier<TagGroup<T>> containerSupplier) {
-		return new TagDelegate<>(id, containerSupplier);
+		return org.quiltmc.qsl.tag.api.TagRegistry.of(containerSupplier).create(id);
 	}
 
 	/**

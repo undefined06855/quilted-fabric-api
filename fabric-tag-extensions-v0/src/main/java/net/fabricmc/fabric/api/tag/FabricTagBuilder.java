@@ -16,15 +16,20 @@
 
 package net.fabricmc.fabric.api.tag;
 
+import org.quiltmc.qsl.tag.api.QuiltTagBuilder;
+
 /**
  * Interface implemented by {@link net.minecraft.tag.Tag.Builder} instances when
  * Fabric API is present.
  *
  * @param <T>
  */
-public interface FabricTagBuilder<T> {
+@Deprecated
+public interface FabricTagBuilder<T> extends QuiltTagBuilder {
 	/**
 	 * Clear the contained entries and mark the tag as replaced.
 	 */
-	void clearTagEntries();
+	default void clearTagEntries() {
+		this.clearEntries();
+	}
 }

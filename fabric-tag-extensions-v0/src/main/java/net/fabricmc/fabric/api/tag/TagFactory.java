@@ -18,15 +18,12 @@ package net.fabricmc.fabric.api.tag;
 
 import java.util.function.Supplier;
 
+import org.quiltmc.qsl.tag.api.TagRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.EntityTypeTags;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.tag.GameEventTags;
-import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.tag.TagGroup;
 import net.minecraft.util.Identifier;
@@ -40,13 +37,14 @@ import net.fabricmc.fabric.impl.tag.extension.TagFactoryImpl;
 /**
  * A factory for accessing datapack tags.
  */
+@Deprecated
 public interface TagFactory<T> {
-	TagFactory<Item> ITEM = of(ItemTags::getTagGroup);
-	TagFactory<Block> BLOCK = of(BlockTags::getTagGroup);
-	TagFactory<Fluid> FLUID = of(FluidTags::getTagGroup);
-	TagFactory<GameEvent> GAME_EVENT = of(GameEventTags::getTagGroup);
-	TagFactory<EntityType<?>> ENTITY_TYPE = of(EntityTypeTags::getTagGroup);
-	TagFactory<Biome> BIOME = of(Registry.BIOME_KEY, "tags/biomes");
+	TagFactory<Item> ITEM = TagRegistry.ITEM::create;
+	TagFactory<Block> BLOCK = TagRegistry.BLOCK::create;
+	TagFactory<Fluid> FLUID = TagRegistry.FLUID::create;
+	TagFactory<GameEvent> GAME_EVENT = TagRegistry.GAME_EVENT::create;
+	TagFactory<EntityType<?>> ENTITY_TYPE = TagRegistry.ENTITY_TYPE::create;
+	TagFactory<Biome> BIOME = TagRegistry.BIOME::create;
 
 	/**
 	 * Create a new tag factory for specified registry.

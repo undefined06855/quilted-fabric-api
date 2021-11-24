@@ -16,15 +16,19 @@
 
 package net.fabricmc.fabric.api.tag;
 
+import org.quiltmc.qsl.tag.api.QuiltTag;
+
 /**
  * Interface implemented by {@link net.minecraft.tag.Tag} instances when
  * Fabric API is present.
  *
  * @param <T>
  */
-public interface FabricTag<T> {
+@Deprecated
+public interface FabricTag<T> extends QuiltTag<T> {
 	/**
 	 * @return True if the given tag has been "replaced" by a datapack at least once.
 	 */
+	@Override
 	boolean hasBeenReplaced();
 }
