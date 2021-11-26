@@ -5,7 +5,6 @@
   "mixins": [
     "MinecraftServerMixin",
     "ServerWorldEntityLoaderMixin",
-    "ServerWorldMixin",
     "ThreadedAnvilChunkStorageMixin",
     "WorldMixin"
   ],
@@ -13,8 +12,6 @@
     "client.ClientChunkManagerMixin",
     "client.ClientPlayNetworkHandlerMixin",
     "client.ClientWorldEntityLoaderMixin",
-    "client.ClientWorldMixin",
-    "client.MinecraftClientMixin",
     "client.WorldChunkMixin"
   ],
   "server": [

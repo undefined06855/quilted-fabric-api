@@ -23,6 +23,7 @@ import net.minecraft.util.profiler.Profiler;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
+@Deprecated
 public final class ServerTickEvents {
 	private ServerTickEvents() {
 	}

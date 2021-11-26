@@ -23,6 +23,7 @@ import net.minecraft.world.PersistentState;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
+@Deprecated
 public final class ServerWorldEvents {
 	/**
 	 * Called just after a world is loaded by a Minecraft server.

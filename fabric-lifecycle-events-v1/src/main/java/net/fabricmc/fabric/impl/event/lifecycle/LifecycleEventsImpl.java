@@ -16,6 +16,11 @@
 
 package net.fabricmc.fabric.impl.event.lifecycle;
 
+import org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents;
+import org.quiltmc.qsl.lifecycle.api.event.ServerTickEvents;
+import org.quiltmc.qsl.lifecycle.api.event.ServerWorldLoadEvents;
+import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
+
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.chunk.WorldChunk;
@@ -58,5 +63,16 @@ public final class LifecycleEventsImpl implements ModInitializer {
 				ServerEntityEvents.ENTITY_UNLOAD.invoker().onUnload(entity, world);
 			}
 		});
+
+		ServerLifecycleEvents.STARTING.register(net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STARTING.invoker()::onServerStarting);
+		ServerLifecycleEvents.READY.register(net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STARTED.invoker()::onServerStarted);
+		ServerLifecycleEvents.STOPPING.register(net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPING.invoker()::onServerStopping);
+		ServerLifecycleEvents.STOPPED.register(net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.invoker()::onServerStopped);
+		ServerTickEvents.START.register(net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.START_SERVER_TICK.invoker()::onStartTick);
+		ServerTickEvents.END.register(net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.END_SERVER_TICK.invoker()::onEndTick);
+		ServerWorldTickEvents.START.register((server, world) -> net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.START_WORLD_TICK.invoker().onStartTick(world));
+		ServerWorldTickEvents.END.register(((server, world) -> net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.END_WORLD_TICK.invoker().onEndTick(world)));
+		ServerWorldLoadEvents.LOAD.register(ServerWorldEvents.LOAD.invoker()::onWorldLoad);
+		ServerWorldLoadEvents.UNLOAD.register(ServerWorldEvents.UNLOAD.invoker()::onWorldUnload);
 	}
 }

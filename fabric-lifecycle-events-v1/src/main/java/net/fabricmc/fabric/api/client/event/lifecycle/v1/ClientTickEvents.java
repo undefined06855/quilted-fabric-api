@@ -25,6 +25,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
+@Deprecated
 @Environment(EnvType.CLIENT)
 public final class ClientTickEvents {
 	public ClientTickEvents() {

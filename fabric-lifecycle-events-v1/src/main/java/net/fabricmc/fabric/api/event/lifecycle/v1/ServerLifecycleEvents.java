@@ -23,6 +23,7 @@ import net.minecraft.server.PlayerManager;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
+@Deprecated
 public final class ServerLifecycleEvents {
 	private ServerLifecycleEvents() {
 	}
