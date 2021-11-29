@@ -31,6 +31,12 @@
   },
   "description": "Legacy events for the game's lifecycle, superseded by fabric-lifecycle-events-v1 and fabric-item-api-v1.",
   "custom": {
-    "fabric-api:module-lifecycle": "deprecated"
+    "fabric-api:module-lifecycle": "deprecated",
+    "modmenu": {
+      "badges": [
+        "library",
+        "deprecated"
+      ]
+    }
   }
 }
