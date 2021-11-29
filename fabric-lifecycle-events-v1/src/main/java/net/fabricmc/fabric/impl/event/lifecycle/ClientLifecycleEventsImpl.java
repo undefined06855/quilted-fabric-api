@@ -16,10 +16,6 @@
 
 package net.fabricmc.fabric.impl.event.lifecycle;
 
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientWorldTickEvents;
-
 import net.minecraft.block.entity.BlockEntity;
 
 import net.fabricmc.api.ClientModInitializer;
@@ -46,12 +42,5 @@ public final class ClientLifecycleEventsImpl implements ClientModInitializer {
 				ClientBlockEntityEvents.BLOCK_ENTITY_UNLOAD.invoker().onUnload(blockEntity, world);
 			}
 		});
-
-		ClientLifecycleEvents.READY.register(net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents.CLIENT_STARTED.invoker()::onClientStarted);
-		ClientLifecycleEvents.STOPPING.register(net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents.CLIENT_STOPPING.invoker()::onClientStopping);
-		ClientTickEvents.START.register(net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.START_CLIENT_TICK.invoker()::onStartTick);
-		ClientTickEvents.END.register(net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.invoker()::onEndTick);
-		ClientWorldTickEvents.START.register((client, world) -> net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.START_WORLD_TICK.invoker().onStartTick(world));
-		ClientWorldTickEvents.END.register((client, world) -> net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_WORLD_TICK.invoker().onEndTick(world));
 	}
 }

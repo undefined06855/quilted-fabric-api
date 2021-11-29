@@ -16,12 +16,14 @@
 
 package net.fabricmc.fabric.api.event.lifecycle.v1;
 
+import org.quiltmc.qsl.lifecycle.api.event.ServerWorldLoadEvents;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 @Deprecated
 public final class ServerWorldEvents {
@@ -30,11 +32,11 @@ public final class ServerWorldEvents {
 	 *
 	 * <p>This can be used to load world specific metadata or initialize a {@link PersistentState} on a server world.
 	 */
-	public static final Event<Load> LOAD = EventFactory.createArrayBacked(Load.class, callbacks -> (server, world) -> {
-		for (Load callback : callbacks) {
-			callback.onWorldLoad(server, world);
-		}
-	});
+	public static final Event<Load> LOAD = QuiltCompatEvent.fromQuilt(
+			ServerWorldLoadEvents.LOAD,
+			load -> load::onWorldLoad,
+			load -> load::loadWorld
+	);
 
 	/**
 	 * Called before a world is unloaded by a Minecraft server.
@@ -42,11 +44,11 @@ public final class ServerWorldEvents {
 	 * <p>This typically occurs after a server has {@link ServerLifecycleEvents#SERVER_STOPPING started shutting down}.
 	 * Mods which allow dynamic world (un)registration should call this event so mods can let go of world handles when a world is removed.
 	 */
-	public static final Event<Unload> UNLOAD = EventFactory.createArrayBacked(Unload.class, callbacks -> (server, world) -> {
-		for (Unload callback : callbacks) {
-			callback.onWorldUnload(server, world);
-		}
-	});
+	public static final Event<Unload> UNLOAD = QuiltCompatEvent.fromQuilt(
+			ServerWorldLoadEvents.UNLOAD,
+			unload -> unload::onWorldUnload,
+			unload -> unload::unloadWorld
+	);
 
 	@FunctionalInterface
 	public interface Load {

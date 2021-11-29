@@ -22,6 +22,7 @@ import net.minecraft.server.PlayerManager;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 @Deprecated
 public final class ServerLifecycleEvents {
@@ -33,22 +34,22 @@ public final class ServerLifecycleEvents {
 	 *
 	 * <p>This occurs before the {@link PlayerManager player manager} and any worlds are loaded.
 	 */
-	public static final Event<ServerStarting> SERVER_STARTING = EventFactory.createArrayBacked(ServerStarting.class, callbacks -> server -> {
-		for (ServerStarting callback : callbacks) {
-			callback.onServerStarting(server);
-		}
-	});
+	public static final Event<ServerStarting> SERVER_STARTING = QuiltCompatEvent.fromQuilt(
+			org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.STARTING,
+			serverStarting -> serverStarting::onServerStarting,
+			starting -> starting::startingServer
+	);
 
 	/**
 	 * Called when a Minecraft server has started and is about to tick for the first time.
 	 *
 	 * <p>At this stage, all worlds are live.
 	 */
-	public static final Event<ServerStarted> SERVER_STARTED = EventFactory.createArrayBacked(ServerStarted.class, (callbacks) -> (server) -> {
-		for (ServerStarted callback : callbacks) {
-			callback.onServerStarted(server);
-		}
-	});
+	public static final Event<ServerStarted> SERVER_STARTED = QuiltCompatEvent.fromQuilt(
+			org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.READY,
+			serverStarted -> serverStarted::onServerStarted,
+			ready -> ready::readyServer
+	);
 
 	/**
 	 * Called when a Minecraft server has started shutting down.
@@ -58,11 +59,11 @@ public final class ServerLifecycleEvents {
 	 *
 	 * <p>All worlds are still present and can be modified.
 	 */
-	public static final Event<ServerStopping> SERVER_STOPPING = EventFactory.createArrayBacked(ServerStopping.class, (callbacks) -> (server) -> {
-		for (ServerStopping callback : callbacks) {
-			callback.onServerStopping(server);
-		}
-	});
+	public static final Event<ServerStopping> SERVER_STOPPING = QuiltCompatEvent.fromQuilt(
+			org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.STOPPING,
+			serverStopping -> serverStopping::onServerStopping,
+			stopping -> stopping::stoppingServer
+	);
 
 	/**
 	 * Called when a Minecraft server has stopped.
@@ -71,11 +72,11 @@ public final class ServerLifecycleEvents {
 	 * <p>For example, an {@link net.fabricmc.api.EnvType#CLIENT integrated server} will begin stopping, but it's client may continue to run.
 	 * Meanwhile for a {@link net.fabricmc.api.EnvType#SERVER dedicated server}, this will be the last event called.
 	 */
-	public static final Event<ServerStopped> SERVER_STOPPED = EventFactory.createArrayBacked(ServerStopped.class, callbacks -> server -> {
-		for (ServerStopped callback : callbacks) {
-			callback.onServerStopped(server);
-		}
-	});
+	public static final Event<ServerStopped> SERVER_STOPPED = QuiltCompatEvent.fromQuilt(
+			org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.STOPPED,
+			serverStopped -> serverStopped::onServerStopped,
+			stopped -> stopped::exitServer
+	);
 
 	/**
 	 * Called before a Minecraft server reloads data packs.
@@ -129,9 +130,9 @@ public final class ServerLifecycleEvents {
 		 *
 		 * <p>If the reload was not successful, the old data packs will be kept.
 		 *
-		 * @param server the server
+		 * @param server                the server
 		 * @param serverResourceManager the server resource manager
-		 * @param success if the reload was successful
+		 * @param success               if the reload was successful
 		 */
 		void endDataPackReload(MinecraftServer server, ServerResourceManager serverResourceManager, boolean success);
 	}

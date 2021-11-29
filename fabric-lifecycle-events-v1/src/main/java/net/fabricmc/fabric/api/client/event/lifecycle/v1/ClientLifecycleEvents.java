@@ -21,7 +21,7 @@ import net.minecraft.client.MinecraftClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 @Deprecated
 @Environment(EnvType.CLIENT)
@@ -34,11 +34,11 @@ public final class ClientLifecycleEvents {
 	 *
 	 * <p>This occurs while the splash screen is displayed.
 	 */
-	public static final Event<ClientStarted> CLIENT_STARTED = EventFactory.createArrayBacked(ClientStarted.class, callbacks -> client -> {
-		for (ClientStarted callback : callbacks) {
-			callback.onClientStarted(client);
-		}
-	});
+	public static final Event<ClientStarted> CLIENT_STARTED = QuiltCompatEvent.fromQuilt(
+			org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents.READY,
+			clientStarted -> clientStarted::onClientStarted,
+			ready -> ready::readyClient
+	);
 
 	/**
 	 * Called when Minecraft's client begins to stop.
@@ -46,11 +46,11 @@ public final class ClientLifecycleEvents {
 	 *
 	 * <p>This will be called before the integrated server is stopped if it is running.
 	 */
-	public static final Event<ClientStopping> CLIENT_STOPPING = EventFactory.createArrayBacked(ClientStopping.class, callbacks -> client -> {
-		for (ClientStopping callback : callbacks) {
-			callback.onClientStopping(client);
-		}
-	});
+	public static final Event<ClientStopping> CLIENT_STOPPING = QuiltCompatEvent.fromQuilt(
+			org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents.STOPPING,
+			clientStopping -> clientStopping::onClientStopping,
+			stopping -> stopping::stoppingClient
+	);
 
 	@FunctionalInterface
 	public interface ClientStarted {
