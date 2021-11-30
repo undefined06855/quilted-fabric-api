@@ -38,7 +38,7 @@ public final class ClientTickEvents {
 	public static final Event<StartTick> START_CLIENT_TICK = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents.START,
 			startTick -> startTick::onStartTick,
-			start -> start::startClientTick
+			invokerGetter -> client -> invokerGetter.get().startClientTick(client)
 	);
 
 	/**
@@ -47,7 +47,7 @@ public final class ClientTickEvents {
 	public static final Event<EndTick> END_CLIENT_TICK = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents.END,
 			endTick -> endTick::onEndTick,
-			end -> end::endClientTick
+			invokerGetter -> client -> invokerGetter.get().endClientTick(client)
 	);
 
 	/**
@@ -56,7 +56,7 @@ public final class ClientTickEvents {
 	public static final Event<StartWorldTick> START_WORLD_TICK = QuiltCompatEvent.fromQuilt(
 			ClientWorldTickEvents.START,
 			startWorldTick -> (client, world) -> startWorldTick.onStartTick(world),
-			start -> world -> start.startWorldTick(MinecraftClient.getInstance(), world)
+			invokerGetter -> world -> invokerGetter.get().startWorldTick(MinecraftClient.getInstance(), world)
 	);
 
 	/**
@@ -67,7 +67,7 @@ public final class ClientTickEvents {
 	public static final Event<EndWorldTick> END_WORLD_TICK = QuiltCompatEvent.fromQuilt(
 			ClientWorldTickEvents.END,
 			endWorldTick -> (client, world) -> endWorldTick.onEndTick(world),
-			end -> world -> end.endWorldTick(MinecraftClient.getInstance(), world)
+			invokerGetter -> world -> invokerGetter.get().endWorldTick(MinecraftClient.getInstance(), world)
 	);
 
 	@FunctionalInterface

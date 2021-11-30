@@ -37,7 +37,7 @@ public final class ServerLifecycleEvents {
 	public static final Event<ServerStarting> SERVER_STARTING = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.STARTING,
 			serverStarting -> serverStarting::onServerStarting,
-			starting -> starting::startingServer
+			invokerGetter -> server -> invokerGetter.get().startingServer(server)
 	);
 
 	/**
@@ -48,7 +48,7 @@ public final class ServerLifecycleEvents {
 	public static final Event<ServerStarted> SERVER_STARTED = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.READY,
 			serverStarted -> serverStarted::onServerStarted,
-			ready -> ready::readyServer
+			invokerGetter -> server -> invokerGetter.get().readyServer(server)
 	);
 
 	/**
@@ -62,7 +62,7 @@ public final class ServerLifecycleEvents {
 	public static final Event<ServerStopping> SERVER_STOPPING = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.STOPPING,
 			serverStopping -> serverStopping::onServerStopping,
-			stopping -> stopping::stoppingServer
+			invokerGetter -> server -> invokerGetter.get().stoppingServer(server)
 	);
 
 	/**
@@ -75,7 +75,7 @@ public final class ServerLifecycleEvents {
 	public static final Event<ServerStopped> SERVER_STOPPED = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.STOPPED,
 			serverStopped -> serverStopped::onServerStopped,
-			stopped -> stopped::exitServer
+			invokerGetter -> server -> invokerGetter.get().exitServer(server)
 	);
 
 	/**

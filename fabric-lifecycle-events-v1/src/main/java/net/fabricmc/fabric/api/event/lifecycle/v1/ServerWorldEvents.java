@@ -35,7 +35,7 @@ public final class ServerWorldEvents {
 	public static final Event<Load> LOAD = QuiltCompatEvent.fromQuilt(
 			ServerWorldLoadEvents.LOAD,
 			load -> load::onWorldLoad,
-			load -> load::loadWorld
+			invokerGetter -> (server, world) -> invokerGetter.get().loadWorld(server, world)
 	);
 
 	/**
@@ -47,7 +47,7 @@ public final class ServerWorldEvents {
 	public static final Event<Unload> UNLOAD = QuiltCompatEvent.fromQuilt(
 			ServerWorldLoadEvents.UNLOAD,
 			unload -> unload::onWorldUnload,
-			unload -> unload::unloadWorld
+			invokerGetter -> (server, world) -> invokerGetter.get().unloadWorld(server, world)
 	);
 
 	@FunctionalInterface

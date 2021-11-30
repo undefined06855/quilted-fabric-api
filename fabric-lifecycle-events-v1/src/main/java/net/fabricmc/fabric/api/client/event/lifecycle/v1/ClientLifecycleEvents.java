@@ -37,7 +37,7 @@ public final class ClientLifecycleEvents {
 	public static final Event<ClientStarted> CLIENT_STARTED = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents.READY,
 			clientStarted -> clientStarted::onClientStarted,
-			ready -> ready::readyClient
+			invokerGetter -> client -> invokerGetter.get().readyClient(client)
 	);
 
 	/**
@@ -49,7 +49,7 @@ public final class ClientLifecycleEvents {
 	public static final Event<ClientStopping> CLIENT_STOPPING = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents.STOPPING,
 			clientStopping -> clientStopping::onClientStopping,
-			stopping -> stopping::stoppingClient
+			invokerGetter -> client -> invokerGetter.get().stoppingClient(client)
 	);
 
 	@FunctionalInterface

@@ -17,6 +17,7 @@
 package net.fabricmc.fabric.impl.base.event;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.ApiStatus;
 
@@ -30,7 +31,7 @@ public final class QuiltCompatEvent {
 	}
 
 	public static <S, D> Event<D> fromQuilt(org.quiltmc.qsl.base.api.event.Event<S> event,
-											Function<D, S> listenerConverter, Function<S, D> invoker) {
+											Function<D, S> listenerConverter, Function<Supplier<S>, D> invoker) {
 		return new QuiltEvent<>(event, listenerConverter, invoker);
 	}
 
@@ -38,10 +39,10 @@ public final class QuiltCompatEvent {
 		private org.quiltmc.qsl.base.api.event.Event<S> event;
 		private Function<D, S> listenerConverter;
 
-		public QuiltEvent(org.quiltmc.qsl.base.api.event.Event<S> event, Function<D, S> listenerConverter, Function<S, D> invoker) {
+		public QuiltEvent(org.quiltmc.qsl.base.api.event.Event<S> event, Function<D, S> listenerConverter, Function<Supplier<S>, D> invoker) {
 			this.event = event;
 			this.listenerConverter = listenerConverter;
-			this.invoker = invoker.apply(event.invoker());
+			this.invoker = invoker.apply(event::invoker);
 		}
 
 		@Override

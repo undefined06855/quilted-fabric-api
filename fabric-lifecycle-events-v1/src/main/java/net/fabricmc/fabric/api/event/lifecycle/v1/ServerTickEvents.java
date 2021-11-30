@@ -35,7 +35,7 @@ public final class ServerTickEvents {
 	public static final Event<StartTick> START_SERVER_TICK = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.event.ServerTickEvents.START,
 			startTick -> startTick::onStartTick,
-			start -> start::startServerTick
+			invokerGetter -> server -> invokerGetter.get().startServerTick(server)
 	);
 
 	/**
@@ -44,7 +44,7 @@ public final class ServerTickEvents {
 	public static final Event<EndTick> END_SERVER_TICK = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.lifecycle.api.event.ServerTickEvents.END,
 			endTick -> endTick::onEndTick,
-			end -> end::endServerTick
+			invokerGetter -> server -> invokerGetter.get().endServerTick(server)
 	);
 
 	/**
@@ -53,7 +53,7 @@ public final class ServerTickEvents {
 	public static final Event<StartWorldTick> START_WORLD_TICK = QuiltCompatEvent.fromQuilt(
 			ServerWorldTickEvents.START,
 			startWorldTick -> (server, world) -> startWorldTick.onStartTick(world),
-			start -> world -> start.startWorldTick(world.getServer(), world)
+			invokerGetter -> world -> invokerGetter.get().startWorldTick(world.getServer(), world)
 	);
 
 	/**
@@ -64,7 +64,7 @@ public final class ServerTickEvents {
 	public static final Event<EndWorldTick> END_WORLD_TICK = QuiltCompatEvent.fromQuilt(
 			ServerWorldTickEvents.END,
 			endWorldTick -> (server, world) -> endWorldTick.onEndTick(world),
-			end -> world -> end.endWorldTick(world.getServer(), world)
+			invokerGetter -> world -> invokerGetter.get().endWorldTick(world.getServer(), world)
 	);
 
 	@FunctionalInterface
