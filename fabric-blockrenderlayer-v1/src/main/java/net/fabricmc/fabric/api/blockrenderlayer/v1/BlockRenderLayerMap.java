@@ -35,6 +35,7 @@ import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
  *
  * <p>Client-side only.
  */
+@Deprecated
 public interface BlockRenderLayerMap {
 	BlockRenderLayerMap INSTANCE = new BlockRenderLayerMapImpl();
 

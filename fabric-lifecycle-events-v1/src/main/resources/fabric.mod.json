@@ -29,6 +29,7 @@
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric-api-base": "*",
+    "quilt_resource_loader": ">=1.0.0",
     "quilt_lifecycle_events": ">=1.0.0"
   },
   "description": "Events for the game's lifecycle.",

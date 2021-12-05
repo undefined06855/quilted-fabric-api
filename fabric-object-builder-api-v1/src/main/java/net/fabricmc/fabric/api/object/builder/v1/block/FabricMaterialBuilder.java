@@ -16,20 +16,20 @@
 
 package net.fabricmc.fabric.api.object.builder.v1.block;
 
+import org.quiltmc.qsl.block.extensions.api.QuiltMaterialBuilder;
+
 import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.util.DyeColor;
 
-import net.fabricmc.fabric.mixin.object.builder.MaterialBuilderAccessor;
-
-public class FabricMaterialBuilder extends Material.Builder {
+@Deprecated
+public class FabricMaterialBuilder extends QuiltMaterialBuilder {
 	public FabricMaterialBuilder(MapColor color) {
 		super(color);
 	}
 
 	public FabricMaterialBuilder(DyeColor color) {
-		this(color.getMapColor());
+		super(color.getMapColor());
 	}
 
 	@Override
@@ -39,12 +39,12 @@ public class FabricMaterialBuilder extends Material.Builder {
 	}
 
 	public FabricMaterialBuilder pistonBehavior(PistonBehavior behavior) {
-		((MaterialBuilderAccessor) this).setPistonBehavior(behavior);
+		super.pistonBehavior(behavior);
 		return this;
 	}
 
 	public FabricMaterialBuilder lightPassesThrough() {
-		((MaterialBuilderAccessor) this).invokeLightPassesThrough();
+		super.lightPassesThrough();
 		return this;
 	}
 

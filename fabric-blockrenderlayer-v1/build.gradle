@@ -4,3 +4,7 @@ version = getSubprojectVersion(project)
 moduleDependencies(project, [
         'fabric-api-base'
 ])
+
+dependencies {
+	include modApi(getQslModule("block", "block_extensions", "1.0.0"))
+}

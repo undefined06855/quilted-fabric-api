@@ -10,7 +10,6 @@
     "DefaultAttributeRegistryAccessor",
     "DefaultAttributeRegistryMixin",
     "DetectorRailBlockMixin",
-    "MaterialBuilderAccessor",
     "MixinBlock",
     "PointOfInterestTypeAccessor",
     "SpawnRestrictionAccessor",

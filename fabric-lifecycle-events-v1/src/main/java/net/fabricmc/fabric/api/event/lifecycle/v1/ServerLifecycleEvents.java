@@ -16,12 +16,13 @@
 
 package net.fabricmc.fabric.api.event.lifecycle.v1;
 
+import org.quiltmc.qsl.resource.loader.api.ResourceLoaderEvents;
+
 import net.minecraft.resource.ServerResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 @Deprecated
@@ -81,22 +82,30 @@ public final class ServerLifecycleEvents {
 	/**
 	 * Called before a Minecraft server reloads data packs.
 	 */
-	public static final Event<StartDataPackReload> START_DATA_PACK_RELOAD = EventFactory.createArrayBacked(StartDataPackReload.class, callbacks -> (server, serverResourceManager) -> {
-		for (StartDataPackReload callback : callbacks) {
-			callback.startDataPackReload(server, serverResourceManager);
-		}
-	});
+	public static final Event<StartDataPackReload> START_DATA_PACK_RELOAD = QuiltCompatEvent.fromQuilt(
+			ResourceLoaderEvents.START_DATA_PACK_RELOAD,
+			startDataPackReload -> (server, oldResourceManager) -> {
+				if (server != null) {
+					// Fabric only triggers it at reloads, not startup.
+					startDataPackReload.startDataPackReload(server, oldResourceManager);
+				}
+			},
+			invokerGetter -> (server, serverResourceManager) -> invokerGetter.get().onStartDataPackReload(server, serverResourceManager)
+	);
 
 	/**
 	 * Called after a Minecraft server has reloaded data packs.
 	 *
 	 * <p>If reloading data packs was unsuccessful, the current data packs will be kept.
 	 */
-	public static final Event<EndDataPackReload> END_DATA_PACK_RELOAD = EventFactory.createArrayBacked(EndDataPackReload.class, callbacks -> (server, serverResourceManager, success) -> {
-		for (EndDataPackReload callback : callbacks) {
-			callback.endDataPackReload(server, serverResourceManager, success);
-		}
-	});
+	public static final Event<EndDataPackReload> END_DATA_PACK_RELOAD = QuiltCompatEvent.fromQuilt(
+			ResourceLoaderEvents.END_DATA_PACK_RELOAD,
+			endDataPackReload -> (server, resourceManager, error) ->
+					endDataPackReload.endDataPackReload(server, resourceManager, error == null),
+			invokerGetter -> (server, serverResourceManager, success) ->
+					invokerGetter.get().onEndDataPackReload(server, serverResourceManager,
+							success ? null : new RuntimeException("Unknown error"))
+	);
 
 	@FunctionalInterface
 	public interface ServerStarting {

@@ -33,53 +33,7 @@ import net.minecraft.util.Identifier;
 
 @Mixin(AbstractBlock.Settings.class)
 public interface AbstractBlockSettingsAccessor {
-	/* GETTERS */
-	@Accessor
-	Material getMaterial();
-
-	@Accessor
-	float getHardness();
-
-	@Accessor
-	float getResistance();
-
-	@Accessor
-	boolean getCollidable();
-
-	@Accessor
-	boolean getRandomTicks();
-
-	@Accessor("luminance")
-	ToIntFunction<BlockState> getLuminance();
-
-	@Accessor
-	Function<BlockState, MapColor> getMapColorProvider();
-
-	@Accessor
-	BlockSoundGroup getSoundGroup();
-
-	@Accessor
-	float getSlipperiness();
-
-	@Accessor
-	float getVelocityMultiplier();
-
-	@Accessor
-	boolean getDynamicBounds();
-
-	@Accessor
-	boolean getOpaque();
-
-	@Accessor
-	boolean getIsAir();
-
-	@Accessor
-	boolean isToolRequired();
-
 	/* SETTERS */
-	@Accessor
-	void setMaterial(Material material);
-
 	@Accessor
 	void setHardness(float hardness);
 
@@ -90,25 +44,13 @@ public interface AbstractBlockSettingsAccessor {
 	void setCollidable(boolean collidable);
 
 	@Accessor
-	void setRandomTicks(boolean ticksRandomly);
-
-	@Accessor
 	void setMapColorProvider(Function<BlockState, MapColor> mapColorProvider);
 
 	@Accessor
 	void setDynamicBounds(boolean dynamicBounds);
 
 	@Accessor
-	void setOpaque(boolean opaque);
-
-	@Accessor
-	void setIsAir(boolean isAir);
-
-	@Accessor
 	void setLootTableId(Identifier lootTableId);
-
-	@Accessor
-	void setToolRequired(boolean toolRequired);
 
 	// Cannot be an invoker due to conflicts in mixin: method_9631(Ljava/util/function/ToIntFunction;)Lnet/minecraft/class_4970$class_2251; for target net.minecraft.block.AbstractBlock$Settings conflicts with existing mapping field_10663:Ljava/util/function/ToIntFunction;
 	@Accessor("luminance")

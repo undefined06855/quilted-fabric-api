@@ -18,6 +18,8 @@ package net.fabricmc.fabric.api.object.builder.v1.block;
 
 import java.util.function.ToIntFunction;
 
+import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
+
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -42,33 +44,13 @@ import net.fabricmc.fabric.mixin.object.builder.AbstractBlockSettingsAccessor;
  * <p>To use it, simply replace Block.Settings.of() with
  * FabricBlockSettings.of().
  */
-public class FabricBlockSettings extends AbstractBlock.Settings {
+public class FabricBlockSettings extends QuiltBlockSettings {
 	protected FabricBlockSettings(Material material, MapColor color) {
 		super(material, color);
 	}
 
 	protected FabricBlockSettings(AbstractBlock.Settings settings) {
-		super(((AbstractBlockSettingsAccessor) settings).getMaterial(), ((AbstractBlockSettingsAccessor) settings).getMapColorProvider());
-		// Mostly Copied from vanilla's copy method
-		// Note: If new methods are added to Block settings, an accessor must be added here
-		AbstractBlockSettingsAccessor thisAccessor = (AbstractBlockSettingsAccessor) this;
-		AbstractBlockSettingsAccessor otherAccessor = (AbstractBlockSettingsAccessor) settings;
-
-		thisAccessor.setMaterial(otherAccessor.getMaterial());
-		this.hardness(otherAccessor.getHardness());
-		this.resistance(otherAccessor.getResistance());
-		this.collidable(otherAccessor.getCollidable());
-		thisAccessor.setRandomTicks(otherAccessor.getRandomTicks());
-		this.luminance(otherAccessor.getLuminance());
-		thisAccessor.setMapColorProvider(otherAccessor.getMapColorProvider());
-		this.sounds(otherAccessor.getSoundGroup());
-		this.slipperiness(otherAccessor.getSlipperiness());
-		this.velocityMultiplier(otherAccessor.getVelocityMultiplier());
-		thisAccessor.setDynamicBounds(otherAccessor.getDynamicBounds());
-		thisAccessor.setOpaque(otherAccessor.getOpaque());
-		thisAccessor.setIsAir(otherAccessor.getIsAir());
-		thisAccessor.setToolRequired(otherAccessor.isToolRequired());
-
+		super(settings);
 		// Now attempt to copy fabric specific data
 		BlockSettingsInternals otherInternals = (BlockSettingsInternals) settings;
 		FabricBlockInternals.ExtraData extraData = otherInternals.getExtraData();
@@ -247,17 +229,17 @@ public class FabricBlockSettings extends AbstractBlock.Settings {
 	}
 
 	public FabricBlockSettings hardness(float hardness) {
-		((AbstractBlockSettingsAccessor) this).setHardness(hardness);
+		super.hardness(hardness);
 		return this;
 	}
 
 	public FabricBlockSettings resistance(float resistance) {
-		((AbstractBlockSettingsAccessor) this).setResistance(Math.max(0.0F, resistance));
+		super.resistance(resistance);
 		return this;
 	}
 
 	public FabricBlockSettings drops(Identifier dropTableId) {
-		((AbstractBlockSettingsAccessor) this).setLootTableId(dropTableId);
+		super.drops(dropTableId);
 		return this;
 	}
 
@@ -289,7 +271,7 @@ public class FabricBlockSettings extends AbstractBlock.Settings {
 	}
 
 	public FabricBlockSettings mapColor(MapColor color) {
-		((AbstractBlockSettingsAccessor) this).setMapColorProvider(ignored -> color);
+		super.mapColor(color);
 		return this;
 	}
 
@@ -298,7 +280,7 @@ public class FabricBlockSettings extends AbstractBlock.Settings {
 	}
 
 	public FabricBlockSettings collidable(boolean collidable) {
-		((AbstractBlockSettingsAccessor) this).setCollidable(collidable);
+		super.collidable(collidable);
 		return this;
 	}
 
