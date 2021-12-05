@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderLayers;
-import net.minecraft.fluid.Fluid;
 
 import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
 
