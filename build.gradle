@@ -250,9 +250,11 @@ subprojects {
 	dependencies {
 		testmodImplementation sourceSets.main.output
 
-		// Make all modules depend on the gametest api to try and promote its usage.
-		if (project.name != "fabric-gametest-api-v1")
+		// Make all modules depend on the gametest api (and thus res loader) to try and promote its usage.
+		if (project.name != "fabric-gametest-api-v1") {
 			testmodImplementation project(path: ':fabric-gametest-api-v1', configuration: 'namedElements')
+			testmodImplementation project(path: ':fabric-resource-loader-v0', configuration: 'namedElements')
+		}
 	}
 
 	publishing {
@@ -340,7 +342,8 @@ sourceSets {
 
 // These modules are not included in the fat jar, maven will resolve them via the pom.
 def devOnlyModules = [
-		"fabric-gametest-api-v1"
+		"fabric-gametest-api-v1",
+		"fabric-data-generation-api-v1"
 ]
 
 dependencies {
@@ -365,8 +368,8 @@ curseforge {
 	project {
 		id = "306612"
 		changelog = ENV.CHANGELOG ?: "No changelog provided"
-		releaseType = project.prerelease as Boolean ? "beta" : "release"
-		addGameVersion "1.18-Snapshot"
+		releaseType = project.prerelease == "true" ? "beta" : "release"
+		addGameVersion "1.18"
 		addGameVersion "Fabric"
 
 		mainArtifact(remapJar) {
@@ -399,7 +402,7 @@ task github(dependsOn: remapMavenJar) {
 		releaseBuilder.name("[$project.minecraft_version] Fabric API $project.version")
 		releaseBuilder.body(ENV.CHANGELOG ?: "No changelog provided")
 		releaseBuilder.commitish(getBranch())
-		releaseBuilder.prerelease(project.prerelease as Boolean)
+		releaseBuilder.prerelease(project.prerelease == "true")
 
 		def ghRelease = releaseBuilder.create()
 		ghRelease.uploadAsset(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"), "application/java-archive");
@@ -415,7 +418,7 @@ task modrinth(type: com.modrinth.minotaur.TaskModrinthUpload, dependsOn: remapMa
 	projectId = "P7dR8mSH"
 	versionNumber = version
 	versionName = "[$project.minecraft_version] Fabric API $project.version"
-	releaseType = project.prerelease as Boolean ? "beta" : "release"
+	releaseType = project.prerelease == "true" ? "beta" : "release"
 	changelog = ENV.CHANGELOG ?: "No changelog provided"
 
 	uploadFile = remapJar
