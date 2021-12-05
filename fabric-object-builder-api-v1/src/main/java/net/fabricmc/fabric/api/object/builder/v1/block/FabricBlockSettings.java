@@ -35,7 +35,6 @@ import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.impl.object.builder.BlockSettingsInternals;
 import net.fabricmc.fabric.impl.object.builder.FabricBlockInternals;
 import net.fabricmc.fabric.mixin.object.builder.AbstractBlockAccessor;
-import net.fabricmc.fabric.mixin.object.builder.AbstractBlockSettingsAccessor;
 
 /**
  * Fabric's version of Block.Settings. Adds additional methods and hooks
