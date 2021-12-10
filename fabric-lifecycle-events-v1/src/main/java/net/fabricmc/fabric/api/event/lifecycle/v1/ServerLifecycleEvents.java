@@ -100,8 +100,12 @@ public final class ServerLifecycleEvents {
 	 */
 	public static final Event<EndDataPackReload> END_DATA_PACK_RELOAD = QuiltCompatEvent.fromQuilt(
 			ResourceLoaderEvents.END_DATA_PACK_RELOAD,
-			endDataPackReload -> (server, resourceManager, error) ->
-					endDataPackReload.endDataPackReload(server, resourceManager, error == null),
+			endDataPackReload -> (server, resourceManager, error) -> {
+				if (server != null) {
+					// Fabric only triggers it at reloads, not startup.
+					endDataPackReload.endDataPackReload(server, resourceManager, error == null);
+				}
+			},
 			invokerGetter -> (server, serverResourceManager, success) ->
 					invokerGetter.get().onEndDataPackReload(server, serverResourceManager,
 							success ? null : new RuntimeException("Unknown error"))
