@@ -19,7 +19,7 @@ plugins {
 
 def ENV = System.getenv()
 
-version = project.version + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch()
+version = project.version + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch() + (ENV.SNAPSHOTS_URL ? "-SNAPSHOT" : "")
 logger.lifecycle("Building Fabric: " + version)
 
 
@@ -65,6 +65,10 @@ def getSubprojectVersion(project) {
 
 	if (latestCommits.isEmpty()) {
 		return version + "+uncommited"
+	}
+
+	if (System.getenv().SNAPSHOTS_URL) {
+		return version + "+" + getBranch() + "-SNAPSHOT"
 	}
 
 	return version + "+" + latestCommits.get(0).id.substring(0, 8) + DigestUtils.sha256Hex(project.rootProject.minecraft_version).substring(0, 2)
@@ -329,6 +333,15 @@ void setupRepositories(RepositoryHandler repositories) {
 				}
 			}
 		}
+	} else if (ENV.SNAPSHOTS_URL) {
+
+		repositories.maven {
+			url ENV.SNAPSHOTS_URL
+			credentials {
+				username ENV.SNAPSHOTS_USERNAME
+				password ENV.SNAPSHOTS_PASSWORD
+			}
+		}
 	}
 }
 
@@ -430,7 +443,7 @@ task modrinth(type: com.modrinth.minotaur.TaskModrinthUpload, dependsOn: remapMa
 // A task to ensure that the version being released has not already been released.
 task checkVersion {
 	doFirst {
-		def xml = new URL("https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml").text
+		def xml = new URL("https://maven.quiltmc.org/repository/snapshot/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml").text
 		def metadata = new XmlSlurper().parseText(xml)
 		def versions = metadata.versioning.versions.version*.text();
 		if (versions.contains(version)) {

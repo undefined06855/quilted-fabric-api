@@ -1,0 +1,26 @@
+name: Publish Snapshot
+on:
+  push:
+    branches:
+      - '1.[1-9][0-9]' # match 1.XX branches to avoid publishing snapshots for other branches
+      - '1.[1-9][0-9].[1-9]'
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    container:
+      image: eclipse-temurin:17-jdk
+      options: --user root
+    steps:
+      - run: apt update && apt install git -y && git --version
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: gradle/wrapper-validation-action@v1
+      - run: ./gradlew build publish --stacktrace
+        env:
+          SNAPSHOTS_URL: ${{ secrets.SNAPSHOTS_URL }}
+          SNAPSHOTS_USERNAME: ${{ secrets.SNAPSHOTS_USERNAME }}
+          SNAPSHOTS_PASSWORD: ${{ secrets.SNAPSHOTS_PASSWORD }}
