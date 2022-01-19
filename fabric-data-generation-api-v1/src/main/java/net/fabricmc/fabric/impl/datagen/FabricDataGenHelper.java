@@ -19,16 +19,28 @@ package net.fabricmc.fabric.impl.datagen;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
+import com.mojang.serialization.Lifecycle;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.data.server.AbstractTagProvider;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.util.registry.SimpleRegistry;
+
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.DynamicRegistryTagProvider;
+import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 
@@ -62,6 +74,21 @@ public final class FabricDataGenHelper {
 	 */
 	private static final String ENTRYPOINT_KEY = "fabric-datagen";
 
+	/**
+	 * A fake registry instance to be used for {@link DynamicRegistryTagProvider}.
+	 *
+	 * <p>In {@link AbstractTagProvider#run}, it checks for whether the registry has all the elements added to the builder.
+	 * This would be fine for static registry, but there won't be any instance dynamic registry available.
+	 * Therefore, this simply return true for all {@link Registry#containsId} call.
+	 */
+	@SuppressWarnings("rawtypes")
+	private static final Registry FAKE_DYNAMIC_REGISTRY = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("fabric:fake_dynamic_registry")), Lifecycle.experimental()) {
+		@Override
+		public boolean containsId(Identifier id) {
+			return true;
+		}
+	};
+
 	private FabricDataGenHelper() {
 	}
 
@@ -88,5 +115,24 @@ public final class FabricDataGenHelper {
 			entrypointContainer.getEntrypoint().onInitializeDataGenerator(dataGenerator);
 			dataGenerator.run();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Registry<T> getFakeDynamicRegistry() {
+		return FAKE_DYNAMIC_REGISTRY;
+	}
+
+	/**
+	 * Used to keep track of conditions associated to generated objects.
+	 */
+	private static final Map<Object, ConditionJsonProvider[]> CONDITIONS_MAP = new IdentityHashMap<>();
+
+	public static void addConditions(Object object, ConditionJsonProvider[] conditions) {
+		CONDITIONS_MAP.merge(object, conditions, ArrayUtils::addAll);
+	}
+
+	@Nullable
+	public static ConditionJsonProvider[] consumeConditions(Object object) {
+		return CONDITIONS_MAP.remove(object);
 	}
 }
