@@ -21,14 +21,15 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.quiltmc.qsl.itemgroup.impl.ItemGroupExtensions;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.impl.item.group.ItemGroupExtensions;
-
+@Deprecated
 public final class FabricItemGroupBuilder {
 	private Identifier identifier;
 	private Supplier<ItemStack> stackSupplier = () -> ItemStack.EMPTY;
@@ -112,7 +113,8 @@ public final class FabricItemGroupBuilder {
 	 * @return An instance of the built ItemGroup
 	 */
 	public ItemGroup build() {
-		((ItemGroupExtensions) ItemGroup.BUILDING_BLOCKS).fabric_expandArray();
+		//noinspection UnstableApiUsage
+		((ItemGroupExtensions) ItemGroup.BUILDING_BLOCKS).quilt$expandArray();
 		return new ItemGroup(ItemGroup.GROUPS.length - 1, String.format("%s.%s", identifier.getNamespace(), identifier.getPath())) {
 			@Override
 			public ItemStack createIcon() {
