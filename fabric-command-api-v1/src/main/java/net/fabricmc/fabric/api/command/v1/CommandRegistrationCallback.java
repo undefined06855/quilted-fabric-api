@@ -21,7 +21,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.server.command.ServerCommandSource;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 /**
  * Callback for when a server registers all commands.
@@ -35,18 +35,18 @@ import net.fabricmc.fabric.api.event.EventFactory;
  * })};
  * </code></pre>
  */
+@Deprecated
 public interface CommandRegistrationCallback {
-	Event<CommandRegistrationCallback> EVENT = EventFactory.createArrayBacked(CommandRegistrationCallback.class, (callbacks) -> (dispatcher, dedicated) -> {
-		for (CommandRegistrationCallback callback : callbacks) {
-			callback.register(dispatcher, dedicated);
-		}
-	});
+	Event<CommandRegistrationCallback> EVENT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.command.api.CommandRegistrationCallback.EVENT,
+			callback -> (dispatcher, integrated, dedicated) -> callback.register(dispatcher, dedicated),
+			invokerGetter -> (dispatcher, dedicated) -> invokerGetter.get().registerCommands(dispatcher, !dedicated, dedicated)
+	);
 
 	/**
 	 * Called when the server is registering commands.
 	 *
 	 * @param dispatcher the command dispatcher to register commands to.
-	 * @param dedicated whether the server this command is being registered on is a dedicated server.
+	 * @param dedicated  whether the server this command is being registered on is a dedicated server.
 	 */
 	void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated);
 }

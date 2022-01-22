@@ -53,11 +53,12 @@ import net.fabricmc.api.Environment;
  * 	ClientCommandManager.literal("hello").executes(context -> {
  * 		context.getSource().sendFeedback(new LiteralText("Hello, world!"));
  * 		return 0;
- * 	})
+ *    })
  * );
  * }
  * </pre>
  */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public final class ClientCommandManager {
 	/**

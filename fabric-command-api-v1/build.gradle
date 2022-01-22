@@ -3,6 +3,9 @@ version = getSubprojectVersion(project)
 
 dependencies {
 	testmodImplementation project(path: ':fabric-lifecycle-events-v1', configuration: 'namedElements')
+
+	include modApi(getQslModule("command", "command", "1.0.0"))
+	include modApi(getQslModule("command", "client_command", "1.0.0"))
 }
 
 moduleDependencies(project, [

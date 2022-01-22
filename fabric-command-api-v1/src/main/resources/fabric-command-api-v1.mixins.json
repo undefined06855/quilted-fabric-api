@@ -1,16 +1,9 @@
 {
   "required": true,
   "package": "net.fabricmc.fabric.mixin.command",
-  "compatibilityLevel": "JAVA_16",
-  "mixins": [
-    "CommandManagerMixin",
-    "HelpCommandAccessor"
-  ],
+  "compatibilityLevel": "JAVA_17",
   "client": [
-    "client.ClientCommandSourceMixin",
-    "client.ClientPlayerEntityMixin",
-    "client.ClientPlayNetworkHandlerMixin",
-    "client.MinecraftClientMixin"
+    "client.ClientCommandSourceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

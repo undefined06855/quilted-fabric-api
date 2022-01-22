@@ -31,6 +31,7 @@ import net.fabricmc.api.Environment;
 /**
  * Extensions to {@link CommandSource} for client-sided commands.
  */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public interface FabricClientCommandSource extends CommandSource {
 	/**

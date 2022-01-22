@@ -17,9 +17,16 @@
   ],
   "depends": {
     "fabricloader": ">=0.10.5",
-    "fabric-api-base": "*"
+    "fabric-api-base": "*",
+    "quilt_command": ">=1.0.0",
+    "quilt_client_command": ">=1.0.0"
   },
   "description": "Adds command-related hooks.",
+  "entrypoints": {
+    "client_events": [
+      "net.fabricmc.fabric.impl.command.client.ClientCommandInternals"
+    ]
+  },
   "mixins": [
     "fabric-command-api-v1.mixins.json"
   ],
