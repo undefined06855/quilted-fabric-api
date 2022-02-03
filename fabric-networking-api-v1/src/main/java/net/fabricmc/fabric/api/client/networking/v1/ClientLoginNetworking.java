@@ -26,15 +26,12 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.listener.PacketListener;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
-import net.fabricmc.fabric.impl.networking.client.ClientNetworkingImpl;
 
 /**
  * Offers access to login stage client-side networking functionalities.
@@ -44,6 +41,7 @@ import net.fabricmc.fabric.impl.networking.client.ClientNetworkingImpl;
  * @see ClientPlayNetworking
  * @see ServerLoginNetworking
  */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public final class ClientLoginNetworking {
 	/**
@@ -53,14 +51,14 @@ public final class ClientLoginNetworking {
 	 * <p>If a handler is already registered to the {@code channel}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterGlobalReceiver(Identifier)} to unregister the existing handler.
 	 *
-	 * @param channelName the id of the channel
+	 * @param channelName  the id of the channel
 	 * @param queryHandler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientLoginNetworking#unregisterGlobalReceiver(Identifier)
 	 * @see ClientLoginNetworking#registerReceiver(Identifier, LoginQueryRequestHandler)
 	 */
 	public static boolean registerGlobalReceiver(Identifier channelName, LoginQueryRequestHandler queryHandler) {
-		return ClientNetworkingImpl.LOGIN.registerGlobalReceiver(channelName, queryHandler);
+		return org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.registerGlobalReceiver(channelName, queryHandler);
 	}
 
 	/**
@@ -76,7 +74,15 @@ public final class ClientLoginNetworking {
 	 */
 	@Nullable
 	public static ClientLoginNetworking.LoginQueryRequestHandler unregisterGlobalReceiver(Identifier channelName) {
-		return ClientNetworkingImpl.LOGIN.unregisterGlobalReceiver(channelName);
+		var old = org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.unregisterGlobalReceiver(channelName);
+
+		if (old instanceof LoginQueryRequestHandler fabric) {
+			return fabric;
+		} else if (old != null) {
+			return old::receive;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -86,7 +92,7 @@ public final class ClientLoginNetworking {
 	 * @return all channel names which global receivers are registered for.
 	 */
 	public static Set<Identifier> getGlobalReceivers() {
-		return ClientNetworkingImpl.LOGIN.getChannels();
+		return org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.getGlobalReceivers();
 	}
 
 	/**
@@ -95,23 +101,13 @@ public final class ClientLoginNetworking {
 	 * <p>If a handler is already registered to the {@code channelName}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterReceiver(Identifier)} to unregister the existing handler.
 	 *
-	 * @param channelName the id of the channel
+	 * @param channelName  the id of the channel
 	 * @param queryHandler the handler
 	 * @return false if a handler is already registered to the channel name
 	 * @throws IllegalStateException if the client is not logging in
 	 */
 	public static boolean registerReceiver(Identifier channelName, LoginQueryRequestHandler queryHandler) throws IllegalStateException {
-		final ClientConnection connection = ClientNetworkingImpl.getLoginConnection();
-
-		if (connection != null) {
-			final PacketListener packetListener = connection.getPacketListener();
-
-			if (packetListener instanceof ClientLoginNetworkHandler) {
-				return ClientNetworkingImpl.getAddon(((ClientLoginNetworkHandler) packetListener)).registerChannel(channelName, queryHandler);
-			}
-		}
-
-		throw new IllegalStateException("Cannot register receiver while client is not logging in!");
+		return org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.registerReceiver(channelName, queryHandler);
 	}
 
 	/**
@@ -125,25 +121,24 @@ public final class ClientLoginNetworking {
 	 */
 	@Nullable
 	public static LoginQueryRequestHandler unregisterReceiver(Identifier channelName) throws IllegalStateException {
-		final ClientConnection connection = ClientNetworkingImpl.getLoginConnection();
+		var old = org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.unregisterReceiver(channelName);
 
-		if (connection != null) {
-			final PacketListener packetListener = connection.getPacketListener();
-
-			if (packetListener instanceof ClientLoginNetworkHandler) {
-				return ClientNetworkingImpl.getAddon(((ClientLoginNetworkHandler) packetListener)).unregisterChannel(channelName);
-			}
+		if (old instanceof LoginQueryRequestHandler fabric) {
+			return fabric;
+		} else if (old != null) {
+			return old::receive;
+		} else {
+			return null;
 		}
-
-		throw new IllegalStateException("Cannot unregister receiver while client is not logging in!");
 	}
 
 	private ClientLoginNetworking() {
 	}
 
+	@Deprecated
 	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
-	public interface LoginQueryRequestHandler {
+	public interface LoginQueryRequestHandler extends org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.QueryRequestReceiver {
 		/**
 		 * Handles an incoming query request from a server.
 		 *
@@ -154,9 +149,9 @@ public final class ClientLoginNetworking {
 		 * The future should complete in reasonably time to prevent disconnection by the server.
 		 * If your request processes instantly, you may use {@link CompletableFuture#completedFuture(Object)} to wrap your response for immediate sending.
 		 *
-		 * @param client the client
-		 * @param handler the network handler that received this packet
-		 * @param buf the payload of the packet
+		 * @param client        the client
+		 * @param handler       the network handler that received this packet
+		 * @param buf           the payload of the packet
 		 * @param listenerAdder listeners to be called when the response packet is sent to the server
 		 * @return a completable future which contains the payload to respond to the server with.
 		 * If the future contains {@code null}, then the server will be notified that the client did not understand the query.

@@ -16,12 +16,8 @@
 
 package net.fabricmc.fabric.api.networking.v1;
 
-import java.util.Objects;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.local.LocalChannel;
-import io.netty.channel.local.LocalServerChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -33,6 +29,7 @@ import net.minecraft.network.PacketByteBuf;
  * @see FutureListener
  * @see ChannelFutureListener
  */
+@Deprecated
 public final class FutureListeners {
 	/**
 	 * Returns a future listener that releases a packet byte buf when the buffer has been sent to a remote connection.
@@ -41,13 +38,7 @@ public final class FutureListeners {
 	 * @return the future listener
 	 */
 	public static ChannelFutureListener free(PacketByteBuf buf) {
-		Objects.requireNonNull(buf, "PacketByteBuf cannot be null");
-
-		return (future) -> {
-			if (!isLocalChannel(future.channel())) {
-				buf.release();
-			}
-		};
+		return org.quiltmc.qsl.networking.api.FutureListeners.free(buf);
 	}
 
 	/**
@@ -57,7 +48,7 @@ public final class FutureListeners {
 	 * @return whether the channel is local
 	 */
 	public static boolean isLocalChannel(Channel channel) {
-		return channel instanceof LocalServerChannel || channel instanceof LocalChannel;
+		return org.quiltmc.qsl.networking.api.FutureListeners.isLocalChannel(channel);
 	}
 
 	/**
@@ -72,23 +63,7 @@ public final class FutureListeners {
 	// A, B exist just to allow casting
 	@SuppressWarnings("unchecked")
 	public static <A extends Future<? super Void>, B extends Future<? super Void>> GenericFutureListener<? extends Future<? super Void>> union(GenericFutureListener<A> first, GenericFutureListener<B> second) {
-		// Return an empty future listener in the case of both parameters somehow being null
-		if (first == null && second == null) {
-			return future -> { };
-		}
-
-		if (first == null) {
-			return second;
-		}
-
-		if (second == null) {
-			return first;
-		}
-
-		return future -> {
-			first.operationComplete((A) future);
-			second.operationComplete((B) future);
-		};
+		return org.quiltmc.qsl.networking.api.FutureListeners.union(first, second);
 	}
 
 	private FutureListeners() {

@@ -21,22 +21,23 @@ import net.minecraft.server.network.ServerLoginNetworkHandler;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to events related to the connection to a client on a logical server while a client is logging in.
  */
+@Deprecated
 public final class ServerLoginConnectionEvents {
 	/**
 	 * Event indicating a connection entered the LOGIN state, ready for registering query response handlers.
 	 *
 	 * @see ServerLoginNetworking#registerReceiver(ServerLoginNetworkHandler, Identifier, ServerLoginNetworking.LoginQueryResponseHandler)
 	 */
-	public static final Event<Init> INIT = EventFactory.createArrayBacked(Init.class, callbacks -> (handler, server) -> {
-		for (Init callback : callbacks) {
-			callback.onLoginInit(handler, server);
-		}
-	});
+	public static final Event<Init> INIT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.ServerLoginConnectionEvents.INIT,
+			init -> init::onLoginInit,
+			invokerGetter -> (handler, server) -> invokerGetter.get().onLoginInit(handler, server)
+	);
 
 	/**
 	 * An event for the start of login queries of the server login network handler.
@@ -46,22 +47,20 @@ public final class ServerLoginConnectionEvents {
 	 *
 	 * <p>You may send login queries to the connected client using the provided {@link PacketSender}.
 	 */
-	public static final Event<QueryStart> QUERY_START = EventFactory.createArrayBacked(QueryStart.class, callbacks -> (handler, server, sender, synchronizer) -> {
-		for (QueryStart callback : callbacks) {
-			callback.onLoginStart(handler, server, sender, synchronizer);
-		}
-	});
+	public static final Event<QueryStart> QUERY_START = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.ServerLoginConnectionEvents.QUERY_START,
+			queryStart -> (handler, server, sender, synchronizer) -> queryStart.onLoginStart(handler, server, new QuiltPacketSender(sender), synchronizer::waitFor),
+			invokerGetter -> (handler, server, sender, synchronizer) -> invokerGetter.get().onLoginStart(handler, server, sender, synchronizer)
+	);
 
 	/**
 	 * An event for the disconnection of the server login network handler.
 	 *
 	 * <p>No packets should be sent when this event is invoked.
 	 */
-	public static final Event<Disconnect> DISCONNECT = EventFactory.createArrayBacked(Disconnect.class, callbacks -> (handler, server) -> {
-		for (Disconnect callback : callbacks) {
-			callback.onLoginDisconnect(handler, server);
-		}
-	});
+	public static final Event<Disconnect> DISCONNECT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.ServerLoginConnectionEvents.DISCONNECT,
+			disconnect -> disconnect::onLoginDisconnect,
+			invokerGetter -> (handler, server) -> invokerGetter.get().onLoginDisconnect(handler, server)
+	);
 
 	private ServerLoginConnectionEvents() {
 	}

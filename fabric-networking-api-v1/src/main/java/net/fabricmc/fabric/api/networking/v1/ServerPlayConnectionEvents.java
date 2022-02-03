@@ -21,44 +21,43 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to events related to the connection to a client on a logical server while a client is in game.
  */
+@Deprecated
 public final class ServerPlayConnectionEvents {
 	/**
 	 * Event indicating a connection entered the PLAY state, ready for registering channel handlers.
 	 *
 	 * @see ServerPlayNetworking#registerReceiver(ServerPlayNetworkHandler, Identifier, ServerPlayNetworking.PlayChannelHandler)
 	 */
-	public static final Event<Init> INIT = EventFactory.createArrayBacked(Init.class, callbacks -> (handler, server) -> {
-		for (Init callback : callbacks) {
-			callback.onPlayInit(handler, server);
-		}
-	});
+	public static final Event<Init> INIT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents.INIT,
+			init -> init::onPlayInit,
+			invokerGetter -> (handler, server) -> invokerGetter.get().onPlayInit(handler, server)
+	);
 
 	/**
 	 * An event for notification when the server play network handler is ready to send packets to the client.
 	 *
 	 * <p>At this stage, the network handler is ready to send packets to the client.
 	 */
-	public static final Event<Join> JOIN = EventFactory.createArrayBacked(Join.class, callbacks -> (handler, sender, server) -> {
-		for (Join callback : callbacks) {
-			callback.onPlayReady(handler, sender, server);
-		}
-	});
+	public static final Event<Join> JOIN = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents.JOIN,
+			join -> (handler, sender, server) -> join.onPlayReady(handler, new QuiltPacketSender(sender), server),
+			invokerGetter -> (handler, sender, server) -> invokerGetter.get().onPlayReady(handler, sender, server)
+	);
 
 	/**
 	 * An event for the disconnection of the server play network handler.
 	 *
 	 * <p>No packets should be sent when this event is invoked.
 	 */
-	public static final Event<Disconnect> DISCONNECT = EventFactory.createArrayBacked(Disconnect.class, callbacks -> (handler, server) -> {
-		for (Disconnect callback : callbacks) {
-			callback.onPlayDisconnect(handler, server);
-		}
-	});
+	public static final Event<Disconnect> DISCONNECT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents.DISCONNECT,
+			disconnect -> disconnect::onPlayDisconnect,
+			invokerGetter -> (handler, server) -> invokerGetter.get().onPlayDisconnect(handler, server)
+	);
 
 	private ServerPlayConnectionEvents() {
 	}

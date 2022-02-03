@@ -25,33 +25,33 @@ import net.minecraft.util.Identifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to events related to the indication of a connected server's ability to receive packets in certain channels.
  */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public final class C2SPlayChannelEvents {
 	/**
 	 * An event for the client play network handler receiving an update indicating the connected server's ability to receive packets in certain channels.
 	 * This event may be invoked at any time after login and up to disconnection.
 	 */
-	public static final Event<Register> REGISTER = EventFactory.createArrayBacked(Register.class, callbacks -> (handler, sender, client, channels) -> {
-		for (Register callback : callbacks) {
-			callback.onChannelRegister(handler, sender, client, channels);
-		}
-	});
+	public static final Event<Register> REGISTER = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.C2SPlayChannelEvents.REGISTER,
+			register -> (handler, sender, client, channels) -> register.onChannelRegister(handler, new QuiltPacketSender(sender), client, channels),
+			invokerGetter -> (handler, sender, client, channels) -> invokerGetter.get().onChannelRegister(handler, sender, client, channels)
+	);
 
 	/**
 	 * An event for the client play network handler receiving an update indicating the connected server's lack of ability to receive packets in certain channels.
 	 * This event may be invoked at any time after login and up to disconnection.
 	 */
-	public static final Event<Unregister> UNREGISTER = EventFactory.createArrayBacked(Unregister.class, callbacks -> (handler, sender, client, channels) -> {
-		for (Unregister callback : callbacks) {
-			callback.onChannelUnregister(handler, sender, client, channels);
-		}
-	});
+	public static final Event<Unregister> UNREGISTER = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.C2SPlayChannelEvents.UNREGISTER,
+			unregister -> (handler, sender, client, channels) -> unregister.onChannelUnregister(handler, new QuiltPacketSender(sender), client, channels),
+			invokerGetter -> (handler, sender, client, channels) -> invokerGetter.get().onChannelUnregister(handler, sender, client, channels)
+	);
 
 	private C2SPlayChannelEvents() {
 	}
