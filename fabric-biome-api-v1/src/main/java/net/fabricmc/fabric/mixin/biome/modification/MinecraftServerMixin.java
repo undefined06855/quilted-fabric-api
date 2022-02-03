@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.mixin.client.keybinding;
+package net.fabricmc.fabric.mixin.biome.modification;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.KeyBinding;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.registry.DynamicRegistryManager;
+import net.minecraft.world.SaveProperties;
+import net.minecraft.world.level.LevelProperties;
 
-import net.fabricmc.fabric.impl.client.keybinding.KeyBindingRegistryImpl;
+import net.fabricmc.fabric.impl.biome.modification.BiomeModificationImpl;
 
-@Mixin(GameOptions.class)
-public class MixinGameOptions {
-	@Mutable
-	@Final
+@Mixin(MinecraftServer.class)
+public class MinecraftServerMixin {
 	@Shadow
-	public KeyBinding[] allKeys;
+	private DynamicRegistryManager.Impl registryManager;
 
-	@Inject(at = @At("HEAD"), method = "load()V")
-	public void loadHook(CallbackInfo info) {
-		allKeys = KeyBindingRegistryImpl.process(allKeys);
+	@Shadow
+	private SaveProperties saveProperties;
+
+	@Inject(method = "<init>", at = @At(value = "RETURN"))
+	private void finalizeWorldGen(CallbackInfo ci) {
+		if (!(saveProperties instanceof LevelProperties levelProperties)) {
+			throw new RuntimeException("Incompatible SaveProperties passed to MinecraftServer: " + saveProperties);
+		}
+
+		BiomeModificationImpl.INSTANCE.finalizeWorldGen(registryManager, levelProperties);
 	}
 }

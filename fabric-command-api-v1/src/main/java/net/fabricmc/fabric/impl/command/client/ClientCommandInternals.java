@@ -33,12 +33,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.quiltmc.qsl.command.api.client.ClientCommandRegistrationCallback;
 import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 import org.quiltmc.qsl.command.mixin.HelpCommandAccessor;
+import org.slf4j.Logger;
 
 import net.minecraft.text.LiteralText;
 
@@ -48,7 +48,7 @@ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 @Environment(EnvType.CLIENT)
 public final class ClientCommandInternals implements ClientCommandRegistrationCallback {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final String API_COMMAND_NAME = "fabric-command-api-v1:client";
 	private static final String SHORT_API_COMMAND_NAME = "fcc";
 
