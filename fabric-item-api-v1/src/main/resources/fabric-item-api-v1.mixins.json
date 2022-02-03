@@ -9,8 +9,7 @@
   ],
   "client": [
     "client.ClientPlayerInteractionManagerMixin",
-    "client.HeldItemRendererMixin",
-    "client.ItemStackMixin"
+    "client.HeldItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

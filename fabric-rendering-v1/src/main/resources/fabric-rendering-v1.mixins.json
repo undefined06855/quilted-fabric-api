@@ -15,7 +15,6 @@
     "LivingEntityRendererAccessor",
     "MixinBlockEntityRenderers",
     "MixinEntityRenderers",
-    "ScreenMixin",
     "DimensionEffectsAccessor"
   ],
   "injectors": {

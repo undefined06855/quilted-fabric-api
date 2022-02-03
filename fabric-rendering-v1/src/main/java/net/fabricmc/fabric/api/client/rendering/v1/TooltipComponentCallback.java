@@ -25,7 +25,7 @@ import net.minecraft.client.item.TooltipData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 /**
  * Allows registering a mapping from {@link TooltipData} to {@link TooltipComponent}.
@@ -35,19 +35,13 @@ import net.fabricmc.fabric.api.event.EventFactory;
  * <p>Note that failure to map some data to a component will throw an exception,
  * so make sure that any data you return in {@link Item#getTooltipData} will be handled by one of the callbacks.
  */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public interface TooltipComponentCallback {
-	Event<TooltipComponentCallback> EVENT = EventFactory.createArrayBacked(TooltipComponentCallback.class, listeners -> data -> {
-		for (TooltipComponentCallback listener : listeners) {
-			TooltipComponent component = listener.getComponent(data);
-
-			if (component != null) {
-				return component;
-			}
-		}
-
-		return null;
-	});
+	Event<TooltipComponentCallback> EVENT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.tooltip.api.client.TooltipComponentCallback.EVENT,
+			tooltipComponentCallback -> tooltipComponentCallback::getComponent,
+			invokerGetter -> data -> invokerGetter.get().getComponent(data)
+	);
 
 	/**
 	 * Return the tooltip component for the passed data, or null if none is available.

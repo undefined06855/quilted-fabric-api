@@ -16,27 +16,28 @@
 
 package net.fabricmc.fabric.api.client.item.v1;
 
-import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import java.util.List;
 
+@Deprecated
 @Environment(EnvType.CLIENT)
 public interface ItemTooltipCallback {
 	/**
 	 * Fired after the game has appended all base tooltip lines to the list.
 	 */
-	Event<ItemTooltipCallback> EVENT = EventFactory.createArrayBacked(ItemTooltipCallback.class, callbacks -> (stack, context, lines) -> {
-		for (ItemTooltipCallback callback : callbacks) {
-			callback.getTooltip(stack, context, lines);
-		}
-	});
+	Event<ItemTooltipCallback> EVENT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.tooltip.api.client.ItemTooltipCallback.EVENT,
+			itemTooltipCallback -> (stack, player, context, lines) -> itemTooltipCallback.getTooltip(stack, context, lines),
+			invokerGetter -> (stack, context, lines) -> invokerGetter.get().onTooltipRequest(stack, MinecraftClient.getInstance().player, context, lines)
+	);
 
 	/**
 	 * Called when an item stack's tooltip is rendered. Text added to {@code lines} will be
