@@ -26,6 +26,7 @@ import net.minecraft.network.PacketByteBuf;
 
 /**
  * Utilities for working with netty's future listeners.
+ *
  * @see FutureListener
  * @see ChannelFutureListener
  */
@@ -56,8 +57,8 @@ public final class FutureListeners {
 	 *
 	 * @param first  the first future listener
 	 * @param second the second future listener
-	 * @param <A> the future type of the first listener, used for casting
-	 * @param <B> the future type of the second listener, used for casting
+	 * @param <A>    the future type of the first listener, used for casting
+	 * @param <B>    the future type of the second listener, used for casting
 	 * @return the combined future listener.
 	 */
 	// A, B exist just to allow casting

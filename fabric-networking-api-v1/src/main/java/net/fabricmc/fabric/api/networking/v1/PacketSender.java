@@ -18,6 +18,7 @@ package net.fabricmc.fabric.api.networking.v1;
 
 /**
  * Represents something that supports sending packets to channels.
+ *
  * @see PacketByteBufs
  */
 @Deprecated

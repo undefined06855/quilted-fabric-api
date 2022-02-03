@@ -20,7 +20,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 /**
@@ -54,7 +53,7 @@ public final class EntityTrackingEvents {
 		 * Called before an entity starts getting tracked by a player.
 		 *
 		 * @param trackedEntity the entity that will be tracked
-		 * @param player the player that will track the entity
+		 * @param player        the player that will track the entity
 		 */
 		void onStartTracking(Entity trackedEntity, ServerPlayerEntity player);
 	}
@@ -65,7 +64,7 @@ public final class EntityTrackingEvents {
 		 * Called after an entity stops getting tracked by a player.
 		 *
 		 * @param trackedEntity the entity that is no longer being tracked
-		 * @param player the player that is no longer tracking the entity
+		 * @param player        the player that is no longer tracking the entity
 		 */
 		void onStopTracking(Entity trackedEntity, ServerPlayerEntity player);
 	}
