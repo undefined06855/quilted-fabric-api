@@ -16,17 +16,17 @@
 
 package net.fabricmc.fabric.api.client.item.v1;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+import java.util.List;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
-import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 @Deprecated
 @Environment(EnvType.CLIENT)
