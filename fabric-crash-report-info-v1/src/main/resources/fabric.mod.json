@@ -22,7 +22,7 @@
   },
   "description": "Adds Fabric-related debug info to crash reports.",
   "entrypoints": {
-    "main": [
+    "init": [
       "net.fabricmc.fabric.impl.qsl.crash.QuiltCrashInfoCompatMod"
     ]
   },
