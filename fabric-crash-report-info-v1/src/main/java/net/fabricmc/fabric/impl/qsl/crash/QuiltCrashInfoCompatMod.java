@@ -16,13 +16,14 @@
 
 package net.fabricmc.fabric.impl.qsl.crash;
 
+import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.crash.api.CrashReportEvents;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.ModContainer;
 
 public class QuiltCrashInfoCompatMod implements ModInitializer {
 	@Override
-	public void onInitialize() {
+	public void onInitialize(ModContainer mod) {
 		CrashReportEvents.SYSTEM_DETAILS.register(details -> {
 			details.addSection("QSL-FabricAPI", "!! WARNING !! This instance is using Fabric API modules "
 					+ "that got re-implemented with QSL. If the issue comes from Fabric API/QSL, "

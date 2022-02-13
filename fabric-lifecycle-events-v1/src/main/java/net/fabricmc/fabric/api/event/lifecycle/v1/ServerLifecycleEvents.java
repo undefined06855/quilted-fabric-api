@@ -87,10 +87,10 @@ public final class ServerLifecycleEvents {
 			startDataPackReload -> (server, oldResourceManager) -> {
 				if (server != null) {
 					// Fabric only triggers it at reloads, not startup.
-					startDataPackReload.startDataPackReload(server, oldResourceManager);
+					startDataPackReload.startDataPackReload(server, null);
 				}
 			},
-			invokerGetter -> (server, serverResourceManager) -> invokerGetter.get().onStartDataPackReload(server, serverResourceManager)
+			invokerGetter -> (server, serverReloadableResources) -> invokerGetter.get().onStartDataPackReload(server, null)
 	);
 
 	/**
@@ -103,12 +103,14 @@ public final class ServerLifecycleEvents {
 			endDataPackReload -> (server, resourceManager, error) -> {
 				if (server != null) {
 					// Fabric only triggers it at reloads, not startup.
-					endDataPackReload.endDataPackReload(server, resourceManager, error == null);
+					// Also using an actual cast, unlike Fabric.
+					endDataPackReload.endDataPackReload(server, null, error == null);
 				}
 			},
-			invokerGetter -> (server, serverResourceManager, success) ->
-					invokerGetter.get().onEndDataPackReload(server, serverResourceManager,
-							success ? null : new RuntimeException("Unknown error"))
+			invokerGetter -> (server, serverResourceManager, success) -> {
+				invokerGetter.get().onEndDataPackReload(server, null,
+						success ? null : new RuntimeException("Unknown error"));
+			}
 	);
 
 	@FunctionalInterface

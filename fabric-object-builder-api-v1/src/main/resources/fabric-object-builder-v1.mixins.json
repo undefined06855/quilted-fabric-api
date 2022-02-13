@@ -5,12 +5,10 @@
   "mixins": [
     "AbstractBlockAccessor",
     "AbstractBlockSettingsAccessor",
-    "AbstractBlockSettingsMixin",
     "CriteriaAccessor",
     "DefaultAttributeRegistryAccessor",
     "DefaultAttributeRegistryMixin",
     "DetectorRailBlockMixin",
-    "MixinBlock",
     "PointOfInterestTypeAccessor",
     "SpawnRestrictionAccessor",
     "TypeAwareTradeMixin",
