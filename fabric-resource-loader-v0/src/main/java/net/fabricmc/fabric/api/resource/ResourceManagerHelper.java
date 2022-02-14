@@ -104,6 +104,7 @@ public interface ResourceManagerHelper {
 	static boolean registerBuiltinResourcePack(Identifier id, String subPath, ModContainer container, boolean enabledByDefault) {
 		return ResourceLoaderImpl.registerBuiltinResourcePack(id, subPath, container,
 				enabledByDefault ? org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.DEFAULT_ENABLED
-						: org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.NORMAL);
+						: org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.NORMAL,
+				ResourceLoaderImpl.getBuiltinPackDisplayNameFromId(id));
 	}
 }
