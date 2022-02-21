@@ -18,7 +18,7 @@ package net.fabricmc.fabric.api.event.lifecycle.v1;
 
 import org.quiltmc.qsl.resource.loader.api.ResourceLoaderEvents;
 
-import net.minecraft.resource.ServerResourceManager;
+import net.minecraft.resource.LifecycledResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 
@@ -104,11 +104,11 @@ public final class ServerLifecycleEvents {
 				if (server != null) {
 					// Fabric only triggers it at reloads, not startup.
 					// Also using an actual cast, unlike Fabric.
-					endDataPackReload.endDataPackReload(server, null, error == null);
+					endDataPackReload.endDataPackReload(server, (LifecycledResourceManager) resourceManager, error == null);
 				}
 			},
-			invokerGetter -> (server, serverResourceManager, success) -> {
-				invokerGetter.get().onEndDataPackReload(server, null,
+			invokerGetter -> (server, resourceManager, success) -> {
+				invokerGetter.get().onEndDataPackReload(server, resourceManager,
 						success ? null : new RuntimeException("Unknown error"));
 			}
 	);
@@ -135,7 +135,7 @@ public final class ServerLifecycleEvents {
 
 	@FunctionalInterface
 	public interface StartDataPackReload {
-		void startDataPackReload(MinecraftServer server, ServerResourceManager serverResourceManager);
+		void startDataPackReload(MinecraftServer server, LifecycledResourceManager resourceManager);
 	}
 
 	@FunctionalInterface
@@ -145,10 +145,10 @@ public final class ServerLifecycleEvents {
 		 *
 		 * <p>If the reload was not successful, the old data packs will be kept.
 		 *
-		 * @param server                the server
-		 * @param serverResourceManager the server resource manager
-		 * @param success               if the reload was successful
+		 * @param server          the server
+		 * @param resourceManager the resource manager
+		 * @param success         if the reload was successful
 		 */
-		void endDataPackReload(MinecraftServer server, ServerResourceManager serverResourceManager, boolean success);
+		void endDataPackReload(MinecraftServer server, LifecycledResourceManager resourceManager, boolean success);
 	}
 }

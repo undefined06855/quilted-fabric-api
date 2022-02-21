@@ -21,13 +21,13 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.quiltmc.qsl.itemgroup.impl.ItemGroupExtensions;
+import org.quiltmc.qsl.item.group.impl.ItemGroupExtensions;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 
 @Deprecated
 public final class FabricItemGroupBuilder {
