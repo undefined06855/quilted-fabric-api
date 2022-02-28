@@ -90,7 +90,7 @@ public final class ServerLifecycleEvents {
 					startDataPackReload.startDataPackReload(server, null);
 				}
 			},
-			invokerGetter -> (server, serverReloadableResources) -> invokerGetter.get().onStartDataPackReload(server, null)
+			invokerGetter -> (server, resourceManager) -> invokerGetter.get().onStartDataPackReload(server, resourceManager)
 	);
 
 	/**
