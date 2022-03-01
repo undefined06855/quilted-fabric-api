@@ -29,16 +29,7 @@ import net.minecraft.item.ItemStack;
  * <p>Note that items extending {@link net.minecraft.item.ArmorItem} don't need to use this
  * as there's {@link net.minecraft.item.ArmorItem#getSlotType()}.
  */
+@Deprecated
 @FunctionalInterface
-public interface EquipmentSlotProvider {
-	/**
-	 * Gets the preferred equipment slot for an item stack.
-	 *
-	 * <p>If there is no preferred armor equipment slot for the stack,
-	 * {@link EquipmentSlot#MAINHAND} can be returned.
-	 *
-	 * @param stack the item stack
-	 * @return the preferred equipment slot
-	 */
-	EquipmentSlot getPreferredEquipmentSlot(ItemStack stack);
+public interface EquipmentSlotProvider extends org.quiltmc.qsl.item.setting.api.EquipmentSlotProvider {
 }

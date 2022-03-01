@@ -16,13 +16,13 @@
 
 package net.fabricmc.fabric.api.item.v1;
 
+import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
+
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Rarity;
-
-import net.fabricmc.fabric.impl.item.FabricItemInternals;
 
 /**
  * Fabric's version of Item.Settings. Adds additional methods and hooks
@@ -31,7 +31,8 @@ import net.fabricmc.fabric.impl.item.FabricItemInternals;
  * <p>To use it, simply replace {@code new Item.Settings()} with
  * {@code new FabricItemSettings()}.
  */
-public class FabricItemSettings extends Item.Settings {
+@Deprecated
+public class FabricItemSettings extends QuiltItemSettings {
 	/**
 	 * Sets the equipment slot provider of the item.
 	 *
@@ -39,7 +40,7 @@ public class FabricItemSettings extends Item.Settings {
 	 * @return this builder
 	 */
 	public FabricItemSettings equipmentSlot(EquipmentSlotProvider equipmentSlotProvider) {
-		FabricItemInternals.computeExtraData(this).equipmentSlot(equipmentSlotProvider);
+		this.equipmentSlot((org.quiltmc.qsl.item.setting.api.EquipmentSlotProvider) equipmentSlotProvider);
 		return this;
 	}
 
@@ -49,7 +50,7 @@ public class FabricItemSettings extends Item.Settings {
 	 * @see CustomDamageHandler
 	 */
 	public FabricItemSettings customDamage(CustomDamageHandler handler) {
-		FabricItemInternals.computeExtraData(this).customDamage(handler);
+		this.customDamage((org.quiltmc.qsl.item.setting.api.CustomDamageHandler) handler);
 		return this;
 	}
 

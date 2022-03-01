@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "fabric",
+  "id": "quilted_fabric_api",
+  "provides": [
+    "fabric"
+  ],
   "name": "Fabric API QSL",
   "version": "${version}",
   "environment": "*",

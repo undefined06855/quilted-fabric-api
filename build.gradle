@@ -26,27 +26,8 @@ logger.lifecycle("Building Fabric: " + version)
 import org.apache.commons.codec.digest.DigestUtils
 import org.kohsuke.github.GHReleaseBuilder
 
-def isMinecraftVersionNonRelease() {
-	return project.minecraft_version.matches("^\\d\\dw\\d\\d[a-z]\$");
-}
-
-def getMinecraftVersionFancyString() {
-	if (isMinecraftVersionNonRelease()) {
-		return project.minecraft_version;
-	}
-
-	String[] version = project.minecraft_version.split("\\.");
-
-	int index;
-	if ((index = version[1].indexOf("-pre")) != -1 || (index = version[1].indexOf("-rc")) != -1) {
-		version[1] = version[1].substring(0, index);
-	}
-
-	return version[0] + '.' + version[1];
-}
-
 def getQslModule(String library, String module, String version) {
-	return "org.quiltmc.qsl.${library}:${module}:${version}+${getMinecraftVersionFancyString()}-SNAPSHOT";
+	return "org.quiltmc.qsl.${library}:${module}:${version}+${project.minecraft_version}-SNAPSHOT";
 }
 
 def getSubprojectVersion(project) {

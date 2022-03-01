@@ -1,7 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-object-builder-api-v1",
-  "name": "Fabric Object Builder API (v1)",
+  "id": "quilted-fabric-object-builder-api-v1",
+  "provides": [
+    "fabric-object-builder-api-v1"
+  ],
+  "name": "Quilted Fabric Object Builder API (v1)",
   "version": "${version}",
   "environment": "*",
   "license": "Apache-2.0",
@@ -17,7 +20,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.8.2",
-    "fabric-api-base": "*"
+    "quilted-fabric-api-base": "*"
   },
   "description": "Builders for objects vanilla has locked down.",
   "mixins": [

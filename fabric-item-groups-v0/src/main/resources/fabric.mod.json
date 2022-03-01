@@ -1,7 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-item-groups-v0",
-  "name": "Quiltified Fabric Item Groups (v0)",
+  "id": "quilted-fabric-item-groups-v0",
+  "provides": [
+    "fabric-item-groups-v0"
+  ],
+  "name": "Quilted Fabric Item Groups (v0)",
   "version": "${version}",
   "environment": "*",
   "license": "Apache-2.0",
@@ -19,7 +22,7 @@
   "depends": {
     "fabricloader": ">=0.6.0",
     "minecraft": ">=1.15-",
-    "fabric-api-base": "*",
+    "quilted-fabric-api-base": "*",
     "quilt_item_group": ">=1.0.0"
   },
   "description": "An API for adding custom item groups.",

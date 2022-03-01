@@ -1,7 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-command-api-v1",
-  "name": "Quiltified Fabric Command API (v1)",
+  "id": "quilted-fabric-command-api-v1",
+  "provides": [
+    "fabric-command-api-v1"
+  ],
+  "name": "Quilted Fabric Command API (v1)",
   "version": "${version}",
   "environment": "*",
   "license": "Apache-2.0",
@@ -18,7 +21,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.10.5",
-    "fabric-api-base": "*",
+    "quilted-fabric-api-base": "*",
     "quilt_command": ">=1.0.0",
     "quilt_client_command": ">=1.0.0"
   },

@@ -1,7 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-resource-loader-v0",
-  "name": "Quiltified Fabric Resource Loader (v0)",
+  "id": "quilted-fabric-resource-loader-v0",
+  "provides": [
+    "fabric-resource-loader-v0"
+  ],
+  "name": "Quilted Fabric Resource Loader (v0)",
   "version": "${version}",
   "environment": "*",
   "license": "Apache-2.0",
@@ -17,6 +20,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.4.0",
+    "quilted-fabric-api-base": "*",
     "quilt_resource_loader": ">=1.0.0"
   },
   "description": "Asset and data resource loading.",

@@ -1,7 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-crash-report-info-v1",
-  "name": "Quiltified Fabric Crash Report Info (v1)",
+  "id": "quilted-fabric-crash-report-info-v1",
+  "provides": [
+    "fabric-crash-report-info-v1"
+  ],
+  "name": "Quilted Fabric Crash Report Info (v1)",
   "version": "${version}",
   "environment": "*",
   "license": "Apache-2.0",

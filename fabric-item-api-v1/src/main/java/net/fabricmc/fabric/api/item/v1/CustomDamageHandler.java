@@ -28,14 +28,7 @@ import net.minecraft.item.ItemStack;
  *
  * <p>Custom damage handlers can be set with {@link FabricItemSettings#customDamage}.
  */
+@Deprecated
 @FunctionalInterface
-public interface CustomDamageHandler {
-	/**
-	 * Called to apply damage to the given stack.
-	 * This can be used to e.g. drain from a battery before actually damaging the item.
-	 * @param amount The amount of damage originally requested
-	 * @param breakCallback Callback when the stack reaches zero damage. See {@link ItemStack#damage(int, LivingEntity, Consumer)} and its callsites for more information.
-	 * @return The amount of damage to pass to vanilla's logic
-	 */
-	int damage(ItemStack stack, int amount, LivingEntity entity, Consumer<LivingEntity> breakCallback);
+public interface CustomDamageHandler extends org.quiltmc.qsl.item.setting.api.CustomDamageHandler {
 }

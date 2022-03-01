@@ -1,7 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-api-base",
-  "name": "Quiltified Fabric API Base",
+  "id": "quilted-fabric-api-base",
+  "provides": [
+    "fabric-api-base"
+  ],
+  "name": "Quilted Fabric API Base",
   "version": "${version}",
   "environment": "*",
   "license": "Apache-2.0",

@@ -16,6 +16,8 @@
 
 package net.fabricmc.fabric.test.item;
 
+import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterials;
@@ -24,13 +26,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.CustomDamageHandler;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.loader.api.ModContainer;
 
 public class CustomDamageTest implements ModInitializer {
 	@Override
-	public void onInitialize() {
+	public void onInitialize(ModContainer mod) {
 		Registry.register(Registry.ITEM, new Identifier("fabric-item-api-v1-testmod", "weird_pickaxe"), new WeirdPick());
 	}
 
