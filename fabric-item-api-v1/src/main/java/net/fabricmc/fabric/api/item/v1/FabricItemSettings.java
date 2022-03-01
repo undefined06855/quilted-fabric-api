@@ -47,6 +47,7 @@ public class FabricItemSettings extends QuiltItemSettings {
 	/**
 	 * Sets the custom damage handler of the item.
 	 * Note that this is only called on an ItemStack if {@link ItemStack#isDamageable()} returns true.
+	 *
 	 * @see CustomDamageHandler
 	 */
 	public FabricItemSettings customDamage(CustomDamageHandler handler) {
