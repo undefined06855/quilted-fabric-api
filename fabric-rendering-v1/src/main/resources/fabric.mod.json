@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "quilted-fabric-rendering-v1",
+  "id": "fabric-rendering-v1",
   "provides": [
-    "fabric-rendering-v1"
+    "quilted-fabric-rendering-v1"
   ],
-  "name": "Fabric Rendering (v1)",
+  "name": "Quilted Fabric Rendering (v1)",
   "version": "${version}",
   "environment": "client",
   "license": "Apache-2.0",
