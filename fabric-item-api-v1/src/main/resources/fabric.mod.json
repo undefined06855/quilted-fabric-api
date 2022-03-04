@@ -16,7 +16,8 @@
     "sources": "https://github.com/FabricMC/fabric"
   },
   "authors": [
-    "FabricMC"
+    "FabricMC",
+    "QuiltMC"
   ],
   "mixins": [
     "fabric-item-api-v1.mixins.json"

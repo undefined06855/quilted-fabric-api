@@ -19,7 +19,7 @@
     "QuiltMC"
   ],
   "depends": {
-    "fabricloader": ">=0.4.0",
+    "fabricloader": ">=0.13.0",
     "quilted-fabric-api-base": "*",
     "quilt_resource_loader": ">=1.0.0"
   },

@@ -16,7 +16,8 @@
     "sources": "https://github.com/FabricMC/fabric"
   },
   "authors": [
-    "FabricMC"
+    "FabricMC",
+    "QuiltMC"
   ],
   "depends": {
     "fabricloader": ">=0.8.2",
