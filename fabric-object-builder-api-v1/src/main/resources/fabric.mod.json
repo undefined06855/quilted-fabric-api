@@ -29,6 +29,12 @@
   ],
   "accessWidener" : "fabric-object-builder-api-v1.accesswidener",
   "custom": {
-    "fabric-api:module-lifecycle": "stable"
+    "fabric-api:module-lifecycle": "deprecated",
+    "modmenu": {
+      "badges": [
+        "library",
+        "deprecated"
+      ]
+    }
   }
 }
