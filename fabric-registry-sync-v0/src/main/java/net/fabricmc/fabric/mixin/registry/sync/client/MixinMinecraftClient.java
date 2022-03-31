@@ -30,7 +30,6 @@ import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.fabricmc.fabric.impl.registry.sync.RemapException;
-import net.fabricmc.fabric.impl.registry.sync.trackers.vanilla.BlockInitTracker;
 
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
@@ -52,6 +51,5 @@ public class MixinMinecraftClient {
 		// Freeze the registries on the client
 		FABRIC_LOGGER.debug("Freezing registries");
 		Registry.freezeRegistries();
-		BlockInitTracker.postFreeze();
 	}
 }

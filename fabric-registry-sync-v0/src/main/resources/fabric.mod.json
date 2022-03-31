@@ -1,23 +1,26 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-registry-sync-v0",
-  "name": "Fabric Registry Sync (v0)",
+  "id": "quilted-fabric-registry-sync-v0",
+  "provides": [
+    "fabric-registry-sync-v0"
+  ],
+  "name": "Quilted Fabric Registry Sync (v0)",
   "version": "${version}",
   "environment": "*",
   "license": "Apache-2.0",
   "icon": "assets/fabric-registry-sync-v0/icon.png",
   "contact": {
-    "homepage": "https://fabricmc.net",
-    "irc": "irc://irc.esper.net:6667/fabric",
-    "issues": "https://github.com/FabricMC/fabric/issues",
-    "sources": "https://github.com/FabricMC/fabric"
+    "homepage": "https://quiltmc.org",
+    "issues": "https://github.com/QuiltMC/fabric-api-qsl/issues",
+    "sources": "https://github.com/QuiltMC/fabric-api-qsl"
   },
   "authors": [
-    "FabricMC"
+    "FabricMC",
+    "QuiltMC"
   ],
   "depends": {
     "fabricloader": ">=0.13.2",
-    "fabric-api-base": "*",
+    "quilted-fabric-api-base": "*",
     "fabric-networking-api-v1": "*"
   },
   "description": "Syncs registry mappings.",
@@ -33,6 +36,6 @@
     ]
   },
   "custom": {
-    "fabric-api:module-lifecycle": "stable"
+    "fabric-api:module-lifecycle": "deprecated"
   }
 }

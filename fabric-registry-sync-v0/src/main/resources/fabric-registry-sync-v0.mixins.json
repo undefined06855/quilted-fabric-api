@@ -3,7 +3,6 @@
   "package": "net.fabricmc.fabric.mixin.registry.sync",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "AccessorDebugChunkGenerator",
     "AccessorLevelStorageSession",
     "AccessorRegistry",
     "MixinBootstrap",

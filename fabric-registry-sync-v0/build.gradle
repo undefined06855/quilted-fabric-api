@@ -1,6 +1,10 @@
 archivesBaseName = "fabric-registry-sync-v0"
 version = getSubprojectVersion(project)
 
+dependencies {
+	include modApi(getQslModule("core", "registry", "1.0.0"))
+}
+
 moduleDependencies(project, [
 		'fabric-api-base',
 		'fabric-networking-api-v1'

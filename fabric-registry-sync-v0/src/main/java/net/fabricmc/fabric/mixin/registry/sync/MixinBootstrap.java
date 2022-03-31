@@ -34,7 +34,6 @@ import net.minecraft.world.biome.BiomeKeys;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.fabricmc.fabric.impl.registry.sync.trackers.StateIdTracker;
 import net.fabricmc.fabric.impl.registry.sync.trackers.vanilla.BlockInitTracker;
-import net.fabricmc.fabric.impl.registry.sync.trackers.vanilla.BlockItemTracker;
 
 @Mixin(Bootstrap.class)
 public class MixinBootstrap {
@@ -52,9 +51,6 @@ public class MixinBootstrap {
 		// state ID tracking
 		StateIdTracker.register(Registry.BLOCK, Block.STATE_IDS, (block) -> block.getStateManager().getStates());
 		StateIdTracker.register(Registry.FLUID, Fluid.STATE_IDS, (fluid) -> fluid.getStateManager().getStates());
-
-		// map tracking
-		BlockItemTracker.register(Registry.ITEM);
 
 		// block initialization, like Blocks
 		BlockInitTracker.register(Registry.BLOCK);
