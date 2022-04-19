@@ -417,7 +417,7 @@ configurations {
 }
 dependencies {
 	// Bundle all QSL modules
-	qsl modImplementation("org.quiltmc:qsl:${project.qsl_version}")
+	qsl modApi("org.quiltmc:qsl:${project.qsl_version}")
 	configurations.getByName("qsl").resolvedConfiguration.getFirstLevelModuleDependencies().each {
 		// "it" is QSL
 		it.getChildren().each {
