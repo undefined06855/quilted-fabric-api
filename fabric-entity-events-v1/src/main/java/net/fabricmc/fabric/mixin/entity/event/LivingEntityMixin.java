@@ -18,7 +18,6 @@ package net.fabricmc.fabric.mixin.entity.event;
 
 import java.util.Optional;
 
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -103,7 +102,8 @@ abstract class LivingEntityMixin {
 	@Inject(method = "getSleepingDirection", at = @At("RETURN"), cancellable = true)
 	private void onGetSleepingDirection(CallbackInfoReturnable<Direction> info) {
 		// TODO - Ideally, this would have been grabbed from the locals, however, something went terribly wrong, I guess
-		BlockPos sleepingPos = (BlockPos)this.getSleepingPosition().orElse(null);
+		BlockPos sleepingPos = (BlockPos) this.getSleepingPosition().orElse(null);
+
 		if (sleepingPos != null) {
 			info.setReturnValue(EntitySleepEvents.MODIFY_SLEEPING_DIRECTION.invoker().modifySleepDirection((LivingEntity) (Object) this, sleepingPos, info.getReturnValue()));
 		}
