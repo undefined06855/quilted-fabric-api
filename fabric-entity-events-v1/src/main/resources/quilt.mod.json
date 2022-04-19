@@ -21,10 +21,7 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"depends": [
-			{
-				"id": "fabricloader",
-				"versions": ">=0.8.2"
-			}
+			"quilt_loader"
 		],
 		"provides": [
 			{

@@ -29,14 +29,14 @@
 			"quilted_fabric_api_base",
 			{
 				"id": "quilted_fabric_resource_loader_v0",
+				"versions": ">=1.0.0-"
+			},
+			{
+				"id": "quilt_resource_loader",
 				"versions": ">=1.0.0"
 			},
 			{
-				"id": "quilt_command",
-				"versions": ">=1.0.0"
-			},
-			{
-				"id": "quilt_client_command",
+				"id": "quilt_lifecycle_events",
 				"versions": ">=1.0.0"
 			}
 		],
