@@ -100,9 +100,10 @@ abstract class LivingEntityMixin {
 		}
 	}
 
-	// FIXME - The locals fail to be obtained somehow...
-	@Inject(method = "getSleepingDirection", at = @At("RETURN"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
-	private void onGetSleepingDirection(CallbackInfoReturnable<Direction> info, @Nullable BlockPos sleepingPos) {
+	@Inject(method = "getSleepingDirection", at = @At("RETURN"), cancellable = true)
+	private void onGetSleepingDirection(CallbackInfoReturnable<Direction> info) {
+		// TODO - Ideally, this would have been grabbed from the locals, however, something went terribly wrong, I guess
+		BlockPos sleepingPos = (BlockPos)this.getSleepingPosition().orElse(null);
 		if (sleepingPos != null) {
 			info.setReturnValue(EntitySleepEvents.MODIFY_SLEEPING_DIRECTION.invoker().modifySleepDirection((LivingEntity) (Object) this, sleepingPos, info.getReturnValue()));
 		}
