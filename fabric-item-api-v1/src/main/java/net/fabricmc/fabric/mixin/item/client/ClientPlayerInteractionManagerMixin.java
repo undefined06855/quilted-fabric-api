@@ -16,8 +16,6 @@
 
 package net.fabricmc.fabric.mixin.item.client;
 
-import net.fabricmc.fabric.api.item.v1.FabricItem;
-
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,6 +26,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+
+import net.fabricmc.fabric.api.item.v1.FabricItem;
 
 @Mixin(ClientPlayerInteractionManager.class)
 public class ClientPlayerInteractionManagerMixin {
