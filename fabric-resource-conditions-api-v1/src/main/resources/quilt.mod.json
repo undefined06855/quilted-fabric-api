@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Resource Conditions API (v1)",
 			"description": "Allows conditionally loading resources.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

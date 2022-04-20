@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Data Generation API (v1)",
 			"description": "Allows for automatic data generation.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

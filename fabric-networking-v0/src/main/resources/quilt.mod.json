@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Networking (v0)",
 			"description": "Legacy Networking packet hooks and registries, superseded by fabric-networking-api-v1.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

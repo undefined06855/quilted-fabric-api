@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Entity Events (v1)",
 			"description": "Events to hook into entities.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

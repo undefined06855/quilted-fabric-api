@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Command API (v1)",
 			"description": "Adds command-related hooks.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Particles (v1)",
 			"description": "Hooks for registering custom particles.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

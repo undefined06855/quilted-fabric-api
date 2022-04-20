@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Transitive Access Wideners (v1)",
 			"description": "Contains transitive access wideners that provide access to otherwise inaccessible Minecraft code.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

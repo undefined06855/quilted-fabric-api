@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Registry Sync (v0)",
 			"description": "Syncs registry mappings.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

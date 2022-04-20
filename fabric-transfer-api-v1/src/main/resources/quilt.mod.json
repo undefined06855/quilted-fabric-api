@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Transfer API (v1)",
 			"description": "A common API for the transfer of fluids, items and other game resources.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

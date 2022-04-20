@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Game Test API (v1)",
 			"description": "Allows registration of custom game tests.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

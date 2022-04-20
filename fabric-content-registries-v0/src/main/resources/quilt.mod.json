@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Content Registries (v0)",
 			"description": "Adds registries for vanilla mechanics that are missing them.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

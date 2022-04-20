@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric BlockRenderLayer Registration (v1)",
 			"description": "Registration utility for block and fluid render layers.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

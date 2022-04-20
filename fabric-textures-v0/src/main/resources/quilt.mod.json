@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Textures (v0)",
 			"description": "Hooks for texture loading and registration.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

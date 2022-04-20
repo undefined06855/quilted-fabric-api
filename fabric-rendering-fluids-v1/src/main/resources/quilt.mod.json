@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Rendering Fluids (v1)",
 			"description": "Hooks for registering fluid renders.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

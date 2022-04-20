@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Renderer Registries (v1)",
 			"description": "Registries for entity and block renderers.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",

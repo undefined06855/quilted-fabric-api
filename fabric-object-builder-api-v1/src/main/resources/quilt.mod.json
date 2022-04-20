@@ -8,8 +8,8 @@
 			"name": "Quilted Fabric Object Builder API (v1)",
 			"description": "Builders for objects vanilla has locked down.",
 			"contributors": {
-				"Owner": "QuiltMC: QSL Team",
-				"Original Owner": "FabricMC"
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
 			},
 			"contact": {
 				"homepage": "https://quiltmc.org",
