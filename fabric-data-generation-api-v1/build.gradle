@@ -111,3 +111,5 @@ ClassNode getClassNode(File input, String className) {
 		}
 	}
 }
+
+generateResources.dependsOn generateAccessWidener
