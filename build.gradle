@@ -196,6 +196,11 @@ allprojects {
 			}
 		}
 	}
+
+	// Run this task after updating minecraft to regenerate any required resources
+	task generateResources {
+		group = "fabric"
+	}
 }
 
 // Apply auxiliary buildscripts to submodules
