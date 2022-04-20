@@ -466,6 +466,7 @@ import org.kohsuke.github.GitHub
 
 task renameJar(type: Jar, dependsOn: (signingEnabled ? signRemapJar : remapJar)) {
 	with remapJar
+	from zipTree(remapJar.archiveFile)
 	def qsl_version_normalized = project.qsl_version.substring(0, project.qsl_version.indexOf('+'))
 	def qfapi_version_normalized = project.version.substring(0, project.version.indexOf('+'))
 	def upstream_fapi_version_normalized = project.upstream_version
