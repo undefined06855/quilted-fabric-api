@@ -19,8 +19,6 @@ package net.fabricmc.fabric.test.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
-import net.fabricmc.fabric.api.item.v1.FabricItem;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -34,6 +32,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+
+import net.fabricmc.fabric.api.item.v1.FabricItem;
 
 public class UpdatingItem extends Item implements FabricItem {
 	private static final EntityAttributeModifier PLUS_FIVE = new EntityAttributeModifier(
