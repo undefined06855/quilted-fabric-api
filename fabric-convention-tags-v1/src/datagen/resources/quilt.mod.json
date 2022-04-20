@@ -8,9 +8,9 @@
       "name": "Quilted Fabric Convention Tags API (v1) Datagen",
       "description": "Contains common tags used by mods for vanilla things.",
       "contributors": {
-        "Owner": "QuiltMC: QSL Team",
-        "Original Owner": "FabricMC"
-      },
+				"QuiltMC: QSL Team": "Owner",
+				"FabricMC": "Original Owner"
+			},
       "contact": {
         "homepage": "https://quiltmc.org",
         "issues": "https://github.com/QuiltMC/quilted-fabric-api/issues",
