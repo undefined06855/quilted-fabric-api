@@ -16,6 +16,8 @@
 
 package net.fabricmc.fabric.mixin.item.client;
 
+import net.fabricmc.fabric.api.item.v1.FabricItem;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -56,7 +58,7 @@ public class ClientPlayerInteractionManagerMixin {
 			ItemStack oldStack = this.selectedStack;
 			ItemStack newStack = this.client.player.getMainHandStack();
 
-			if (oldStack.isOf(newStack.getItem()) && oldStack.getItem().allowContinuingBlockBreaking(this.client.player, oldStack, newStack)) {
+			if (oldStack.isOf(newStack.getItem()) && ((FabricItem) oldStack.getItem()).allowContinuingBlockBreaking(this.client.player, oldStack, newStack)) {
 				stackUnchanged = true;
 			}
 		}
