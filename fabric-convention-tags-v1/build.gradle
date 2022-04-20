@@ -1,5 +1,6 @@
 archivesBaseName = "fabric-convention-tags-v1"
 version = getSubprojectVersion(project)
+upstream_version = getSubprojectUpstreamVersion(project)
 
 moduleDependencies(project, [
 		'fabric-api-base'
