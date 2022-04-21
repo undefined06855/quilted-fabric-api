@@ -26,6 +26,7 @@
 		},
 		"depends": [
 			"quilt_loader",
+			"quilt_registry",
 			"quilted_fabric_api_base",
 			"fabric-networking-api-v1"
 		],
