@@ -13,7 +13,7 @@ plugins {
 	id "org.quiltmc.gradle.licenser" version "1.1.0"
 	id "org.ajoberstar.grgit" version "3.1.0"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
-	id "com.modrinth.minotaur" version "1.1.0"
+	id "com.modrinth.minotaur" version "2.1.2"
 	id "me.modmuss50.remotesign" version "0.2.4" apply false
 }
 
@@ -500,21 +500,15 @@ task github(dependsOn: renameJar) {
 }
 
 
-task modrinth(type: com.modrinth.minotaur.TaskModrinthUpload, dependsOn: renameJar) {
-	onlyIf {
-		ENV.MODRINTH_TOKEN
-	}
-
-	token = ENV.MODRINTH_TOKEN
+import com.modrinth.minotaur.dependencies.ModDependency
+modrinth {
 	projectId = "qvIfYCYJ"
-	versionNumber = version
 	versionName = "[$project.minecraft_version] QSL " + project.qsl_version.split("\\+")[0] + " and QFAPI " + project.version.split("\\+")[0]
-	releaseType = project.prerelease == "true" ? "beta" : "release"
-	changelog = "Provides Fabric API ${project.upstream_version}\n"
-	changelog += ENV.CHANGELOG ?: "No changelog provided"
-
+	versionType = project.prerelease == "true" ? "beta" : "release"
+	changelog = "Provides Fabric API ${project.upstream_version}\n" + (ENV.CHANGELOG ?: "No changelog provided")
 	uploadFile = renameJar
-
-	addGameVersion(project.minecraft_version)
-	addLoader('quilt')
+	dependencies = [
+		new ModDependency("P7dR8mSH", "incompatible") // Incompatible dependency on Fabric API
+	]
 }
+tasks.modrinth.dependsOn renameJar
