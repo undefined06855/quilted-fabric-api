@@ -340,6 +340,13 @@ publishing {
 
 			pom.withXml {
 				def depsNode = asNode().appendNode("dependencies")
+				getAllQslModules().forEach {
+					def depNode = depsNode.appendNode("dependency")
+					depNode.appendNode("groupId", it.getModuleGroup())
+					depNode.appendNode("artifactId", it.getModuleName())
+					depNode.appendNode("version", it.getModuleVersion())
+					depNode.appendNode("scope", "compile")
+				}
 				subprojects.each {
 					def depNode = depsNode.appendNode("dependency")
 					depNode.appendNode("groupId", it.group)
@@ -379,6 +386,8 @@ void setupRepositories(RepositoryHandler repositories) {
 				password ENV.SNAPSHOTS_PASSWORD
 			}
 		}
+	} else {
+		repositories.mavenLocal()
 	}
 }
 
@@ -400,20 +409,8 @@ configurations {
 dependencies {
 	// Bundle all QSL modules
 	qsl modApi("org.quiltmc:qsl:${project.qsl_version}")
-	configurations.getByName("qsl").resolvedConfiguration.getFirstLevelModuleDependencies().each {
-		// "it" is QSL
-		it.getChildren().each {
-			// "it" is each QSL library
-			it.getChildren().each {
-				// "it" is each QSL module
-				// this should only be QSL modules, but it can't hurt to filter out
-				if (it.getModuleGroup().startsWith("org.quiltmc.qsl") && it.getModuleGroup().split("\\.").length == 4) {
-					include (it.getModuleGroup() + ":" + it.getModuleName() + ":" + it.getModuleVersion())
-				} else {
-					println("WARNING: Excluding non-QSL module: $it")
-				}
-			}
-		}
+	getAllQslModules().forEach {
+		include (it.getModuleGroup() + ":" + it.getModuleName() + ":" + it.getModuleVersion())
 	}
 	afterEvaluate {
 		subprojects.each {
@@ -424,6 +421,24 @@ dependencies {
 	}
 }
 
+java.util.stream.Stream<ResolvedDependency> getAllQslModules() {
+// "it" is QSL
+	return configurations.getByName("qsl").resolvedConfiguration.getFirstLevelModuleDependencies().stream().flatMap {
+		it.getChildren().stream()
+	}.flatMap {
+		// "it" is each QSL library
+		it.getChildren().stream()
+	}.filter {
+		// "it" is each QSL module
+		// this should only be QSL modules, but it can't hurt to filter out
+		if (it.getModuleGroup().startsWith("org.quiltmc.qsl") && it.getModuleGroup().split("\\.").length == 4) {
+			return true
+		} else {
+			throw RuntimeException("Unexpected dependency: $it")
+		}
+	}
+
+}
 remapJar {
 	afterEvaluate {
 		subprojects.each {
@@ -501,6 +516,7 @@ task github(dependsOn: renameJar) {
 
 
 import com.modrinth.minotaur.dependencies.ModDependency
+
 modrinth {
 	projectId = "qvIfYCYJ"
 	versionName = "[$project.minecraft_version] QSL " + project.qsl_version.split("\\+")[0] + " and QFAPI " + project.version.split("\\+")[0]
