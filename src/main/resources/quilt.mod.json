@@ -84,6 +84,7 @@
 			"quilt_networking",
 			"quilt_recipe",
 			"quilt_registry",
+			"quilt_registry_entry_attachments",
 			"quilt_resource_loader",
 			"quilt_tags",
 			"quilt_tooltip"
