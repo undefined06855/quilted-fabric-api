@@ -21,7 +21,8 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"depends": [
-			"quilt_loader"
+			"quilt_loader",
+			"quilt_block_extensions"
 		],
 		"provides": [
 			{
