@@ -451,6 +451,11 @@ remapJar {
 	}
 }
 
+machete {
+	// JSON minification only saves singular bytes and makes the JSON unreadable
+	optimizations.json = false
+}
+
 curseforge {
 	if (ENV.CURSEFORGE_API_KEY) {
 		apiKey = ENV.CURSEFORGE_API_KEY
