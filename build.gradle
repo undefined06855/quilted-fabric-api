@@ -161,7 +161,9 @@ allprojects {
 	}
 
 	license {
-		rule rootProject.file("HEADER")
+		rule rootProject.file("codeformat/FABRIC_MODIFIED_HEADER")
+		rule rootProject.file("codeformat/HEADER")
+
 		include "**/*.java"
 	}
 
