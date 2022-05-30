@@ -29,6 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
+import net.minecraft.entity.EntityType;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
@@ -77,6 +78,9 @@ public interface AbstractBlockSettingsAccessor {
 
 	@Deprecated
 	@Accessor
+	float getJumpVelocityMultiplier();
+
+	@Accessor
 	boolean getDynamicBounds();
 
 	@Deprecated
@@ -90,6 +94,24 @@ public interface AbstractBlockSettingsAccessor {
 	@Deprecated
 	@Accessor
 	boolean isToolRequired();
+
+	@Accessor
+	AbstractBlock.TypedContextPredicate<EntityType<?>> getAllowsSpawningPredicate();
+
+	@Accessor
+	AbstractBlock.ContextPredicate getSolidBlockPredicate();
+
+	@Accessor
+	AbstractBlock.ContextPredicate getSuffocationPredicate();
+
+	@Accessor
+	AbstractBlock.ContextPredicate getBlockVisionPredicate();
+
+	@Accessor
+	AbstractBlock.ContextPredicate getPostProcessPredicate();
+
+	@Accessor
+	AbstractBlock.ContextPredicate getEmissiveLightingPredicate();
 
 	/* SETTERS */
 	@Deprecated
