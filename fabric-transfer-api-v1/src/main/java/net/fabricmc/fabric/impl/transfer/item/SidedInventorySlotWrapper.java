@@ -41,7 +41,7 @@ class SidedInventorySlotWrapper implements SingleSlotStorage<ItemVariant> {
 
 	@Override
 	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
-		if (!sidedInventory.canInsert(slotWrapper.slot, resource.toStack(), direction)) {
+		if (!sidedInventory.canInsert(slotWrapper.slot, ((ItemVariantImpl) resource).getCachedStack(), direction)) {
 			return 0;
 		} else {
 			return slotWrapper.insert(resource, maxAmount, transaction);
@@ -50,7 +50,7 @@ class SidedInventorySlotWrapper implements SingleSlotStorage<ItemVariant> {
 
 	@Override
 	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
-		if (!sidedInventory.canExtract(slotWrapper.slot, resource.toStack(), direction)) {
+		if (!sidedInventory.canExtract(slotWrapper.slot, ((ItemVariantImpl) resource).getCachedStack(), direction)) {
 			return 0;
 		} else {
 			return slotWrapper.extract(resource, maxAmount, transaction);
