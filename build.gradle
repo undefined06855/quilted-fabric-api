@@ -309,6 +309,7 @@ subprojects {
 
 	afterEvaluate {
 		// Disable the gen sources task on sub projects
+		genSourcesWithQuiltflower.enabled = false
 		genSourcesWithFernFlower.enabled = false
 		genSourcesWithCfr.enabled = false
 		unpickJar.enabled = false
