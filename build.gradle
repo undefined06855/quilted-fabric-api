@@ -320,6 +320,7 @@ task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
 	archiveFileName = "${archivesBaseName}-${project.version}-maven.jar"
 	addNestedDependencies = false
 }
+prepareRemapMavenJar.dependsOn("optimizeOutputsOfJar")
 build.dependsOn remapMavenJar
 
 if (signingEnabled) {
@@ -454,7 +455,7 @@ remapJar {
 }
 
 machete {
-	// JSON minification only saves singular bytes and makes the JSON unreadable
+	// JSON minification isn't effective on this scale and sacrifices readability
 	optimizations.json = false
 }
 
