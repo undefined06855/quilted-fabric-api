@@ -33,7 +33,7 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.client.screen.ScreenEventFactory;
 import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
 
-@Mixin(Screen.class)
+@Mixin(value = Screen.class, priority = 999)
 abstract class ScreenMixin implements ScreenExtensions {
 	@Unique
 	private Event<ScreenEvents.Remove> qfapi$removeEvent;
@@ -114,7 +114,7 @@ abstract class ScreenMixin implements ScreenExtensions {
 	@Unique
 	private <T> Event<T> ensureEventsAreInitialised(Event<T> event) {
 		if (event == null) {
-			throw new IllegalStateException(String.format("[fabric-screen-api-v1] The current screen (%s) has not been correctly initialised, please send this crash log to the mod author. This is usually caused by the screen not calling super.init(Lnet/minecraft/client/MinecraftClient;II)V", this.getClass().getSuperclass().getName()));
+			throw new IllegalStateException(String.format("[quilted-fabric-screen-api-v1] The current screen (%s) has not been correctly initialised, please send this crash log to the mod author. This is usually caused by the screen not calling super.init(Lnet/minecraft/client/MinecraftClient;II)V", this.getClass().getSuperclass().getName()));
 		}
 
 		return event;
