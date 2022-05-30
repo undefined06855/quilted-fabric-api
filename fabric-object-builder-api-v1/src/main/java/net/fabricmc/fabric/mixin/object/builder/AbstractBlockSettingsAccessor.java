@@ -80,6 +80,7 @@ public interface AbstractBlockSettingsAccessor {
 	@Accessor
 	float getJumpVelocityMultiplier();
 
+	@Deprecated
 	@Accessor
 	boolean getDynamicBounds();
 
