@@ -95,21 +95,27 @@ public interface AbstractBlockSettingsAccessor {
 	@Accessor
 	boolean isToolRequired();
 
+	@Deprecated
 	@Accessor
 	AbstractBlock.TypedContextPredicate<EntityType<?>> getAllowsSpawningPredicate();
 
+	@Deprecated
 	@Accessor
 	AbstractBlock.ContextPredicate getSolidBlockPredicate();
 
+	@Deprecated
 	@Accessor
 	AbstractBlock.ContextPredicate getSuffocationPredicate();
 
+	@Deprecated
 	@Accessor
 	AbstractBlock.ContextPredicate getBlockVisionPredicate();
 
+	@Deprecated
 	@Accessor
 	AbstractBlock.ContextPredicate getPostProcessPredicate();
 
+	@Deprecated
 	@Accessor
 	AbstractBlock.ContextPredicate getEmissiveLightingPredicate();
 
