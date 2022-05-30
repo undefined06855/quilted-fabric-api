@@ -54,6 +54,11 @@ public final class ScreenTests implements ClientModInitializer {
 	private void afterInitScreen(MinecraftClient client, Screen screen, int windowWidth, int windowHeight) {
 		LOGGER.info("Initializing {}", screen.getClass().getName());
 
+		// Uncomment this debug code if a screen is causing havoc
+		// for (Screen screen2 : ScreenEventFactory.ACTIVE_SCREENS) {
+		// 	LOGGER.info("Active: {}", screen2);
+		// }
+
 		if (screen instanceof TitleScreen) {
 			final List<ClickableWidget> buttons = Screens.getButtons(screen);
 

@@ -20,6 +20,8 @@ package net.fabricmc.fabric.api.client.screen.v1;
 import java.util.List;
 import java.util.Objects;
 
+import org.quiltmc.qsl.screen.api.client.QuiltScreen;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
@@ -28,14 +30,13 @@ import net.minecraft.client.render.item.ItemRenderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
-import net.fabricmc.fabric.mixin.screen.ScreenAccessor;
 
 /**
  * Utility methods related to screens.
  *
  * @see ScreenEvents
  */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public final class Screens {
 	/**
@@ -48,7 +49,7 @@ public final class Screens {
 	public static List<ClickableWidget> getButtons(Screen screen) {
 		Objects.requireNonNull(screen, "Screen cannot be null");
 
-		return ScreenExtensions.getExtensions(screen).fabric_getButtons();
+		return ((QuiltScreen) screen).getButtons();
 	}
 
 	/**
@@ -59,7 +60,7 @@ public final class Screens {
 	public static ItemRenderer getItemRenderer(Screen screen) {
 		Objects.requireNonNull(screen, "Screen cannot be null");
 
-		return ((ScreenAccessor) screen).getItemRenderer();
+		return ((QuiltScreen) screen).getItemRenderer();
 	}
 
 	/**
@@ -70,13 +71,13 @@ public final class Screens {
 	public static TextRenderer getTextRenderer(Screen screen) {
 		Objects.requireNonNull(screen, "Screen cannot be null");
 
-		return ((ScreenAccessor) screen).getTextRenderer();
+		return ((QuiltScreen) screen).getTextRenderer();
 	}
 
 	public static MinecraftClient getClient(Screen screen) {
 		Objects.requireNonNull(screen, "Screen cannot be null");
 
-		return ((ScreenAccessor) screen).getClient();
+		return ((QuiltScreen) screen).getClient();
 	}
 
 	private Screens() {

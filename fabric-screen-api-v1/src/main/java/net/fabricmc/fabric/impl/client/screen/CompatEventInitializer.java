@@ -1,5 +1,4 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,24 +14,14 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.mixin.screen;
+package net.fabricmc.fabric.impl.client.screen;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.item.ItemRenderer;
-
-@Mixin(Screen.class)
-public interface ScreenAccessor {
-	@Accessor
-	ItemRenderer getItemRenderer();
-
-	@Accessor
-	TextRenderer getTextRenderer();
-
-	@Accessor
-	MinecraftClient getClient();
+public class CompatEventInitializer implements ClientModInitializer {
+	@Override
+	public void onInitializeClient(ModContainer mod) {
+		ScreenEventFactory.initializeCompatEvents();
+	}
 }
