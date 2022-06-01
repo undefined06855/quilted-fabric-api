@@ -53,7 +53,7 @@ public final class QuiltCompatEvent {
 
 		@Override
 		public void register(Identifier phase, D listener) {
-			this.event.register(phase, this.listenerConverter.apply(listener));
+			this.event.register(quiltifyPhases(phase), this.listenerConverter.apply(listener));
 		}
 
 		@Override
