@@ -58,7 +58,12 @@ public final class QuiltCompatEvent {
 
 		@Override
 		public void addPhaseOrdering(Identifier firstPhase, Identifier secondPhase) {
-			this.event.addPhaseOrdering(firstPhase, secondPhase);
+			this.event.addPhaseOrdering(quiltifyPhases(firstPhase), quiltifyPhases(secondPhase));
+		}
+
+		// This makes Fabric's default phase equal to the Quilt one, preventing ordering issues
+		private static Identifier quiltifyPhases(Identifier phase) {
+			return phase.equals(DEFAULT_PHASE) ? org.quiltmc.qsl.base.api.event.Event.DEFAULT_PHASE : phase;
 		}
 	}
 }
