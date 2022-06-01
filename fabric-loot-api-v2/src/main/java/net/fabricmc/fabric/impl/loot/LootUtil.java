@@ -41,11 +41,6 @@ public final class LootUtil {
 		try (Resource resource = resourceManager.getResource(resourceId)) {
 			ResourcePackSource packSource = ((FabricResource) resource).getFabricPackSource();
 
-			if (resource.getId().toString().contains("black_wool")) {
-				System.out.println(packSource.toString());
-				System.out.println(ResourcePackSource.PACK_SOURCE_BUILTIN.toString());
-				System.out.println(ResourcePackSource.PACK_SOURCE_NONE.toString());
-			}
 			if (packSource == ResourcePackSource.PACK_SOURCE_BUILTIN) {
 				return LootTableSource.VANILLA;
 			} else if (packSource == ModResourcePackCreator.RESOURCE_PACK_SOURCE || packSource instanceof BuiltinResourcePackSource) {

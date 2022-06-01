@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2022 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,6 +62,7 @@ public class NamespaceResourceManagerMixin {
 		if (resources.get(resources.size() - 1) instanceof FabricResourceImpl resource) {
 			if (resourcePack instanceof GroupResourcePack groupPack) {
 				var innerPacks = groupPack.getPacks(id.getNamespace());
+
 				for (ResourcePack innerPack : innerPacks) {
 					if (innerPack.contains(type, resource.getId())) {
 						resource.setFabricPackSource(ResourcePackSourceTracker.getSource(innerPack));
@@ -78,6 +80,7 @@ public class NamespaceResourceManagerMixin {
 		if (cir.getReturnValue() instanceof FabricResourceImpl resource) {
 			if (resourcePack instanceof GroupResourcePack groupPack) {
 				var innerPacks = groupPack.getPacks(id.getNamespace());
+
 				for (ResourcePack innerPack : innerPacks) {
 					if (innerPack.contains(type, resource.getId())) {
 						resource.setFabricPackSource(ResourcePackSourceTracker.getSource(innerPack));
