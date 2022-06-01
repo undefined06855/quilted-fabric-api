@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +14,16 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.mixin.loot.table;
+package net.fabricmc.fabric.impl.resource.loader;
 
-import java.util.List;
+import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourcePackSource;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
-
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.function.LootFunction;
-
-@Mixin(LootTable.Builder.class)
-public interface LootSupplierBuilderHooks {
-	@Accessor
-	List<LootPool> getPools();
-	@Accessor
-	List<LootFunction> getFunctions();
+/**
+ * An extended version of {@link FabricResource} that supports
+ * setting the pack resource. Only for use from within this module.
+ * Note that <strong>not all</strong> resources are instances of this interface.
+ */
+public interface FabricResourceImpl extends Resource, FabricResource {
+	void setFabricPackSource(ResourcePackSource packSource);
 }

@@ -20,9 +20,13 @@
 			"icon": "assets/quilted_fabric_loot_tables_v1/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"main": "net.fabricmc.fabric.impl.loot.table.LootTablesV1Init"
+		},
 		"depends": [
 			"quilt_loader",
-			"fabric-api-base"
+			"fabric-api-base",
+			"fabric-loot-api-v2"
 		],
 		"provides": [
 			{
@@ -32,7 +36,7 @@
 		]
 	},
 	"mixin": "quilted_fabric_loot_tables_v1.mixins.json",
-	"fabric-api:module-lifecycle": "stable",
+	"fabric-api:module-lifecycle": "deprecated",
 	"modmenu": {
 		"badges": [
 			"library"

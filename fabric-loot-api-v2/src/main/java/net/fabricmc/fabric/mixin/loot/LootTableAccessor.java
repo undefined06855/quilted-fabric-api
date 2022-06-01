@@ -15,20 +15,24 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.mixin.loot.table;
+package net.fabricmc.fabric.mixin.loot;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Invoker;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.loot.entry.LootPoolEntry;
-import net.minecraft.loot.entry.LootPoolEntryType;
-import net.minecraft.loot.entry.LootPoolEntryTypes;
-import net.minecraft.util.JsonSerializer;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.function.LootFunction;
 
-@Mixin(LootPoolEntryTypes.class)
-public interface LootPoolEntryTypesAccessor {
-	@Invoker("register")
-	static LootPoolEntryType register(String id, JsonSerializer<? extends LootPoolEntry> serializer) {
-		throw new UnsupportedOperationException("Mixin dummy");
-	}
+/**
+ * Accesses loot table fields for {@link net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder#copyOf(LootTable)}.
+ * These are normally available in the transitive access widener module.
+ */
+@Mixin(LootTable.class)
+public interface LootTableAccessor {
+	@Accessor("pools")
+	LootPool[] fabric_getPools();
+
+	@Accessor("functions")
+	LootFunction[] fabric_getFunctions();
 }
