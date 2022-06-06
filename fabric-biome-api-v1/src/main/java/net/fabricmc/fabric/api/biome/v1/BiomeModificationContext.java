@@ -25,4 +25,32 @@ import net.minecraft.world.biome.Biome;
  * <p><b>Experimental feature</b>, may be removed or changed without further notice.
  */
 @Deprecated
-public interface BiomeModificationContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext { }
+public interface BiomeModificationContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext {
+	/**
+	 * Returns the modification context for the biomes weather properties.
+	 */
+	WeatherContext getWeather();
+
+	/**
+	 * Returns the modification context for the biomes effects.
+	 */
+	EffectsContext getEffects();
+
+	/**
+	 * Returns the modification context for the biomes generation settings.
+	 */
+	GenerationSettingsContext getGenerationSettings();
+
+	/**
+	 * Returns the modification context for the biomes spawn settings.
+	 */
+	SpawnSettingsContext getSpawnSettings();
+
+	interface WeatherContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.WeatherContext { }
+
+	interface EffectsContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.EffectsContext { }
+
+	interface GenerationSettingsContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.GenerationSettingsContext { }
+
+	interface SpawnSettingsContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.SpawnSettingsContext { }
+}
