@@ -1,5 +1,4 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +14,12 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.impl.biome.modification;
+package net.fabricmc.fabric.mixin.biome;
 
-import org.jetbrains.annotations.ApiStatus;
+import org.quiltmc.qsl.worldgen.biome.impl.modification.BiomeModificationContextImpl;
+import org.spongepowered.asm.mixin.Mixin;
 
-/**
- * Prevents double-modification of biomes in the same dynamic registry manager from occurring and fails-fast
- * if it does occur.
- */
-@ApiStatus.Internal
-public interface BiomeModificationMarker {
-	void fabric_markModified();
-}
+import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
+
+@Mixin(BiomeModificationContextImpl.class)
+public abstract class BiomeModificationContextImplMixin implements BiomeModificationContext { }

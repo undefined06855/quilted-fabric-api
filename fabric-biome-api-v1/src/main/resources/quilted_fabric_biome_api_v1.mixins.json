@@ -3,10 +3,8 @@
   "package": "net.fabricmc.fabric.mixin.biome",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "modification.DynamicRegistryManagerImplMixin",
-    "modification.MinecraftServerMixin",
-    "MixinMultiNoiseBiomeSource",
-    "MixinTheEndBiomeSource"
+    "BiomeModificationContextImplMixin",
+    "BiomeSelectionContextImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -18,27 +18,21 @@
 package net.fabricmc.fabric.api.biome.v1;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.google.common.collect.ImmutableSet;
-
-import net.minecraft.tag.TagKey;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.util.registry.BuiltinRegistries;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.SpawnSettings;
-import net.minecraft.world.dimension.DimensionOptions;
 
 /**
  * Provides several convenient biome selectors that can be used with {@link BiomeModifications}.
  *
  * <p><b>Experimental feature</b>, may be removed or changed without further notice.
  */
+@Deprecated
 public final class BiomeSelectors {
 	private BiomeSelectors() {
 	}
@@ -47,25 +41,21 @@ public final class BiomeSelectors {
 	 * Matches all Biomes. Use a more specific selector if possible.
 	 */
 	public static Predicate<BiomeSelectionContext> all() {
-		return context -> true;
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.all().test(context);
 	}
 
 	/**
 	 * Matches Biomes that have not been originally defined in a datapack, but that are defined in code.
 	 */
 	public static Predicate<BiomeSelectionContext> builtIn() {
-		return context -> BuiltinRegistries.BIOME.containsId(context.getBiomeKey().getValue());
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.builtIn().test(context);
 	}
 
 	/**
 	 * Returns a biome selector that will match all biomes from the minecraft namespace.
 	 */
 	public static Predicate<BiomeSelectionContext> vanilla() {
-		return context -> {
-			// In addition to the namespace, we also check that it doesn't come from a data pack.
-			return context.getBiomeKey().getValue().getNamespace().equals("minecraft")
-					&& BuiltinRegistries.BIOME.containsId(context.getBiomeKey().getValue());
-		};
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.foundInTheEnd().test(context);
 	}
 
 	/**
@@ -73,7 +63,7 @@ public final class BiomeSelectors {
 	 * assuming Vanilla's default biome source is used.
 	 */
 	public static Predicate<BiomeSelectionContext> foundInOverworld() {
-		return context -> context.canGenerateIn(DimensionOptions.OVERWORLD);
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.foundInOverworld().test(context);
 	}
 
 	/**
@@ -83,7 +73,7 @@ public final class BiomeSelectors {
 	 * <p>This selector will also match modded biomes that have been added to the nether using {@link NetherBiomes}.
 	 */
 	public static Predicate<BiomeSelectionContext> foundInTheNether() {
-		return context -> context.canGenerateIn(DimensionOptions.NETHER);
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.foundInTheNether().test(context);
 	}
 
 	/**
@@ -91,16 +81,17 @@ public final class BiomeSelectors {
 	 * assuming Vanilla's default End biome source is used.
 	 */
 	public static Predicate<BiomeSelectionContext> foundInTheEnd() {
-		return context -> context.canGenerateIn(DimensionOptions.END);
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.foundInTheEnd().test(context);
 	}
 
 	/**
 	 * Returns a biome selector that will match all biomes in the given tag.
 	 *
-	 * @see net.fabricmc.fabric.api.tag.TagFactory#BIOME
+	 * @see net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+	 * @see net.fabricmc.fabric.impl.tag.convention.TagRegistration
 	 */
 	public static Predicate<BiomeSelectionContext> tag(TagKey<Biome> tag) {
-		return context -> context.hasTag(tag);
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.isIn(tag).test(context);
 	}
 
 	/**
@@ -108,17 +99,17 @@ public final class BiomeSelectors {
 	 */
 	@SafeVarargs
 	public static Predicate<BiomeSelectionContext> excludeByKey(RegistryKey<Biome>... keys) {
-		return excludeByKey(ImmutableSet.copyOf(keys));
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.excludeByKey(keys).test(context);
 	}
 
 	/**
-	 * Returns a selector that will reject any biome whos keys is in the given collection of keys.
+	 * Returns a selector that will reject any biome whose keys are in the given collection of keys.
 	 *
 	 * <p>This is useful for allowing a list of biomes to be defined in the config file, where
 	 * a certain feature should not spawn.
 	 */
 	public static Predicate<BiomeSelectionContext> excludeByKey(Collection<RegistryKey<Biome>> keys) {
-		return context -> !keys.contains(context.getBiomeKey());
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.excludeByKey(keys).test(context);
 	}
 
 	/**
@@ -126,7 +117,7 @@ public final class BiomeSelectors {
 	 */
 	@SafeVarargs
 	public static Predicate<BiomeSelectionContext> includeByKey(RegistryKey<Biome>... keys) {
-		return includeByKey(ImmutableSet.copyOf(keys));
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.includeByKey(keys).test(context);
 	}
 
 	/**
@@ -136,7 +127,7 @@ public final class BiomeSelectors {
 	 * a certain feature should spawn exclusively.
 	 */
 	public static Predicate<BiomeSelectionContext> includeByKey(Collection<RegistryKey<Biome>> keys) {
-		return context -> keys.contains(context.getBiomeKey());
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.includeByKey(keys).test(context);
 	}
 
 	/**
@@ -145,7 +136,7 @@ public final class BiomeSelectors {
 	 * <p>Matches spawns in all {@link SpawnGroup spawn groups}.
 	 */
 	public static Predicate<BiomeSelectionContext> spawnsOneOf(EntityType<?>... entityTypes) {
-		return spawnsOneOf(ImmutableSet.copyOf(entityTypes));
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.spawnsOneOf(entityTypes).test(context);
 	}
 
 	/**
@@ -154,19 +145,7 @@ public final class BiomeSelectors {
 	 * <p>Matches spawns in all {@link SpawnGroup spawn groups}.
 	 */
 	public static Predicate<BiomeSelectionContext> spawnsOneOf(Set<EntityType<?>> entityTypes) {
-		return context -> {
-			SpawnSettings spawnSettings = context.getBiome().getSpawnSettings();
-
-			for (SpawnGroup spawnGroup : SpawnGroup.values()) {
-				for (SpawnSettings.SpawnEntry spawnEntry : spawnSettings.getSpawnEntries(spawnGroup).getEntries()) {
-					if (entityTypes.contains(spawnEntry.type)) {
-						return true;
-					}
-				}
-			}
-
-			return false;
-		};
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.spawnsOneOf(entityTypes).test(context);
 	}
 
 	/**
@@ -175,9 +154,6 @@ public final class BiomeSelectors {
 	 * @see Biome#getCategory()
 	 */
 	public static Predicate<BiomeSelectionContext> categories(Biome.Category... categories) {
-		Set<Biome.Category> categorySet = EnumSet.noneOf(Biome.Category.class);
-		Collections.addAll(categorySet, categories);
-
-		return context -> categorySet.contains(context.getBiome().category);
+		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.categories(categories).test(context);
 	}
 }

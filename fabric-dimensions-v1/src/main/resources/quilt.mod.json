@@ -26,7 +26,11 @@
 				"id": "minecraft",
 				"versions": ">=1.16-rc.3"
 			},
-			"fabric-api-base"
+			"quilted_fabric_api_base",
+			{
+				"id": "quilt_dimension",
+				"versions": ">=1.0.0"
+			}
 		],
 		"provides": [
 			{
@@ -35,8 +39,7 @@
 			}
 		]
 	},
-	"mixin": "quilted_fabric_dimensions_v1.mixins.json",
-	"fabric-api:module-lifecycle": "stable",
+	"fabric-api:module-lifecycle": "deprecated",
 	"modmenu": {
 		"badges": [
 			"library"

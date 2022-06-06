@@ -19,12 +19,12 @@ package net.fabricmc.fabric.test.biome;
 
 import java.util.List;
 
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.sound.BiomeMoodSound;
+import net.minecraft.tag.BiomeTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
@@ -63,7 +63,7 @@ import net.fabricmc.fabric.api.biome.v1.TheEndBiomes;
  * <p>If you don't find a biome right away, teleport far away (~10000 blocks) from spawn and try again.
  */
 public class FabricBiomeTest implements ModInitializer {
-	public static final String MOD_ID = "fabric-biome-api-v1-testmod";
+	public static final String MOD_ID = "fabric_biome_test";
 
 	private static final RegistryKey<Biome> TEST_CRIMSON_FOREST = RegistryKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "test_crimson_forest"));
 	private static final RegistryKey<Biome> CUSTOM_PLAINS = RegistryKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "custom_plains"));
@@ -91,27 +91,33 @@ public class FabricBiomeTest implements ModInitializer {
 		TheEndBiomes.addBarrensBiome(TEST_END_HIGHLANDS, TEST_END_BARRRENS, 1.0);
 
 		ConfiguredFeature<?, ?> COMMON_DESERT_WELL = new ConfiguredFeature<>(Feature.DESERT_WELL, DefaultFeatureConfig.INSTANCE);
-		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(MOD_ID, "fab_desert_well"), COMMON_DESERT_WELL);
+		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(MOD_ID, "fabric_desert_well"), COMMON_DESERT_WELL);
 		RegistryEntry<ConfiguredFeature<?, ?>> featureEntry = BuiltinRegistries.CONFIGURED_FEATURE.getOrCreateEntry(BuiltinRegistries.CONFIGURED_FEATURE.getKey(COMMON_DESERT_WELL).orElseThrow());
 
 		// The placement config is taken from the vanilla desert well, but no randomness
 		PlacedFeature PLACED_COMMON_DESERT_WELL = new PlacedFeature(featureEntry, List.of(SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of()));
 		Registry.register(BuiltinRegistries.PLACED_FEATURE, new Identifier(MOD_ID, "fab_desert_well"), PLACED_COMMON_DESERT_WELL);
 
-		BiomeModifications.create(new Identifier("fabric:test_mod"))
+		BiomeModifications.create(new Identifier("fabric:testmod"))
 				.add(ModificationPhase.ADDITIONS,
 						BiomeSelectors.foundInOverworld(),
 						modification -> modification.getWeather().setDownfall(100))
+				//check for an excess of desert wells
 				.add(ModificationPhase.ADDITIONS,
 						BiomeSelectors.categories(Biome.Category.DESERT),
-						context -> {
-							context.getGenerationSettings().addFeature(GenerationStep.Feature.TOP_LAYER_MODIFICATION,
-									BuiltinRegistries.PLACED_FEATURE.getKey(PLACED_COMMON_DESERT_WELL).orElseThrow()
-							);
-						})
+						context -> context.getGenerationSettings().addFeature(GenerationStep.Feature.TOP_LAYER_MODIFICATION,
+								BuiltinRegistries.PLACED_FEATURE.getKey(PLACED_COMMON_DESERT_WELL).orElseThrow()
+						))
+				//these three test should be glaringly obvious if they work or not, be sure to check forests as well
 				.add(ModificationPhase.ADDITIONS,
-						BiomeSelectors.tag(TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "tag_selector_test"))),
-						context -> context.getEffects().setSkyColor(0x770000));
+						BiomeSelectors.foundInOverworld(),
+						context -> context.getEffects().setSkyColor(0x111111))
+				.add(ModificationPhase.ADDITIONS,
+					BiomeSelectors.foundInOverworld(),
+						context -> context.getEffects().setFogColor(0x000099))
+				.add(ModificationPhase.ADDITIONS,
+						BiomeSelectors.tag(BiomeTags.IS_FOREST),
+						context -> context.getEffects().setFogColor(0x990000));
 	}
 
 	// These are used for testing the spacing of custom end biomes.
@@ -135,6 +141,6 @@ public class FabricBiomeTest implements ModInitializer {
 	private static Biome composeEndSpawnSettings(GenerationSettings.Builder builder) {
 		SpawnSettings.Builder builder2 = new SpawnSettings.Builder();
 		DefaultBiomeFeatures.addEndMobs(builder2);
-		return (new Biome.Builder()).precipitation(Biome.Precipitation.NONE).category(Biome.Category.THEEND).temperature(0.5F).downfall(0.5F).effects((new BiomeEffects.Builder()).waterColor(4159204).waterFogColor(329011).fogColor(10518688).skyColor(0).moodSound(BiomeMoodSound.CAVE).build()).spawnSettings(builder2.build()).generationSettings(builder.build()).build();
+		return (new Biome.Builder()).precipitation(Biome.Precipitation.NONE).category(Biome.Category.THEEND).temperature(0.5F).downfall(0.5F).effects((new BiomeEffects.Builder()).waterColor(0x129900).waterFogColor(0x121212).fogColor(0x990000).skyColor(0).moodSound(BiomeMoodSound.CAVE).build()).spawnSettings(builder2.build()).generationSettings(builder.build()).build();
 	}
 }
