@@ -29,22 +29,30 @@ public interface BiomeModificationContext extends org.quiltmc.qsl.worldgen.biome
 	/**
 	 * Returns the modification context for the biomes weather properties.
 	 */
-	WeatherContext getWeather();
+	default WeatherContext getWeather() {
+		return (WeatherContext) ((org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext) this).getWeather();
+	}
 
 	/**
 	 * Returns the modification context for the biomes effects.
 	 */
-	EffectsContext getEffects();
+	default EffectsContext getEffects() {
+		return (EffectsContext) ((org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext) this).getEffects();
+	}
 
 	/**
 	 * Returns the modification context for the biomes generation settings.
 	 */
-	GenerationSettingsContext getGenerationSettings();
+	default GenerationSettingsContext getGenerationSettings() {
+		return (GenerationSettingsContext) ((org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext) this).getGenerationSettings();
+	}
 
 	/**
 	 * Returns the modification context for the biomes spawn settings.
 	 */
-	SpawnSettingsContext getSpawnSettings();
+	default SpawnSettingsContext getSpawnSettings() {
+		return (SpawnSettingsContext) ((org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext) this).getSpawnSettings();
+	}
 
 	interface WeatherContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.WeatherContext { }
 
