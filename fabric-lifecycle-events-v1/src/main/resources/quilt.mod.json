@@ -28,10 +28,6 @@
 			"quilt_loader",
 			"quilted_fabric_api_base",
 			{
-				"id": "quilted_fabric_resource_loader_v0",
-				"versions": ">=1.0.0-"
-			},
-			{
 				"id": "quilt_resource_loader",
 				"versions": ">=1.0.0"
 			},
@@ -47,7 +43,10 @@
 			}
 		]
 	},
-	"mixin": "quilted_fabric_lifecycle_events_v1.mixins.json",
+	"mixin": [
+		"quilted_fabric_lifecycle_events_v1.mixins.json",
+		"quilted_fabric_lifecycle_events_v1.client.mixins.json"
+	],
 	"fabric-api:module-lifecycle": "deprecated",
 	"modmenu": {
 		"badges": [

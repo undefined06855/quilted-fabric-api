@@ -17,7 +17,6 @@
 
 package net.fabricmc.fabric.mixin.transfer;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,10 +28,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.AbstractCookingRecipe;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -50,9 +46,6 @@ public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerB
 	int cookTime;
 	@Shadow
 	int cookTimeTotal;
-	@Final
-	@Shadow
-	private RecipeType<? extends AbstractCookingRecipe> recipeType;
 	@Unique
 	private boolean fabric_suppressSpecialLogic = false;
 
@@ -84,14 +77,14 @@ public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerB
 			boolean bl = !stack.isEmpty() && stack.isItemEqualIgnoreDamage(itemStack) && ItemStack.areNbtEqual(stack, itemStack);
 
 			if (!bl) {
-				this.cookTimeTotal = getCookTime(this.world, this.recipeType, this);
+				this.cookTimeTotal = getCookTime(this.world, (AbstractFurnaceBlockEntity) (Object) this);
 				this.cookTime = 0;
 			}
 		}
 	}
 
 	@Shadow
-	private static int getCookTime(World world, RecipeType<? extends AbstractCookingRecipe> recipeType, Inventory inventory) {
+	private static int getCookTime(World world, AbstractFurnaceBlockEntity abstractFurnaceBlockEntity) {
 		throw new AssertionError();
 	}
 }

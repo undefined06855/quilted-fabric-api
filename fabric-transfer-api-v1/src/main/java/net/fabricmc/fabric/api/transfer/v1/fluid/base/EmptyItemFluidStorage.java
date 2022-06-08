@@ -18,6 +18,7 @@
 package net.fabricmc.fabric.api.transfer.v1.fluid.base;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -32,7 +33,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.BlankVariantView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleViewIterator;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
 /**
@@ -67,6 +67,7 @@ public final class EmptyItemFluidStorage implements InsertionOnlyStorage<FluidVa
 	private final Function<ItemVariant, ItemVariant> emptyToFullMapping;
 	private final Fluid insertableFluid;
 	private final long insertableAmount;
+	private final List<StorageView<FluidVariant>> blankView;
 
 	/**
 	 * Create a new instance.
@@ -99,6 +100,7 @@ public final class EmptyItemFluidStorage implements InsertionOnlyStorage<FluidVa
 		this.emptyToFullMapping = emptyToFullMapping;
 		this.insertableFluid = insertableFluid;
 		this.insertableAmount = insertableAmount;
+		this.blankView = List.of(new BlankVariantView<>(FluidVariant.blank(), insertableAmount));
 	}
 
 	@Override
@@ -123,7 +125,7 @@ public final class EmptyItemFluidStorage implements InsertionOnlyStorage<FluidVa
 	}
 
 	@Override
-	public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction) {
-		return SingleViewIterator.create(new BlankVariantView<>(FluidVariant.blank(), insertableAmount), transaction);
+	public Iterator<StorageView<FluidVariant>> iterator() {
+		return blankView.iterator();
 	}
 }

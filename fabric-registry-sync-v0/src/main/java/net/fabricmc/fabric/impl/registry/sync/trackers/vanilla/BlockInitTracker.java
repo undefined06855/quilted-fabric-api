@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +16,16 @@
 
 package net.fabricmc.fabric.impl.registry.sync.trackers.vanilla;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
+import net.fabricmc.fabric.mixin.registry.sync.AccessorDebugChunkGenerator;
 
 public final class BlockInitTracker implements RegistryEntryAddedCallback<Block> {
 	private final Registry<Block> registry;
@@ -41,5 +45,18 @@ public final class BlockInitTracker implements RegistryEntryAddedCallback<Block>
 		assert id.equals(registry.getId(object));
 
 		object.getLootTableId();
+	}
+
+	public static void postFreeze() {
+		final List<BlockState> blockStateList = Registry.BLOCK.stream()
+				.flatMap((block) -> block.getStateManager().getStates().stream())
+				.toList();
+
+		final int xLength = MathHelper.ceil(MathHelper.sqrt(blockStateList.size()));
+		final int zLength = MathHelper.ceil(blockStateList.size() / (float) xLength);
+
+		AccessorDebugChunkGenerator.setBLOCK_STATES(blockStateList);
+		AccessorDebugChunkGenerator.setX_SIDE_LENGTH(xLength);
+		AccessorDebugChunkGenerator.setZ_SIDE_LENGTH(zLength);
 	}
 }

@@ -178,7 +178,7 @@ public class FluidVariantAttributes {
 
 			@Override
 			public int getViscosity(FluidVariant variant, @Nullable World world) {
-				if (world != null && world.getDimension().isUltrawarm()) {
+				if (world != null && world.getDimension().ultrawarm()) {
 					return FluidConstants.LAVA_VISCOSITY_NETHER;
 				} else {
 					return FluidConstants.LAVA_VISCOSITY;

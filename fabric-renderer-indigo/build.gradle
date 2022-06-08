@@ -2,6 +2,10 @@ archivesBaseName = "quilted_fabric_renderer_indigo"
 version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
+loom {
+	accessWidenerPath = file("src/client/resources/fabric-renderer-indigo.accesswidener")
+}
+
 moduleDependencies(project, [
 		'fabric-api-base',
 		'fabric-renderer-api-v1'

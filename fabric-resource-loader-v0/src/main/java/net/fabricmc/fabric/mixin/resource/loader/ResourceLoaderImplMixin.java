@@ -16,8 +16,6 @@
 
 package net.fabricmc.fabric.mixin.resource.loader;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,19 +28,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import net.minecraft.resource.Resource;
+import net.minecraft.resource.NamespaceResourceManager;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.impl.resource.loader.FabricResourceImpl;
+import net.fabricmc.fabric.impl.resource.loader.FabricNamespaceResourceManagerEntry;
 import net.fabricmc.fabric.impl.resource.loader.ResourcePackSourceTracker;
 
 @Mixin(ResourceLoaderImpl.class)
 abstract class ResourceLoaderImplMixin {
-	@Inject(method = "appendResourcesFromGroup", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", remap = false, shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-	private static void setSourcesForGroupResources(NamespaceResourceManagerAccessor manager, Identifier id, GroupResourcePack groupResourcePack, List<Resource> resources, CallbackInfo ci, List<ResourcePack> packs, Identifier metadataId, Iterator<ResourcePack> iterator, ResourcePack pack, InputStream metadataInputStream) throws IOException {
-		if (resources.get(resources.size() - 1) instanceof FabricResourceImpl resource) {
-			resource.setFabricPackSource(ResourcePackSourceTracker.getSource(pack));
-		}
+	@Inject(method = "appendResourcesFromGroup", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z"), locals = LocalCapture.CAPTURE_FAILHARD)
+	private static void setSourcesForGroupResources(NamespaceResourceManagerAccessor manager, Identifier id, GroupResourcePack groupResourcePack, List<NamespaceResourceManager.Entry> resources, CallbackInfo ci, List<ResourcePack> packs, Identifier metadataId, Iterator<ResourcePack> iterator, ResourcePack pack, NamespaceResourceManager casted, NamespaceResourceManager.Entry resource) {
+		((FabricNamespaceResourceManagerEntry) resource).setFabricPackSource(ResourcePackSourceTracker.getSource(pack));
 	}
 }

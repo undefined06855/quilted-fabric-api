@@ -82,7 +82,7 @@ task generateAccessWidener() {
 			accessWidener += "transitive-accessible\tmethod\t${owner}\t${name}\t${desc}\n"
 		}
 
-		file("src/main/resources/fabric-data-generation-api-v1.accesswidener").text = accessWidener
+		file("src/main/resources/quilted_fabric_data_generation_api_v1.accesswidener").text = accessWidener
 	}
 }
 

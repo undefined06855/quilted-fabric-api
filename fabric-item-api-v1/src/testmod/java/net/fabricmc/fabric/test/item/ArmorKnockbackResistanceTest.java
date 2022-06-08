@@ -17,9 +17,6 @@
 
 package net.fabricmc.fabric.test.item;
 
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
@@ -30,6 +27,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+
+import net.fabricmc.api.ModInitializer;
 
 public class ArmorKnockbackResistanceTest implements ModInitializer {
 	private static final ArmorMaterial WOOD_ARMOR = new ArmorMaterial() {
@@ -75,7 +74,7 @@ public class ArmorKnockbackResistanceTest implements ModInitializer {
 	};
 
 	@Override
-	public void onInitialize(ModContainer mod) {
+	public void onInitialize() {
 		Registry.register(Registry.ITEM, new Identifier("fabric-item-api-v1-testmod",
 				"wooden_boots"), new ArmorItem(WOOD_ARMOR, EquipmentSlot.FEET, new Item.Settings()));
 	}

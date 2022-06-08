@@ -4,7 +4,13 @@ upstream_version = getSubprojectUpstreamVersion(project)
 
 dependencies {
 	modApi(getQslModule("core", "resource_loader"))
-
-	testmodImplementation project(path: ':fabric-lifecycle-events-v1', configuration: 'namedElements')
-	testmodImplementation project(path: ':fabric-api-base', configuration: 'namedElements')
 }
+
+loom {
+	accessWidenerPath = file("src/main/resources/quilted_fabric_resource_loader_v0.accesswidener")
+}
+
+testDependencies(project, [
+	':fabric-lifecycle-events-v1',
+	':fabric-api-base'
+])

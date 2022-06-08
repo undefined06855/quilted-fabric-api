@@ -1,0 +1,20 @@
+archivesBaseName = "quilted_fabric_command_api_v2"
+version = getSubprojectVersion(project)
+upstream_version = getSubprojectUpstreamVersion(project)
+
+loom {
+	accessWidenerPath = file('src/main/resources/quilted_fabric_command_api_v2.accesswidener')
+}
+
+moduleDependencies(project, [
+		'fabric-api-base'
+])
+
+dependencies {
+	modApi(getQslModule("management", "command"))
+	modApi(getQslModule("management", "client_command"))
+}
+
+testDependencies(project, [
+		':fabric-lifecycle-events-v1',
+])

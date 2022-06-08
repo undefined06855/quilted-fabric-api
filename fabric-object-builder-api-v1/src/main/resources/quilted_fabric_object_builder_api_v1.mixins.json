@@ -9,15 +9,10 @@
     "DefaultAttributeRegistryAccessor",
     "DefaultAttributeRegistryMixin",
     "DetectorRailBlockMixin",
-    "PointOfInterestTypeAccessor",
+    "MaterialBuilderAccessor",
     "SpawnRestrictionAccessor",
     "TypeAwareTradeMixin",
-    "VillagerProfessionAccessor",
     "VillagerTypeAccessor"
-  ],
-  "client": [
-    "ModelPredicateProviderRegistryAccessor",
-    "ModelPredicateProviderRegistrySpecificAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

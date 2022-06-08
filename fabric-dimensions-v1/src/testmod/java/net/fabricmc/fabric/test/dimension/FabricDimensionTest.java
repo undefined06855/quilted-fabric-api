@@ -29,7 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -41,27 +41,18 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
 public class FabricDimensionTest implements ModInitializer {
 	// The dimension options refer to the JSON-file in the dimension subfolder of the datapack,
 	// which will always share it's ID with the world that is created from it
-	private static final RegistryKey<DimensionOptions> DIMENSION_KEY = RegistryKey.of(
-			Registry.DIMENSION_KEY,
-			new Identifier("fabric_dimension", "void")
-	);
+	private static final RegistryKey<DimensionOptions> DIMENSION_KEY = RegistryKey.of(Registry.DIMENSION_KEY, new Identifier("fabric_dimension", "void"));
 
-	private static RegistryKey<World> WORLD_KEY = RegistryKey.of(
-			Registry.WORLD_KEY,
-			DIMENSION_KEY.getValue()
-	);
+	private static RegistryKey<World> WORLD_KEY = RegistryKey.of(Registry.WORLD_KEY, DIMENSION_KEY.getValue());
 
-	private static final RegistryKey<DimensionType> DIMENSION_TYPE_KEY = RegistryKey.of(
-			Registry.DIMENSION_TYPE_KEY,
-			new Identifier("fabric_dimension", "void_type")
-	);
+	private static final RegistryKey<DimensionType> DIMENSION_TYPE_KEY = RegistryKey.of(Registry.DIMENSION_TYPE_KEY, new Identifier("fabric_dimension", "void_type"));
 
 	@Override
 	public void onInitialize() {
@@ -100,16 +91,15 @@ public class FabricDimensionTest implements ModInitializer {
 			if (!teleported.getPos().equals(target.position)) throw new AssertionError("Target Position not reached.");
 		});
 
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
-				dispatcher.register(literal("fabric_dimension_test").executes(FabricDimensionTest.this::swapTargeted))
-		);
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("fabric_dimension_test")
+				.executes(FabricDimensionTest.this::swapTargeted)));
 
 		// Used to test https://github.com/FabricMC/fabric/issues/2239
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(literal("fabric_dimension_test_desync")
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("fabric_dimension_test_desync")
 				.executes(FabricDimensionTest.this::testDesync)));
 
 		// Used to test https://github.com/FabricMC/fabric/issues/2238
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(literal("fabric_dimension_test_entity")
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("fabric_dimension_test_entity")
 				.executes(FabricDimensionTest.this::testEntityTeleport)));
 	}
 
@@ -123,7 +113,7 @@ public class FabricDimensionTest implements ModInitializer {
 			FabricDimensions.teleport(player, modWorld, target);
 
 			if (player.world != modWorld) {
-				throw new CommandException(new LiteralText("Teleportation failed!"));
+				throw new CommandException(Text.literal("Teleportation failed!"));
 			}
 
 			modWorld.setBlockState(new BlockPos(0, 100, 0), Blocks.DIAMOND_BLOCK.getDefaultState());
@@ -141,12 +131,12 @@ public class FabricDimensionTest implements ModInitializer {
 		ServerPlayerEntity player = context.getSource().getPlayer();
 
 		if (player == null) {
-			context.getSource().sendFeedback(new LiteralText("You must be a player to execute this command."), false);
+			context.getSource().sendFeedback(Text.literal("You must be a player to execute this command."), false);
 			return 1;
 		}
 
 		if (!context.getSource().getServer().isDedicated()) {
-			context.getSource().sendFeedback(new LiteralText("This command can only be executed on dedicated servers."), false);
+			context.getSource().sendFeedback(Text.literal("This command can only be executed on dedicated servers."), false);
 			return 1;
 		}
 
@@ -160,7 +150,7 @@ public class FabricDimensionTest implements ModInitializer {
 		ServerPlayerEntity player = context.getSource().getPlayer();
 
 		if (player == null) {
-			context.getSource().sendFeedback(new LiteralText("You must be a player to execute this command."), false);
+			context.getSource().sendFeedback(Text.literal("You must be a player to execute this command."), false);
 			return 1;
 		}
 
@@ -171,7 +161,7 @@ public class FabricDimensionTest implements ModInitializer {
 				.orElse(null);
 
 		if (entity == null) {
-			context.getSource().sendFeedback(new LiteralText("No entities found."), false);
+			context.getSource().sendFeedback(Text.literal("No entities found."), false);
 			return 1;
 		}
 

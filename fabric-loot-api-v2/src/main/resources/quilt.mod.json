@@ -35,12 +35,8 @@
 	"mixin": "quilted_fabric_loot_api_v2.mixins.json",
 	"quilt_loom": {
     "injected_interfaces": {
-      "net/minecraft/class_52\u0024class_53": [
-        "net/fabricmc/fabric/api/loot/v2/FabricLootTableBuilder"
-      ],
-      "net/minecraft/class_55\u0024class_56": [
-        "net/fabricmc/fabric/api/loot/v2/FabricLootPoolBuilder"
-      ]
+      "net/minecraft/class_52\u0024class_53": ["net/fabricmc/fabric/api/loot/v2/FabricLootTableBuilder"],
+      "net/minecraft/class_55\u0024class_56": ["net/fabricmc/fabric/api/loot/v2/FabricLootPoolBuilder"]
     }
 	},
 	"fabric-api:module-lifecycle": "stable",

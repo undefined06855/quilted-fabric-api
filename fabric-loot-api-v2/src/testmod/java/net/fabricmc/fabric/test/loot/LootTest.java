@@ -24,7 +24,7 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.condition.SurvivesExplosionLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.SetNameLootFunction;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
@@ -76,7 +76,7 @@ public class LootTest implements ModInitializer {
 				LootPool pool = LootPool.builder()
 						.with(ItemEntry.builder(Items.GOLD_INGOT).build())
 						.conditionally(SurvivesExplosionLootCondition.builder().build())
-						.apply(SetNameLootFunction.builder(new LiteralText("Gold from White Wool")).build())
+						.apply(SetNameLootFunction.builder(Text.literal("Gold from White Wool")).build())
 						.build();
 
 				tableBuilder.pool(pool);

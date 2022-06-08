@@ -5,7 +5,9 @@ upstream_version = getSubprojectUpstreamVersion(project)
 dependencies {
 	modApi(getQslModule("core", "qsl_base"))
 	modApi(getQslModule("worldgen", "biome"))
-
-	testmodImplementation project(path: ':fabric-api-base', configuration: 'namedElements')
-	testmodImplementation project(path: ':fabric-resource-loader-v0', configuration: 'namedElements')
 }
+
+testDependencies(project, [
+	':fabric-api-base',
+	':fabric-resource-loader-v0'
+])

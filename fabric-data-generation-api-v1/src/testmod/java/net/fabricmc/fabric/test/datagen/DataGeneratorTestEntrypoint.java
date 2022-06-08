@@ -42,7 +42,7 @@ import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.TagKey;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -78,7 +78,7 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 		dataGenerator.addProvider(TestBiomeTagProvider::new);
 
 		try {
-			new FabricTagProvider<>(dataGenerator, BuiltinRegistries.BIOME, "Biome Tags") {
+			new FabricTagProvider<>(dataGenerator, BuiltinRegistries.BIOME) {
 				@Override
 				protected void generateTags() {
 				}
@@ -89,7 +89,7 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 		}
 
 		try {
-			new FabricTagProvider.DynamicRegistryTagProvider<>(dataGenerator, Registry.ITEM_KEY, "items", "Item Tags") {
+			new FabricTagProvider.DynamicRegistryTagProvider<>(dataGenerator, Registry.ITEM_KEY) {
 				@Override
 				protected void generateTags() {
 				}
@@ -167,7 +167,7 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 
 	private static class TestBiomeTagProvider extends FabricTagProvider.DynamicRegistryTagProvider<Biome> {
 		private TestBiomeTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.BIOME_KEY, "biomes", "Biome Tags");
+			super(dataGenerator, Registry.BIOME_KEY);
 		}
 
 		@Override
@@ -195,8 +195,8 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 			Advancement root = Advancement.Builder.create()
 					.display(
 							SIMPLE_BLOCK,
-							new TranslatableText("advancements.test.root.title"),
-							new TranslatableText("advancements.test.root.description"),
+							Text.translatable("advancements.test.root.title"),
+							Text.translatable("advancements.test.root.description"),
 							new Identifier("textures/gui/advancements/backgrounds/end.png"),
 							AdvancementFrame.TASK,
 							false, false, false)
@@ -205,8 +205,8 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 			Advancement rootNotLoaded = Advancement.Builder.create()
 					.display(
 							SIMPLE_BLOCK,
-							new TranslatableText("advancements.test.root_not_loaded.title"),
-							new TranslatableText("advancements.test.root_not_loaded.description"),
+							Text.translatable("advancements.test.root_not_loaded.title"),
+							Text.translatable("advancements.test.root_not_loaded.description"),
 							new Identifier("textures/gui/advancements/backgrounds/end.png"),
 							AdvancementFrame.TASK,
 							false, false, false)

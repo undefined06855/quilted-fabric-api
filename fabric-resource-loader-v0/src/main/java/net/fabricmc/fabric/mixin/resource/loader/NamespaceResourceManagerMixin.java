@@ -19,6 +19,7 @@ package net.fabricmc.fabric.mixin.resource.loader;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.quiltmc.qsl.resource.loader.api.GroupResourcePack;
 import org.spongepowered.asm.mixin.Final;
@@ -35,9 +36,13 @@ import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.impl.resource.loader.FabricResourceImpl;
+import net.fabricmc.fabric.impl.resource.loader.FabricNamespaceResourceManagerEntry;
+import net.fabricmc.fabric.impl.resource.loader.FabricResource;
 import net.fabricmc.fabric.impl.resource.loader.ResourcePackSourceTracker;
 
+/**
+ * Patches getAllResources and method_41265 to work with GroupResourcePack.
+ */
 @Mixin(NamespaceResourceManager.class)
 public class NamespaceResourceManagerMixin {
 	@Shadow
@@ -54,35 +59,34 @@ public class NamespaceResourceManagerMixin {
 	 * which also either track the source similarly or provide other types of Resource instances
 	 * that have a different FabricResource implementation.
 	 */
-
 	@Inject(method = "getAllResources", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", remap = false, shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void trackSourceOnGetAllResources(Identifier id, CallbackInfoReturnable<List<Resource>> cir, List<Resource> resources, Identifier metadataPath, Iterator<ResourcePack> packs, ResourcePack resourcePack) {
+	private void trackSourceOnGetAllResources(Identifier id, CallbackInfoReturnable<List<Resource>> cir, List<NamespaceResourceManager.Entry> entries, Identifier identifier, String string, Iterator var5, NamespaceResourceManager.FilterablePack filterablePack, ResourcePack resourcePack) {
 		// After the created resource has been added, read it from the list and set its source
 		// to match the tracked source of its resource pack.
-		if (resources.get(resources.size() - 1) instanceof FabricResourceImpl resource) {
+		if (entries.get(entries.size() - 1) instanceof FabricNamespaceResourceManagerEntry entry) {
 			if (resourcePack instanceof GroupResourcePack groupPack) {
 				var innerPacks = groupPack.getPacks(id.getNamespace());
 
 				for (ResourcePack innerPack : innerPacks) {
-					if (innerPack.contains(type, resource.getId())) {
-						resource.setFabricPackSource(ResourcePackSourceTracker.getSource(innerPack));
+					if (innerPack.contains(type, id)) {
+						entry.setFabricPackSource(ResourcePackSourceTracker.getSource(innerPack));
 					}
 				}
 			} else {
-				resource.setFabricPackSource(ResourcePackSourceTracker.getSource(resourcePack));
+				entry.setFabricPackSource(ResourcePackSourceTracker.getSource(resourcePack));
 			}
 		}
 	}
 
-	@Inject(method = "getResource", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void trackSourceOnGetResource(Identifier id, CallbackInfoReturnable<Resource> cir, ResourcePack metaResourcePack, Identifier metadataPath, int i, ResourcePack resourcePack) {
+	@Inject(method = "getResource", at = @At(value = "RETURN", ordinal = 1), locals = LocalCapture.CAPTURE_FAILHARD)
+	private void trackSourceOnGetResource(Identifier identifier, CallbackInfoReturnable<Optional<Resource>> cir, int i, NamespaceResourceManager.FilterablePack filterablePack, ResourcePack resourcePack) {
 		// Set the resource's source to match the tracked source of its resource pack.
-		if (cir.getReturnValue() instanceof FabricResourceImpl resource) {
+		if (cir.getReturnValue().orElseThrow() instanceof FabricResource resource) {
 			if (resourcePack instanceof GroupResourcePack groupPack) {
-				var innerPacks = groupPack.getPacks(id.getNamespace());
+				var innerPacks = groupPack.getPacks(identifier.getNamespace());
 
 				for (ResourcePack innerPack : innerPacks) {
-					if (innerPack.contains(type, resource.getId())) {
+					if (resourcePack != null && innerPack.contains(type, identifier)) {
 						resource.setFabricPackSource(ResourcePackSourceTracker.getSource(innerPack));
 					}
 				}

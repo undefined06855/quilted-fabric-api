@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,8 +43,8 @@ public abstract class TestFunctionsMixin {
 		String modId = FabricGameTestModInitializer.getModIdForTestClass(method.getDeclaringClass());
 		String structureName = "%s:%s".formatted(modId, testCaseName);
 
-		if (!gameTest.structureName().isEmpty()) {
-			structureName = gameTest.structureName();
+		if (!gameTest.templateName().isEmpty()) {
+			structureName = gameTest.templateName();
 		}
 
 		TestFunction testFunction = new TestFunction(gameTest.batchId(),

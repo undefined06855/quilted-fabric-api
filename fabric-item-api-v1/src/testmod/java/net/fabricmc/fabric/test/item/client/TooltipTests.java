@@ -17,12 +17,10 @@
 
 package net.fabricmc.fabric.test.item.client;
 
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -30,10 +28,10 @@ import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 @Environment(EnvType.CLIENT)
 public class TooltipTests implements ClientModInitializer {
 	@Override
-	public void onInitializeClient(ModContainer mod) {
+	public void onInitializeClient() {
 		// Adds a tooltip to all items so testing can be verified easily.
 		ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
-			lines.add(new LiteralText("Fancy Tooltips").formatted(Formatting.LIGHT_PURPLE));
+			lines.add(Text.literal("Fancy Tooltips").formatted(Formatting.LIGHT_PURPLE));
 		});
 	}
 }

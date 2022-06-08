@@ -27,7 +27,7 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEnchantmentTags;
 
 public class EnchantmentTagGenerator extends FabricTagProvider<Enchantment> {
 	public EnchantmentTagGenerator(FabricDataGenerator dataGenerator) {
-		super(dataGenerator, Registry.ENCHANTMENT, "Enchantment Tags");
+		super(dataGenerator, Registry.ENCHANTMENT);
 	}
 
 	@Override
@@ -43,6 +43,7 @@ public class EnchantmentTagGenerator extends FabricTagProvider<Enchantment> {
 				.add(Enchantments.POWER)
 				.add(Enchantments.SHARPNESS);
 		getOrCreateTagBuilder(ConventionalEnchantmentTags.ENTITY_MOVEMENT_ENHANCEMENT)
+				.add(Enchantments.SWIFT_SNEAK)
 				.add(Enchantments.DEPTH_STRIDER)
 				.add(Enchantments.SOUL_SPEED);
 		getOrCreateTagBuilder(ConventionalEnchantmentTags.ENTITY_DEFENSE_ENHANCEMENT)

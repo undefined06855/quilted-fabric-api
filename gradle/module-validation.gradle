@@ -8,6 +8,8 @@ import groovy.json.JsonSlurper
  */
 
 subprojects {
+	if (it.name == "deprecated") return
+
 	// Create the task
 	task validateModules(type: ValidateModuleTask)
 }
@@ -30,7 +32,14 @@ class ValidateModuleTask extends DefaultTask {
 
 	@TaskAction
 	void validate() {
-		def quiltModJsonFile = project.file("src/main/resources/quilt.mod.json") as File
+		def clientOnlyMod = false
+		def quiltModJsonFile = (project.file("src/main/resources/quilt.mod.json") as File)
+
+		if (!file.exists()) {
+			quiltModJsonFile = (project.file("src/client/resources/quilt.mod.json") as File)
+			clientOnlyMod = true
+		}
+
 		if (quiltModJsonFile.size() > 0) {
 			def quiltModJson = new JsonSlurper().parse(quiltModJsonFile) as Map<String, String>;
 
@@ -62,10 +71,14 @@ class ValidateModuleTask extends DefaultTask {
 		switch (moduleLifecycle) {
 			case "stable":
 			case "experimental":
+				break
 			case "deprecated":
-				break;
+				if (!project.path.startsWith(":deprecated")) {
+					throw new GradleException("Deprecated module ${project} must be in the deprecated sub directory.")
+				}
+				break
 			default:
-				throw new GradleException("Module ${project} has an invalid module lifecycle ${json.custom.get('fabric-api:module-lifecycle')}");
+				throw new GradleException("Module ${project} has an invalid module lifecycle ${json.custom.get('fabric-api:module-lifecycle')}")
 		}
 	}
 }

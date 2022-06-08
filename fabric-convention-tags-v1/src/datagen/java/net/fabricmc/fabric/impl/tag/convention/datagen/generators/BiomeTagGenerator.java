@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +27,7 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 
 public class BiomeTagGenerator extends FabricTagProvider.DynamicRegistryTagProvider<Biome> {
 	public BiomeTagGenerator(FabricDataGenerator dataGenerator) {
-		super(dataGenerator, Registry.BIOME_KEY, "worldgen/biome", "Biome Tags");
+		super(dataGenerator, Registry.BIOME_KEY);
 	}
 
 	@Override
@@ -49,6 +48,7 @@ public class BiomeTagGenerator extends FabricTagProvider.DynamicRegistryTagProvi
 				.add(BiomeKeys.SOUL_SAND_VALLEY)
 				.add(BiomeKeys.BASALT_DELTAS);
 		getOrCreateTagBuilder(ConventionalBiomeTags.IN_THE_END)
+				.addOptionalTag(BiomeTags.IS_END)
 				.add(BiomeKeys.END_BARRENS)
 				.add(BiomeKeys.END_MIDLANDS)
 				.add(BiomeKeys.END_HIGHLANDS)
@@ -56,6 +56,7 @@ public class BiomeTagGenerator extends FabricTagProvider.DynamicRegistryTagProvi
 				.add(BiomeKeys.SMALL_END_ISLANDS);
 		// We avoid the vanilla group tags here as mods may add to them without actually spawning them in the overworld
 		getOrCreateTagBuilder(ConventionalBiomeTags.IN_OVERWORLD)
+				.addOptionalTag(BiomeTags.IS_OVERWORLD)
 				.add(BiomeKeys.RIVER).add(BiomeKeys.FROZEN_RIVER)
 				.add(BiomeKeys.COLD_OCEAN).add(BiomeKeys.DEEP_COLD_OCEAN)
 				.add(BiomeKeys.DEEP_FROZEN_OCEAN).add(BiomeKeys.DEEP_OCEAN)
@@ -76,12 +77,10 @@ public class BiomeTagGenerator extends FabricTagProvider.DynamicRegistryTagProvi
 				.add(BiomeKeys.WOODED_BADLANDS).add(BiomeKeys.MEADOW).add(BiomeKeys.GROVE)
 				.add(BiomeKeys.SNOWY_SLOPES).add(BiomeKeys.FROZEN_PEAKS).add(BiomeKeys.JAGGED_PEAKS)
 				.add(BiomeKeys.STONY_PEAKS).add(BiomeKeys.MUSHROOM_FIELDS).add(BiomeKeys.DRIPSTONE_CAVES)
-				.add(BiomeKeys.LUSH_CAVES).add(BiomeKeys.SNOWY_BEACH).add(BiomeKeys.SWAMP).add(BiomeKeys.STONY_SHORE);
+				.add(BiomeKeys.LUSH_CAVES).add(BiomeKeys.SNOWY_BEACH).add(BiomeKeys.SWAMP).add(BiomeKeys.STONY_SHORE)
+				.add(BiomeKeys.DEEP_DARK).add(BiomeKeys.MANGROVE_SWAMP);
 	}
 
-	/**
-	 * See {@link Biome.Category} for details.
-	 */
 	private void generateCategoryTags() {
 		getOrCreateTagBuilder(ConventionalBiomeTags.TAIGA)
 				.addOptionalTag(BiomeTags.IS_TAIGA);
@@ -98,6 +97,7 @@ public class BiomeTagGenerator extends FabricTagProvider.DynamicRegistryTagProvi
 				.add(BiomeKeys.SUNFLOWER_PLAINS)
 				.add(BiomeKeys.PLAINS);
 		getOrCreateTagBuilder(ConventionalBiomeTags.SAVANNA)
+				.addOptionalTag(BiomeTags.IS_SAVANNA)
 				.add(BiomeKeys.SAVANNA_PLATEAU)
 				.add(BiomeKeys.WINDSWEPT_SAVANNA)
 				.add(BiomeKeys.SAVANNA);
@@ -126,6 +126,7 @@ public class BiomeTagGenerator extends FabricTagProvider.DynamicRegistryTagProvi
 		getOrCreateTagBuilder(ConventionalBiomeTags.RIVER)
 				.addOptionalTag(BiomeTags.IS_RIVER);
 		getOrCreateTagBuilder(ConventionalBiomeTags.SWAMP)
+				.add(BiomeKeys.MANGROVE_SWAMP)
 				.add(BiomeKeys.SWAMP);
 		getOrCreateTagBuilder(ConventionalBiomeTags.MUSHROOM)
 				.add(BiomeKeys.MUSHROOM_FIELDS);
@@ -140,6 +141,7 @@ public class BiomeTagGenerator extends FabricTagProvider.DynamicRegistryTagProvi
 				.addOptionalTag(ConventionalBiomeTags.MESA)
 				.addOptionalTag(BiomeTags.IS_BADLANDS);
 		getOrCreateTagBuilder(ConventionalBiomeTags.CAVES)
+				.add(BiomeKeys.DEEP_DARK)
 				.add(BiomeKeys.DRIPSTONE_CAVES)
 				.add(BiomeKeys.LUSH_CAVES);
 		getOrCreateTagBuilder(ConventionalBiomeTags.VOID)
@@ -161,6 +163,8 @@ public class BiomeTagGenerator extends FabricTagProvider.DynamicRegistryTagProvi
 		getOrCreateTagBuilder(ConventionalBiomeTags.CLIMATE_COLD)
 				.add(BiomeKeys.GROVE)
 				.add(BiomeKeys.JAGGED_PEAKS)
+				.add(BiomeKeys.TAIGA).add(BiomeKeys.SNOWY_TAIGA)
+				.add(BiomeKeys.OLD_GROWTH_SPRUCE_TAIGA).add(BiomeKeys.OLD_GROWTH_PINE_TAIGA)
 				.addOptionalTag(ConventionalBiomeTags.ICY);
 		getOrCreateTagBuilder(ConventionalBiomeTags.CLIMATE_TEMPERATE)
 				.add(BiomeKeys.FOREST)

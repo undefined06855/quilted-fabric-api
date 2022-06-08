@@ -20,7 +20,7 @@ package net.fabricmc.fabric.test.biome;
 import java.util.List;
 
 import net.minecraft.sound.BiomeMoodSound;
-import net.minecraft.tag.BiomeTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -104,20 +104,23 @@ public class FabricBiomeTest implements ModInitializer {
 						modification -> modification.getWeather().setDownfall(100))
 				//check for an excess of desert wells
 				.add(ModificationPhase.ADDITIONS,
-						BiomeSelectors.categories(Biome.Category.DESERT),
-						context -> context.getGenerationSettings().addFeature(GenerationStep.Feature.TOP_LAYER_MODIFICATION,
-								BuiltinRegistries.PLACED_FEATURE.getKey(PLACED_COMMON_DESERT_WELL).orElseThrow()
-						))
-				//these three test should be glaringly obvious if they work or not, be sure to check forests as well
+						BiomeSelectors.includeByKey(BiomeKeys.DESERT), // TODO: switch to fabric desert biome tag once it is there?
+						context -> {
+							context.getGenerationSettings().addFeature(GenerationStep.Feature.TOP_LAYER_MODIFICATION,
+									BuiltinRegistries.PLACED_FEATURE.getKey(PLACED_COMMON_DESERT_WELL).orElseThrow()
+							);
+						})
 				.add(ModificationPhase.ADDITIONS,
-						BiomeSelectors.foundInOverworld(),
-						context -> context.getEffects().setSkyColor(0x111111))
-				.add(ModificationPhase.ADDITIONS,
-					BiomeSelectors.foundInOverworld(),
-						context -> context.getEffects().setFogColor(0x000099))
-				.add(ModificationPhase.ADDITIONS,
-						BiomeSelectors.tag(BiomeTags.IS_FOREST),
-						context -> context.getEffects().setFogColor(0x990000));
+						BiomeSelectors.tag(TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "tag_selector_test"))),
+						context -> context.getEffects().setSkyColor(0x770000));
+
+		// Make sure data packs can define dynamic registry contents
+		// See #2225, #2261
+		BiomeModifications.addFeature(
+				BiomeSelectors.foundInOverworld(),
+				GenerationStep.Feature.VEGETAL_DECORATION,
+				RegistryKey.of(Registry.PLACED_FEATURE_KEY, new Identifier(MOD_ID, "concrete_pile"))
+		);
 	}
 
 	// These are used for testing the spacing of custom end biomes.
@@ -141,6 +144,6 @@ public class FabricBiomeTest implements ModInitializer {
 	private static Biome composeEndSpawnSettings(GenerationSettings.Builder builder) {
 		SpawnSettings.Builder builder2 = new SpawnSettings.Builder();
 		DefaultBiomeFeatures.addEndMobs(builder2);
-		return (new Biome.Builder()).precipitation(Biome.Precipitation.NONE).category(Biome.Category.THEEND).temperature(0.5F).downfall(0.5F).effects((new BiomeEffects.Builder()).waterColor(0x129900).waterFogColor(0x121212).fogColor(0x990000).skyColor(0).moodSound(BiomeMoodSound.CAVE).build()).spawnSettings(builder2.build()).generationSettings(builder.build()).build();
+		return (new Biome.Builder()).precipitation(Biome.Precipitation.NONE).temperature(0.5F).downfall(0.5F).effects((new BiomeEffects.Builder()).waterColor(0x129900).waterFogColor(0x121212).fogColor(0x990000).skyColor(0).moodSound(BiomeMoodSound.CAVE).build()).spawnSettings(builder2.build()).generationSettings(builder.build()).build();
 	}
 }

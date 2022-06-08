@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "environment": "client",
+  "package": "net.fabricmc.fabric.mixin.resource.loader.client",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "FontManagerResourceReloadListenerMixin",
+    "KeyedResourceReloadListenerClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

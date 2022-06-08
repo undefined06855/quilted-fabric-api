@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +16,35 @@
 
 package net.fabricmc.fabric.mixin.resource.loader;
 
+import java.util.Objects;
+
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourcePackSource;
 
 import net.fabricmc.fabric.impl.resource.loader.FabricResource;
 
-// Add FabricResource to Resource's superinterfaces.
+/**
+ * Implements {@link FabricResource} (resource source getter/setter)
+ * for vanilla's basic {@link Resource} used for most game resources.
+ *
+ * @see NamespaceResourceManagerMixin the usage site for this mixin
+ */
 @Mixin(Resource.class)
-interface ResourceMixin extends FabricResource {
+class ResourceMixin implements FabricResource {
+	@Unique
+	private @Nullable ResourcePackSource fabric_packSource;
+
+	@Override
+	public ResourcePackSource getFabricPackSource() {
+		return Objects.requireNonNullElse(fabric_packSource, ResourcePackSource.PACK_SOURCE_NONE);
+	}
+
+	@Override
+	public void setFabricPackSource(ResourcePackSource packSource) {
+		this.fabric_packSource = packSource;
+	}
 }

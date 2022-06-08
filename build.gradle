@@ -9,7 +9,7 @@ plugins {
 	id "eclipse"
 	id "idea"
 	id "maven-publish"
-	id "org.quiltmc.loom" version "0.12-SNAPSHOT" apply false
+	id "org.quiltmc.loom" version "0.12.+" apply false
 	id "org.quiltmc.gradle.licenser" version "1.1.1"
 	id "org.ajoberstar.grgit" version "3.1.0"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
@@ -26,7 +26,6 @@ logger.lifecycle("Building Quilted Fabric API: " + version)
 
 
 import org.apache.commons.codec.digest.DigestUtils
-import org.kohsuke.github.GHReleaseBuilder
 
 def getQslModule(String library, String module) {
 	return "org.quiltmc.qsl.${library}:${module}:${project.qsl_version}";
@@ -64,9 +63,15 @@ def getBranch() {
 
 def moduleDependencies(project, List<String> depNames) {
 	def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'namedElements') }
+	def clientOutputs = depNames.iterator().collect { findProject(":$it").sourceSets.client.output }
+
 	project.dependencies {
 		deps.each {
 			api it
+		}
+
+		clientOutputs.each {
+			clientImplementation it
 		}
 	}
 
@@ -89,24 +94,76 @@ def moduleDependencies(project, List<String> depNames) {
 	}
 }
 
+def testDependencies(project, List<String> depNames) {
+	def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'namedElements') }
+	def clientOutputs = depNames.iterator().collect { findProject(":$it").sourceSets.client.output }
+
+	project.dependencies {
+		deps.each {
+			testmodImplementation it
+		}
+
+		clientOutputs.each {
+			testmodImplementation it
+		}
+	}
+}
+
 allprojects {
+	group = "org.quiltmc.quilted-fabric-api"
+
+	apply plugin: "maven-publish"
+	apply plugin: "me.modmuss50.remotesign"
+
+	tasks.withType(GenerateModuleMetadata) {
+		enabled = false
+	}
+
+	if (signingEnabled) {
+		remoteSign {
+			requestUrl = ENV.SIGNING_SERVER
+			pgpAuthKey = ENV.SIGNING_PGP_KEY
+			jarAuthKey = ENV.SIGNING_JAR_KEY
+
+			afterEvaluate {
+				// PGP sign all maven publications.
+				sign publishing.publications.mavenJava
+			}
+		}
+	}
+
+	publishing {
+		setupRepositories(repositories)
+	}
+
+	if (it.name == "deprecated") return
+
 	apply plugin: "java-library"
 	apply plugin: "checkstyle"
 	apply plugin: "maven-publish"
 	apply plugin: "org.quiltmc.loom"
 	apply plugin: "org.quiltmc.gradle.licenser"
-	apply plugin: "me.modmuss50.remotesign"
 
 	tasks.withType(JavaCompile).configureEach {
 		it.options.release = 17
 	}
 
-	group = "org.quiltmc.quilted-fabric-api"
+	java {
+		// Must be added before the split source sets are setup.
+		withSourcesJar()
+	}
+
+	loom {
+		splitEnvironmentSourceSets()
+	}
 
 	sourceSets {
 		testmod {
 			compileClasspath += main.compileClasspath
 			runtimeClasspath += main.runtimeClasspath
+
+			compileClasspath += client.compileClasspath
+			runtimeClasspath += client.runtimeClasspath
 		}
 	}
 
@@ -129,10 +186,26 @@ allprojects {
 		}
 	}
 
+	allprojects.each { p ->
+		if (project.name == "deprecated") return
+
+		loom.mods.register(p.name) {
+			sourceSet p.sourceSets.main
+			sourceSet p.sourceSets.client
+		}
+
+		loom.mods.register(p.name + "-testmod") {
+			sourceSet p.sourceSets.testmod
+		}
+	}
+
 	dependencies {
 		minecraft "com.mojang:minecraft:$rootProject.minecraft_version"
 		mappings "net.fabricmc:yarn:${rootProject.minecraft_version}${project.yarn_version}:v2"
 		modApi "org.quiltmc:quilt-loader:${project.loader_version}"
+
+		testmodImplementation sourceSets.main.output
+		testmodImplementation sourceSets.client.output
 	}
 
 	loom {
@@ -147,7 +220,7 @@ allprojects {
 		}
 	}
 
-	processResources {
+	tasks.withType(ProcessResources).configureEach {
 		inputs.property "version", project.version
 		inputs.property "upstream_version", project.upstream_version
 
@@ -167,10 +240,6 @@ allprojects {
 		include "**/*.java"
 	}
 
-	java {
-		withSourcesJar()
-	}
-
 	checkstyle {
 		configFile = rootProject.file("checkstyle.xml")
 		toolVersion = "9.1"
@@ -181,22 +250,9 @@ allprojects {
 		reproducibleFileOrder = true
 	}
 
-	tasks.withType(GenerateModuleMetadata) {
-		enabled = false
-	}
-
 	if (signingEnabled) {
 		remoteSign {
-			requestUrl = ENV.SIGNING_SERVER
-			pgpAuthKey = ENV.SIGNING_PGP_KEY
-			jarAuthKey = ENV.SIGNING_JAR_KEY
-
 			sign remapJar
-
-			afterEvaluate {
-				// PGP sign all maven publications.
-				sign publishing.publications.mavenJava
-			}
 		}
 	}
 
@@ -204,6 +260,32 @@ allprojects {
 	task generateResources {
 		group = "fabric"
 	}
+
+	task testmodJar(type: Jar) {
+		from sourceSets.testmod.output
+		destinationDirectory = new File(project.buildDir, "devlibs")
+		archiveClassifier = "testmod"
+	}
+
+	task remapTestmodJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: testmodJar) {
+		input = testmodJar.archiveFile
+		archiveClassifier = "testmod"
+		addNestedDependencies = false
+	}
+	build.dependsOn remapTestmodJar
+}
+
+remapTestmodJar {
+	def testModJarTasks = []
+
+	subprojects {
+		if (it.name == "deprecated" || !it.file("src/testmod").exists()) return
+
+		testModJarTasks += it.tasks.remapTestmodJar
+	}
+
+	nestedJars.setFrom(testModJarTasks)
+	addNestedDependencies = true
 }
 
 // Apply auxiliary buildscripts to submodules
@@ -229,10 +311,13 @@ javadoc {
 	}
 
 	allprojects.each {
+		if (it.name == "deprecated") return
+
 		source(it.sourceSets.main.allJava.srcDirs)
+		source(it.sourceSets.client.allJava.srcDirs)
 	}
 
-	classpath = sourceSets.main.compileClasspath
+	classpath = files(sourceSets.main.compileClasspath, sourceSets.client.compileClasspath)
 	include("**/api/**")
 	failOnError false
 }
@@ -270,6 +355,8 @@ loom {
 test.dependsOn runGametest
 
 subprojects {
+	if (it.name == "deprecated") return
+
 	dependencies {
 		testmodImplementation sourceSets.main.output
 
@@ -297,8 +384,6 @@ subprojects {
 				}
 			}
 		}
-
-		setupRepositories(repositories)
 	}
 
 	// We manually handle the pom generation
@@ -308,10 +393,14 @@ subprojects {
 
 	afterEvaluate {
 		// Disable the gen sources task on sub projects
-		genSourcesWithQuiltflower.enabled = false
-		genSourcesWithFernFlower.enabled = false
-		genSourcesWithCfr.enabled = false
-		unpickJar.enabled = false
+		genClientOnlySourcesWithQuiltflower.enabled = false
+		genClientOnlySourcesWithFernFlower.enabled = false
+		genClientOnlySourcesWithCfr.enabled = false
+		genCommonSourcesWithQuiltflower.enabled = false
+		genCommonSourcesWithFernFlower.enabled = false
+		genCommonSourcesWithCfr.enabled = false
+		unpickClientOnlyJar.enabled = false
+		unpickCommonJar.enabled = false
 	}
 }
 
@@ -351,6 +440,9 @@ publishing {
 					depNode.appendNode("scope", "compile")
 				}
 				subprojects.each {
+					// Dont depend on the deprecated modules in the main artifact.
+					if (it.path.startsWith(":deprecated")) return
+
 					def depNode = depsNode.appendNode("dependency")
 					depNode.appendNode("groupId", it.group)
 					depNode.appendNode("artifactId", it.name)
@@ -360,8 +452,6 @@ publishing {
 			}
 		}
 	}
-
-	setupRepositories(repositories)
 }
 
 // Required until the deprecation is removed. Fabric API's main jar that is published to maven does not contain sub modules.
@@ -394,7 +484,11 @@ void setupRepositories(RepositoryHandler repositories) {
 	}
 }
 
-subprojects.each { remapJar.dependsOn("${it.path}:remapJar") }
+subprojects.each {
+	if (it.name == "deprecated") return
+
+	remapJar.dependsOn("${it.path}:remapJar")
+}
 
 sourceSets {
 	testmod
@@ -416,9 +510,12 @@ dependencies {
 	}
 	afterEvaluate {
 		subprojects.each {
-			api project(path: ":${it.name}", configuration: "namedElements")
+			if (it.name == "deprecated") return
 
-			testmodImplementation project("${it.name}:").sourceSets.testmod.output
+			api project(path: "${it.path}", configuration: "namedElements")
+			clientImplementation project("${it.path}:").sourceSets.client.output
+
+			testmodImplementation project("${it.path}:").sourceSets.testmod.output
 		}
 	}
 }
@@ -444,10 +541,10 @@ java.util.stream.Stream<ResolvedDependency> getAllQslModules() {
 remapJar {
 	afterEvaluate {
 		subprojects.each {
-			if (it.name in devOnlyModules) return
+			if (it.name in devOnlyModules || it.name == "deprecated") return
 
 			// Include the signed or none signed jar from the sub project.
-			nestedJars.from project("${it.name}:").tasks.getByName(signingEnabled ? "signRemapJar" : "remapJar")
+			nestedJars.from project("${it.path}").tasks.getByName(signingEnabled ? "signRemapJar" : "remapJar")
 		}
 	}
 }
@@ -469,7 +566,7 @@ curseforge {
 		id = "306612"
 		changelog = ENV.CHANGELOG ?: "No changelog provided"
 		releaseType = project.prerelease == "true" ? "beta" : "release"
-		addGameVersion "1.18.2"
+		addGameVersion "1.19-Snapshot"
 		addGameVersion "Fabric"
 
 		mainArtifact(signingEnabled ? signRemapJar.output : remapJar) {

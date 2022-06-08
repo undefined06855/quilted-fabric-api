@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +16,6 @@
 
 package net.fabricmc.fabric.impl.loot;
 
-import java.io.IOException;
-
-import org.quiltmc.qsl.resource.loader.impl.QuiltBuiltinResourcePackProfile.BuiltinResourcePackSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourcePackSource;
@@ -33,21 +26,19 @@ import net.fabricmc.fabric.impl.resource.loader.FabricResource;
 import net.fabricmc.fabric.impl.resource.loader.ModResourcePackCreator;
 
 public final class LootUtil {
-	public static final Logger LOGGER = LoggerFactory.getLogger("fabric-loot-api-v2");
-
 	public static LootTableSource determineSource(Identifier lootTableId, ResourceManager resourceManager) {
 		Identifier resourceId = new Identifier(lootTableId.getNamespace(), "loot_tables/%s.json".formatted(lootTableId.getPath()));
 
-		try (Resource resource = resourceManager.getResource(resourceId)) {
+		Resource resource = resourceManager.getResource(resourceId).orElse(null);
+
+		if (resource != null) {
 			ResourcePackSource packSource = ((FabricResource) resource).getFabricPackSource();
 
 			if (packSource == ResourcePackSource.PACK_SOURCE_BUILTIN) {
 				return LootTableSource.VANILLA;
-			} else if (packSource == ModResourcePackCreator.RESOURCE_PACK_SOURCE || packSource instanceof BuiltinResourcePackSource) {
+			} else if (packSource == ModResourcePackCreator.RESOURCE_PACK_SOURCE) {
 				return LootTableSource.MOD;
 			}
-		} catch (IOException e) {
-			LOGGER.error("Could not open resource for loot table {} to check its source", lootTableId, e);
 		}
 
 		// If not builtin or mod, assume external data pack.

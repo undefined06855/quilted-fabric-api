@@ -3,7 +3,7 @@
   "package": "net.fabricmc.fabric.mixin.registry.sync",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "AccessorLevelStorageSession",
+    "AccessorDebugChunkGenerator",
     "AccessorRegistry",
     "MixinBootstrap",
     "MixinChunkSerializer",
@@ -11,17 +11,10 @@
     "MixinIdList",
     "MixinIdRegistry",
     "MixinLevelStorageSession",
-    "MixinRegistry",
     "MixinMinecraftServer",
+    "MixinRegistry",
     "MixinSimpleRegistry",
     "MixinStructuresToConfiguredStructuresFix"
-  ],
-  "client": [
-    "client.MixinBlockColorMap",
-    "client.MixinItemColorMap",
-    "client.MixinItemModelMap",
-    "client.MixinMinecraftClient",
-    "client.MixinParticleManager"
   ],
   "injectors": {
     "defaultRequire": 1

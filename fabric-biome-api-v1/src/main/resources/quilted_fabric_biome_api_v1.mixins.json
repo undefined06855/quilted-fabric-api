@@ -4,12 +4,11 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BiomeModificationContextImplMixin",
-    "WeatherContextImplMixin",
+    "BiomeSelectionContextImplMixin",
     "EffectsContextImplMixin",
     "GenerationSettingsContextImplMixin",
     "SpawnSettingsContextImplMixin",
-    "BiomeModificationContextImplMixin",
-    "BiomeSelectionContextImplMixin"
+    "WeatherContextImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1

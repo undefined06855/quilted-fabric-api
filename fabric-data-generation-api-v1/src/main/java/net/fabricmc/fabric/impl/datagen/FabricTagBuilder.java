@@ -22,4 +22,6 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public interface FabricTagBuilder {
 	void fabric_setReplace(boolean replace);
+
+	boolean fabric_isReplaced();
 }

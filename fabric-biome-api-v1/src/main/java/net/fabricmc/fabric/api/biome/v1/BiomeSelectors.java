@@ -147,13 +147,4 @@ public final class BiomeSelectors {
 	public static Predicate<BiomeSelectionContext> spawnsOneOf(Set<EntityType<?>> entityTypes) {
 		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.spawnsOneOf(entityTypes).test(context);
 	}
-
-	/**
-	 * Matches Biomes that have one of the given categories.
-	 *
-	 * @see Biome#getCategory()
-	 */
-	public static Predicate<BiomeSelectionContext> categories(Biome.Category... categories) {
-		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.categories(categories).test(context);
-	}
 }

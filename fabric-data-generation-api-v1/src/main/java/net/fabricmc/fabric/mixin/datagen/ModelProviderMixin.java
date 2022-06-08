@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +16,12 @@
 
 package net.fabricmc.fabric.mixin.datagen;
 
-import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
 import com.google.gson.JsonElement;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,8 +31,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import net.minecraft.block.Block;
-import net.minecraft.data.DataCache;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataWriter;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.BlockStateSupplier;
 import net.minecraft.data.client.ItemModelGenerator;
@@ -50,12 +46,16 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 
 @Mixin(ModelProvider.class)
 public class ModelProviderMixin {
-	@Shadow
-	@Final
+	@Unique
 	private DataGenerator generator;
 
 	@Unique
-	private static ThreadLocal<DataGenerator> dataGeneratorThreadLocal = new ThreadLocal<>();
+	private static final ThreadLocal<DataGenerator> dataGeneratorThreadLocal = new ThreadLocal<>();
+
+	@Inject(method = "<init>", at = @At("RETURN"))
+	public void init(DataGenerator generator, CallbackInfo ci) {
+		this.generator = generator;
+	}
 
 	@Unique
 	private static ThreadLocal<Map<Block, BlockStateSupplier>> blockStateMapThreadLocal = new ThreadLocal<>();
@@ -81,13 +81,13 @@ public class ModelProviderMixin {
 	}
 
 	@Inject(method = "run", at = @At(value = "INVOKE_ASSIGN", target = "com/google/common/collect/Maps.newHashMap()Ljava/util/HashMap;", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void runHead(DataCache cache, CallbackInfo ci, Path path, Map<Block, BlockStateSupplier> map) {
+	private void runHead(DataWriter writer, CallbackInfo ci, Map<Block, BlockStateSupplier> map) {
 		dataGeneratorThreadLocal.set(generator);
 		blockStateMapThreadLocal.set(map);
 	}
 
 	@Inject(method = "run", at = @At("TAIL"))
-	private void runTail(DataCache cache, CallbackInfo ci) {
+	private void runTail(DataWriter writer, CallbackInfo ci) {
 		dataGeneratorThreadLocal.remove();
 		blockStateMapThreadLocal.remove();
 	}

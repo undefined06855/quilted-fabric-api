@@ -80,7 +80,6 @@ public interface AbstractBlockSettingsAccessor {
 	@Accessor
 	float getJumpVelocityMultiplier();
 
-	@Deprecated
 	@Accessor
 	boolean getDynamicBounds();
 
@@ -119,6 +118,10 @@ public interface AbstractBlockSettingsAccessor {
 	@Deprecated
 	@Accessor
 	AbstractBlock.ContextPredicate getEmissiveLightingPredicate();
+
+	@Deprecated
+	@Accessor
+	Function<BlockState, AbstractBlock.OffsetType> getOffsetType();
 
 	/* SETTERS */
 	@Deprecated
@@ -175,7 +178,4 @@ public interface AbstractBlockSettingsAccessor {
 
 	@Invoker
 	Block.Settings invokeTicksRandomly();
-
-	@Invoker
-	Block.Settings invokeDropsNothing();
 }

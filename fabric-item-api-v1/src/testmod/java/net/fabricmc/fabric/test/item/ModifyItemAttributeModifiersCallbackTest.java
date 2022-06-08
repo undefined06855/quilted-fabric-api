@@ -17,13 +17,11 @@
 
 package net.fabricmc.fabric.test.item;
 
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Items;
 
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.ModifyItemAttributeModifiersCallback;
 
 public class ModifyItemAttributeModifiersCallbackTest implements ModInitializer {
@@ -31,7 +29,7 @@ public class ModifyItemAttributeModifiersCallbackTest implements ModInitializer 
 	public static final EntityAttributeModifier MODIFIER = new EntityAttributeModifier("generic_max_health_modifier", 5.0, EntityAttributeModifier.Operation.ADDITION);
 
 	@Override
-	public void onInitialize(ModContainer mod) {
+	public void onInitialize() {
 		ModifyItemAttributeModifiersCallback.EVENT.register((stack, slot, attributeModifiers) -> {
 			if (stack.isOf(Items.DIAMOND_HELMET) && slot.getEntitySlotId() == HEAD_SLOT_ID) {
 				attributeModifiers.put(EntityAttributes.GENERIC_MAX_HEALTH, MODIFIER);

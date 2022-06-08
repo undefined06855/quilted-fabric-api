@@ -39,7 +39,7 @@ public class TrashingStorage<T extends TransferVariant<?>> implements InsertionO
 	}
 
 	@Override
-	public Iterator<StorageView<T>> iterator(TransactionContext transaction) {
+	public Iterator<StorageView<T>> iterator() {
 		return Collections.emptyIterator();
 	}
 }

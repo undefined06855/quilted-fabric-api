@@ -209,6 +209,7 @@ public class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.PUFFERFISH_BUCKET)
 				.add(Items.TROPICAL_FISH_BUCKET)
 				.add(Items.SALMON_BUCKET)
+				.add(Items.TADPOLE_BUCKET)
 				.add(Items.WATER_BUCKET);
 		getOrCreateTagBuilder(ConventionalItemTags.MILK_BUCKETS)
 				.add(Items.MILK_BUCKET);
