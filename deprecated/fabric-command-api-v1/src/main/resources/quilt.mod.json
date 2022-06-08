@@ -35,7 +35,6 @@
 			}
 		]
 	},
-	"mixin": "quilted_fabric_command_api_v1.mixins.json",
 	"fabric-api:module-lifecycle": "deprecated",
 	"modmenu": {
 		"badges": [

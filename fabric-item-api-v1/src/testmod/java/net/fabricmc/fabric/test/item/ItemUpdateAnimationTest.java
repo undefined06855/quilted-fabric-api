@@ -17,15 +17,14 @@
 
 package net.fabricmc.fabric.test.item;
 
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import net.fabricmc.api.ModInitializer;
+
 public class ItemUpdateAnimationTest implements ModInitializer {
 	@Override
-	public void onInitialize(ModContainer mod) {
+	public void onInitialize() {
 		Registry.register(Registry.ITEM, new Identifier("fabric-item-api-v1-testmod", "updating_allowed"), new UpdatingItem(true));
 		Registry.register(Registry.ITEM, new Identifier("fabric-item-api-v1-testmod", "updating_disallowed"), new UpdatingItem(false));
 	}
