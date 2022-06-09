@@ -43,6 +43,7 @@
     "environment": "client"
   },
 	"mixin": "quilted_fabric_renderer_indigo.mixins.json",
+	"access_widener": "quilted_fabric_renderer_indigo.accesswidener",
 	"fabric-api:module-lifecycle": "stable",
 	"modmenu": {
 		"badges": [

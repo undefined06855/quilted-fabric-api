@@ -3,7 +3,7 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 loom {
-	accessWidenerPath = file("src/client/resources/fabric-renderer-indigo.accesswidener")
+	accessWidenerPath = file("src/client/resources/quilted_fabric_renderer_indigo.accesswidener")
 }
 
 moduleDependencies(project, [
