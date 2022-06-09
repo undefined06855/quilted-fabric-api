@@ -241,7 +241,7 @@ allprojects {
 	}
 
 	checkstyle {
-		configFile = rootProject.file("checkstyle.xml")
+		configFile = rootProject.file("codeformat/checkstyle.xml")
 		toolVersion = "9.1"
 	}
 

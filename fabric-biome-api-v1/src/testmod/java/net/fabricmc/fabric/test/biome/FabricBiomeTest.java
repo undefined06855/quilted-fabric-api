@@ -63,7 +63,7 @@ import net.fabricmc.fabric.api.biome.v1.TheEndBiomes;
  * <p>If you don't find a biome right away, teleport far away (~10000 blocks) from spawn and try again.
  */
 public class FabricBiomeTest implements ModInitializer {
-	public static final String MOD_ID = "fabric_biome_test";
+	public static final String MOD_ID = "fabric-biome-api-v1-testmod";
 
 	private static final RegistryKey<Biome> TEST_CRIMSON_FOREST = RegistryKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "test_crimson_forest"));
 	private static final RegistryKey<Biome> CUSTOM_PLAINS = RegistryKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "custom_plains"));
@@ -96,7 +96,7 @@ public class FabricBiomeTest implements ModInitializer {
 
 		// The placement config is taken from the vanilla desert well, but no randomness
 		PlacedFeature PLACED_COMMON_DESERT_WELL = new PlacedFeature(featureEntry, List.of(SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of()));
-		Registry.register(BuiltinRegistries.PLACED_FEATURE, new Identifier(MOD_ID, "fab_desert_well"), PLACED_COMMON_DESERT_WELL);
+		Registry.register(BuiltinRegistries.PLACED_FEATURE, new Identifier(MOD_ID, "fabric_desert_well"), PLACED_COMMON_DESERT_WELL);
 
 		BiomeModifications.create(new Identifier("fabric:testmod"))
 				.add(ModificationPhase.ADDITIONS,

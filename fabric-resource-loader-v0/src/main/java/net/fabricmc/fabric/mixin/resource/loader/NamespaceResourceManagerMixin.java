@@ -40,9 +40,6 @@ import net.fabricmc.fabric.impl.resource.loader.FabricNamespaceResourceManagerEn
 import net.fabricmc.fabric.impl.resource.loader.FabricResource;
 import net.fabricmc.fabric.impl.resource.loader.ResourcePackSourceTracker;
 
-/**
- * Patches getAllResources and method_41265 to work with GroupResourcePack.
- */
 @Mixin(NamespaceResourceManager.class)
 public class NamespaceResourceManagerMixin {
 	@Shadow
