@@ -35,6 +35,7 @@
 			}
 		]
 	},
+	"mixin": "quilted_fabric_command_api_v2.client.mixins.json",
 	"access_widener": "quilted_fabric_command_api_v2.accesswidener",
 	"fabric-api:module-lifecycle": "deprecated",
 	"modmenu": {
