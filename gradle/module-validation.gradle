@@ -35,7 +35,7 @@ class ValidateModuleTask extends DefaultTask {
 		def clientOnlyMod = false
 		def quiltModJsonFile = (project.file("src/main/resources/quilt.mod.json") as File)
 
-		if (!file.exists()) {
+		if (!quiltModJsonFile.exists()) {
 			quiltModJsonFile = (project.file("src/client/resources/quilt.mod.json") as File)
 			clientOnlyMod = true
 		}
