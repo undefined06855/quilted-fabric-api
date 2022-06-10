@@ -61,7 +61,7 @@ public class BiomeModification {
 	 */
 	@SuppressWarnings("unchecked")
 	public BiomeModification add(ModificationPhase phase, Predicate<BiomeSelectionContext> selector, BiConsumer<BiomeSelectionContext, BiomeModificationContext> modifier) {
-		BiomeModificationImpl.INSTANCE.addModifier(id, phase.getQuiltEquivalent(), (Predicate<org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext>) (Object) selector, (Consumer<org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext>) (Object) modifier);
+		BiomeModificationImpl.INSTANCE.addModifier(id, phase.getQuiltEquivalent(), (Predicate<org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext>) (Object) selector, (BiConsumer<org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext, org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext>) (Object) modifier);
 		return this;
 	}
 }
