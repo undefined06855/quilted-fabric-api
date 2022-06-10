@@ -18,7 +18,6 @@
 package net.fabricmc.fabric.api.command.v2;
 
 import org.quiltmc.qsl.command.mixin.ArgumentTypeInfosAccessor;
-
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
