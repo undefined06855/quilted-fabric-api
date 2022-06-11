@@ -352,7 +352,7 @@ loom {
 		}
 	}
 }
-test.dependsOn runGametest
+// test.dependsOn runGametest
 
 subprojects {
 	if (it.name == "deprecated") return
