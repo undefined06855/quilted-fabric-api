@@ -597,7 +597,7 @@ task renameJar(type: Jar, dependsOn: (signingEnabled ? signRemapJar : remapJar))
 	def qsl_version_normalized = project.qsl_version.substring(0, project.qsl_version.indexOf('+'))
 	def qfapi_version_normalized = project.version.substring(0, project.version.indexOf('+'))
 	def upstream_fapi_version_normalized = project.upstream_version
-	archiveFileName.set("qsl-${qsl_version_normalized}_qfapi-${qfapi_version_normalized}_fapi-${upstream_fapi_version_normalized}_mc-${project.minecraft_version}.jar")
+	archiveFileName.set("qfapi-${qfapi_version_normalized}_qsl-${qsl_version_normalized}_fapi-${upstream_fapi_version_normalized}_mc-${project.minecraft_version}.jar")
 }
 
 
@@ -611,7 +611,7 @@ task github(dependsOn: renameJar) {
 		def repository = github.getRepository(ENV.GITHUB_REPOSITORY)
 
 		def releaseBuilder = new GHReleaseBuilder(repository, version as String)
-		releaseBuilder.name("[$project.minecraft_version] QSL " + project.qsl_version.split("\\+")[0] + " and QFAPI " + project.version.split("\\+")[0])
+		releaseBuilder.name("[$project.minecraft_version] QFAPI " + project.version.split("\\+")[0] + " and QSL " + project.qsl_version.split("\\+")[0])
 		releaseBuilder.body("Provides Fabric API ${project.upstream_version}\n" + ENV.CHANGELOG ?: "No changelog provided")
 		releaseBuilder.commitish(getBranch())
 		releaseBuilder.prerelease(project.prerelease == "true")
@@ -626,7 +626,7 @@ import com.modrinth.minotaur.dependencies.ModDependency
 
 modrinth {
 	projectId = "qvIfYCYJ"
-	versionName = "[$project.minecraft_version] QSL " + project.qsl_version.split("\\+")[0] + " and QFAPI " + project.version.split("\\+")[0]
+	versionName = "[$project.minecraft_version] QFAPI " + project.version.split("\\+")[0] + " and QSL " + project.qsl_version.split("\\+")[0]
 	versionType = project.prerelease == "true" ? "beta" : "release"
 	changelog = "Provides Fabric API ${project.upstream_version}\n" + (ENV.CHANGELOG ?: "No changelog provided")
 	uploadFile = renameJar
