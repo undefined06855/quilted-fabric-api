@@ -52,7 +52,7 @@ public class HeldItemRendererMixin {
 		ItemStack newMainStack = client.player.getMainHandStack();
 
 		if (mainHand.getItem() == newMainStack.getItem()) {
-			if (!((FabricItem) mainHand.getItem()).allowNbtUpdateAnimation(client.player, Hand.MAIN_HAND, mainHand, newMainStack)) {
+			if (!mainHand.getItem().allowNbtUpdateAnimation(client.player, Hand.MAIN_HAND, mainHand, newMainStack)) {
 				mainHand = newMainStack;
 			}
 		}
@@ -61,7 +61,7 @@ public class HeldItemRendererMixin {
 		ItemStack newOffStack = client.player.getOffHandStack();
 
 		if (offHand.getItem() == newOffStack.getItem()) {
-			if (!((FabricItem) offHand.getItem()).allowNbtUpdateAnimation(client.player, Hand.OFF_HAND, offHand, newOffStack)) {
+			if (!offHand.getItem().allowNbtUpdateAnimation(client.player, Hand.OFF_HAND, offHand, newOffStack)) {
 				offHand = newOffStack;
 			}
 		}
