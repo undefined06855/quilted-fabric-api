@@ -39,7 +39,10 @@
 			"client": "net.fabricmc.fabric.impl.event.interaction.InteractionEventsRouterClient"
 		}
 	},
-	"mixin": "quilted_fabric_events_interaction_v0.mixins.json",
+	"mixin": [
+		"quilted_fabric_events_interaction_v0.mixins.json",
+		"quilted_fabric_events_interaction_v0.client.mixins.json"
+	],
 	"fabric-api:module-lifecycle": "stable",
 	"modmenu": {
 		"badges": [
