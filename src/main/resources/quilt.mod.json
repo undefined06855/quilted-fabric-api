@@ -66,6 +66,42 @@
 			"quilted_fabric_textures_v0",
 			"quilted_fabric_transfer_api_v1",
 			"quilted_fabric_transitive_access_wideners_v1",
+			{
+				"id": "quilted_fabric_command_api_v1",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_commands_v0",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_containers_v0",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_events_lifecycle_v0",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_keybindings_v0",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_loot_tables_v1",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_networking_v0",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_renderer_registries_v1",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_rendering_v0",
+				"optional": true
+			},
 			"quilt_base",
 			"quilt_biome",
 			"quilt_block_extensions",
