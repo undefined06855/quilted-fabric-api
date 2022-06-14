@@ -30,7 +30,10 @@
 			}
 		]
 	},
-	"mixin": "quilted_fabric_entity_events_v1.mixins.json",
+	"mixin": [
+		"quilted_fabric_entity_events_v1.mixins.json",
+		"quilted_fabric_entity_events_v1.client.mixins.json"
+	],
 	"fabric-api:module-lifecycle": "stable",
 	"modmenu": {
 		"badges": [

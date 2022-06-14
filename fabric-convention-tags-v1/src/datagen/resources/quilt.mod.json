@@ -5,7 +5,7 @@
     "id": "quilted_fabric_convention_tags_api_v1_datagen",
     "version": "1.0.0",
     "metadata": {
-      "name": "Quilted Fabric Convention Tags API (v1) Datagen",
+      "name": "Quilted Fabric Convention Tags Datagen",
       "description": "Contains common tags used by mods for vanilla things.",
       "contributors": {
 				"QuiltMC: QSL Team": "Owner",
@@ -20,6 +20,9 @@
       "icon": "assets/quilted_fabric_convention_tags_api_v1/icon.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"fabric-datagen": ["net.fabricmc.fabric.impl.tag.convention.datagen.DatagenEntrypoint"]
+		},
     "depends": [
       "quilt_loader"
     ],
