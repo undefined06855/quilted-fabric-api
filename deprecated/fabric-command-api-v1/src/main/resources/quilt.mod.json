@@ -19,6 +19,7 @@
 			"license": "Apache-2.0",
 			"icon": "assets/quilted_fabric_command_api_v1/icon.png"
 		},
+		"load_type": "if_possible",
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"main": "net.fabricmc.fabric.impl.command.v1.LegacyHandler"
