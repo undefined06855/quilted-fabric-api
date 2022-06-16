@@ -4,12 +4,17 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AxeItemAccessor",
+    "FarmerVillagerTaskMixin",
+    "FarmerWorkTaskAccessor",
+    "GiveGiftsToHeroTaskAccessor",
     "HoeItemAccessor",
     "HoneycombItemMixin",
     "MixinAbstractFurnaceBlockEntity",
     "MixinFireBlock",
     "OxidizableMixin",
-    "ShovelItemAccessor"
+    "ShovelItemAccessor",
+    "VillagerEntityAccessor",
+    "VillagerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

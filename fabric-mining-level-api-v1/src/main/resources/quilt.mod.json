@@ -30,15 +30,9 @@
 				"id": "fabric-mining-level-api-v1",
 				"version": "${upstream_version}"
 			}
-		],
-		"entrypoints": {
-			"main": "net.fabricmc.fabric.impl.mininglevel.FabricMiningLevelInit"
-		}
+		]
 	},
-	"mixin": [
-		"quilted_fabric_mining_level_api_v1.mixins.json",
-		"quilted_fabric_mining_level_api_v1.client.mixins.json"
-	],
+	"mixin": "quilted_fabric_mining_level_api_v1.mixins.json",
 	"fabric-api:module-lifecycle": "stable",
 	"modmenu": {
 		"badges": [

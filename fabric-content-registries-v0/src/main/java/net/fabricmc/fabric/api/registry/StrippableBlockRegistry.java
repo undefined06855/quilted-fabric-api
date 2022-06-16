@@ -17,7 +17,6 @@
 
 package net.fabricmc.fabric.api.registry;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,6 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.state.property.Properties;
 
 import net.fabricmc.fabric.mixin.content.registry.AxeItemAccessor;
+import net.fabricmc.fabric.impl.content.registry.util.ImmutableCollectionUtils;
 
 /**
  * A registry for axe stripping interactions. A vanilla example is turning logs to stripped logs.
@@ -50,14 +50,8 @@ public final class StrippableBlockRegistry {
 	public static void register(Block input, Block stripped) {
 		requireNonNullAndAxisProperty(input, "input block");
 		requireNonNullAndAxisProperty(stripped, "stripped block");
-		Map<Block, Block> strippedBlocks = AxeItemAccessor.getStrippedBlocks();
 
-		if (!(strippedBlocks instanceof HashMap<?, ?>)) {
-			strippedBlocks = new HashMap<>(strippedBlocks);
-			AxeItemAccessor.setStrippedBlocks(strippedBlocks);
-		}
-
-		Block old = strippedBlocks.put(input, stripped);
+		Block old = getRegistry().put(input, stripped);
 
 		if (old != null) {
 			LOGGER.debug("Replaced old stripping mapping from {} to {} with {}", input, old, stripped);
@@ -70,5 +64,9 @@ public final class StrippableBlockRegistry {
 		if (!block.getStateManager().getProperties().contains(Properties.AXIS)) {
 			throw new IllegalArgumentException(name + " must have the 'axis' property");
 		}
+	}
+
+	private static Map<Block, Block> getRegistry() {
+		return ImmutableCollectionUtils.getAsMutableMap(AxeItemAccessor::getStrippedBlocks, AxeItemAccessor::setStrippedBlocks);
 	}
 }
