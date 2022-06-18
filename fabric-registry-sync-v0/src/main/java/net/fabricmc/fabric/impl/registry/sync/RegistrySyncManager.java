@@ -39,6 +39,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.jetbrains.annotations.Nullable;
+import org.quiltmc.loader.api.QuiltLoader;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -232,6 +233,11 @@ public final class RegistrySyncManager {
 					//noinspection unchecked
 					Identifier id = registry.getId(o);
 					if (id == null) continue;
+
+					// We don't want to sync in ServerArgumentTypes
+					if (QuiltLoader.isModLoaded("quilt_command") && registry.equals(Registry.COMMAND_ARGUMENT_TYPE)) {
+						if (QuiltRegistryPatch.checkForServerArgumentType(id)) continue;
+					}
 
 					//noinspection unchecked
 					int rawId = registry.getRawId(o);

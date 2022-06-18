@@ -4,6 +4,7 @@ upstream_version = getSubprojectUpstreamVersion(project)
 
 dependencies {
 	modApi(getQslModule("core", "registry"))
+	modApi(getQslModule("management", "command"))
 }
 
 moduleDependencies(project, [
