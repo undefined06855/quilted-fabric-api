@@ -235,8 +235,10 @@ public final class RegistrySyncManager {
 					if (id == null) continue;
 
 					// We don't want to sync in ServerArgumentTypes
-					if (QuiltLoader.isModLoaded("quilt_command") && registry.equals(Registry.COMMAND_ARGUMENT_TYPE)) {
-						if (QuiltRegistryPatch.checkForServerArgumentType(id)) continue;
+					if (isClientSync) {
+						if (QuiltLoader.isModLoaded("quilt_command") && registry.equals(Registry.COMMAND_ARGUMENT_TYPE)) {
+							if (QuiltRegistryPatch.checkForServerArgumentType(id)) continue;
+						}
 					}
 
 					//noinspection unchecked
