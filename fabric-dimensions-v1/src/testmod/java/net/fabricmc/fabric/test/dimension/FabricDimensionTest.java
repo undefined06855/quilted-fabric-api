@@ -66,11 +66,6 @@ public class FabricDimensionTest implements ModInitializer {
 		}
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-			if (true) {
-				// TODO 22w06a ServerBugfixMixin
-				return;
-			}
-
 			ServerWorld overworld = server.getWorld(World.OVERWORLD);
 			ServerWorld world = server.getWorld(WORLD_KEY);
 
