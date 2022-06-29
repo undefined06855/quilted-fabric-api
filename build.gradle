@@ -578,7 +578,7 @@ curseforge {
 		addGameVersion "1.19"
 		addGameVersion "Quilt"
 
-		mainArtifact(renameJar.archiveFile.get().getAsFile()) {
+		mainArtifact(renameJar) {
 			displayName = "[$project.minecraft_version] QFAPI " + project.version.split("\\+")[0] + " and QSL " + project.qsl_version.split("\\+")[0]
 		}
 
