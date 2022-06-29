@@ -567,8 +567,8 @@ task renameJar(type: Jar, dependsOn: (signingEnabled ? signRemapJar : remapJar))
 }
 
 curseforge {
-	if (ENV.CURSEFORGE_API_KEY) {
-		apiKey = ENV.CURSEFORGE_API_KEY
+	if (ENV.CURSEFORGE_TOKEN) {
+		apiKey = ENV.CURSEFORGE_TOKEN
 	}
 
 	project {
