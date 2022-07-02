@@ -28,7 +28,7 @@
 			},
 			{
 					"id": "minecraft",
-					"versions": "~1.19-alpha.22.18.a"
+					"versions": "~1.19.1-beta.2"
 			},
 			"quilted_fabric_api_base",
 			"quilted_fabric_api_lookup_api_v1",

@@ -15,8 +15,8 @@ jobs:
           fetch-depth: 0
       - uses: gradle/wrapper-validation-action@v1
       # TODO - Re-enable once issues with Quilt Loader are solved
-      # - run: ./gradlew check build publishToMavenLocal --stacktrace --parallel --warning-mode=fail
-      - run: ./gradlew build publishToMavenLocal --stacktrace --parallel --warning-mode=fail
+      # - run: ./gradlew check build publishToMavenLocal --stacktrace --parallel --warning-mode=fail -Porg.gradle.parallel.threads=4
+      - run: ./gradlew build publishToMavenLocal --stacktrace --parallel --warning-mode=fail -Porg.gradle.parallel.threads=4
       # - run: mkdir run && echo "eula=true" >> run/eula.txt
       # - run: ./gradlew runAutoTestServer --stacktrace --warning-mode=fail
       - uses: actions/upload-artifact@v2
