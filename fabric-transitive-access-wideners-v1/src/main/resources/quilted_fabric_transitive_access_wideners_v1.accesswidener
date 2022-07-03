@@ -4,9 +4,6 @@ accessWidener v2 named
 transitive-accessible method net/minecraft/client/item/ModelPredicateProviderRegistry register (Lnet/minecraft/util/Identifier;Lnet/minecraft/client/item/UnclampedModelPredicateProvider;)Lnet/minecraft/client/item/UnclampedModelPredicateProvider;
 transitive-accessible method net/minecraft/client/item/ModelPredicateProviderRegistry register (Lnet/minecraft/item/Item;Lnet/minecraft/util/Identifier;Lnet/minecraft/client/item/UnclampedModelPredicateProvider;)V
 
-# Registering custom advancement criteria
-transitive-accessible method net/minecraft/advancement/criterion/Criteria register (Lnet/minecraft/advancement/criterion/Criterion;)Lnet/minecraft/advancement/criterion/Criterion;
-
 # Creating custom screen handler types
 transitive-accessible class net/minecraft/screen/ScreenHandlerType$Factory
 transitive-accessible method net/minecraft/screen/ScreenHandlerType <init> (Lnet/minecraft/screen/ScreenHandlerType$Factory;)V
