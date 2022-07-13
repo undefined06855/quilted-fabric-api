@@ -28,6 +28,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.Items;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.ItemTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -39,8 +40,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FlattenableBlockRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.fabricmc.fabric.api.registry.SculkSensorFrequencyRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
@@ -139,6 +142,14 @@ public final class ContentRegistryTest implements ModInitializer {
 			// expected behavior
 			LOGGER.info("SculkSensorFrequencyRegistry test passed!");
 		}
+
+		// These tests were added by us (Quilt), because we actually need to test them
+		CompostingChanceRegistry.INSTANCE.add(Items.BONE, 10.0F);
+		CompostingChanceRegistry.INSTANCE.add(ItemTags.ARROWS, 5.0F);
+
+		FuelRegistry.INSTANCE.add(Items.FLOWERING_AZALEA_LEAVES, 777);
+		FuelRegistry.INSTANCE.add(ItemTags.COMPASSES, 10);
+
 	}
 
 	public static class TestEventBlock extends Block {

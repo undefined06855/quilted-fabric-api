@@ -17,37 +17,50 @@
 
 package net.fabricmc.fabric.impl.content.registry;
 
-import net.minecraft.block.ComposterBlock;
 import net.minecraft.tag.TagKey;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
+
+import org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries;
+import org.quiltmc.qsl.registry.attachment.impl.RegistryEntryAttachmentHolder;
 
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 
 public class CompostingChanceRegistryImpl implements CompostingChanceRegistry {
 	@Override
 	public Float get(ItemConvertible item) {
-		return ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.getOrDefault(item.asItem(), 0.0F);
+		return ItemContentRegistries.COMPOST_CHANCE.get(item.asItem()).orElse(0.0F);
 	}
 
 	@Override
 	public void add(ItemConvertible item, Float value) {
-		ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(item.asItem(), value);
+		ItemContentRegistries.COMPOST_CHANCE.put(item.asItem(), value);
 	}
 
+	/**
+	 * @throws UnsupportedOperationException if ran on Fabric API, which currently doesn't implement this method
+	 */
 	@Override
-	public void add(TagKey<Item> tag, Float value) {
-		throw new UnsupportedOperationException("Tags currently not supported!");
+	public void add(TagKey<Item> tag, Float value) throws UnsupportedOperationException {
+		ItemContentRegistries.COMPOST_CHANCE.put(tag, value);
 	}
 
 	@Override
 	public void remove(ItemConvertible item) {
-		ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.removeFloat(item.asItem());
+		if (ItemContentRegistries.COMPOST_CHANCE.get(item.asItem()).isEmpty()) {
+			RegistryEntryAttachmentHolder.getBuiltin(Registry.ITEM).valueTable.remove(ItemContentRegistries.COMPOST_CHANCE, item.asItem());
+		}
 	}
 
+	/**
+	 * @throws UnsupportedOperationException if ran on Fabric API, which currently doesn't implement this method
+	 */
 	@Override
 	public void remove(TagKey<Item> tag) {
-		throw new UnsupportedOperationException("Tags currently not supported!");
+		if (ItemContentRegistries.COMPOST_CHANCE.tagKeySet().contains(tag)) {
+			RegistryEntryAttachmentHolder.getBuiltin(Registry.ITEM).valueTagTable.remove(ItemContentRegistries.COMPOST_CHANCE, tag);
+		}
 	}
 
 	@Override
