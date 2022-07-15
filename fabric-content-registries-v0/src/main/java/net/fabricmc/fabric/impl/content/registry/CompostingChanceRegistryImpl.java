@@ -17,13 +17,11 @@
 
 package net.fabricmc.fabric.impl.content.registry;
 
+import org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries;
+
 import net.minecraft.tag.TagKey;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
-
-import org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries;
-import org.quiltmc.qsl.registry.attachment.impl.RegistryEntryAttachmentHolder;
 
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 
@@ -48,9 +46,7 @@ public class CompostingChanceRegistryImpl implements CompostingChanceRegistry {
 
 	@Override
 	public void remove(ItemConvertible item) {
-		if (ItemContentRegistries.COMPOST_CHANCE.get(item.asItem()).isEmpty()) {
-			RegistryEntryAttachmentHolder.getBuiltin(Registry.ITEM).valueTable.remove(ItemContentRegistries.COMPOST_CHANCE, item.asItem());
-		}
+		ItemContentRegistries.COMPOST_CHANCE.remove(item.asItem());
 	}
 
 	/**
@@ -58,9 +54,7 @@ public class CompostingChanceRegistryImpl implements CompostingChanceRegistry {
 	 */
 	@Override
 	public void remove(TagKey<Item> tag) {
-		if (ItemContentRegistries.COMPOST_CHANCE.tagKeySet().contains(tag)) {
-			RegistryEntryAttachmentHolder.getBuiltin(Registry.ITEM).valueTagTable.remove(ItemContentRegistries.COMPOST_CHANCE, tag);
-		}
+		ItemContentRegistries.COMPOST_CHANCE.remove(tag);
 	}
 
 	@Override

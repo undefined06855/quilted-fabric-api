@@ -21,14 +21,12 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 import org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries;
-import org.quiltmc.qsl.registry.attachment.impl.RegistryEntryAttachmentHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.minecraft.tag.TagKey;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 
@@ -81,16 +79,12 @@ public final class FuelRegistryImpl implements FuelRegistry {
 
 	@Override
 	public void clear(ItemConvertible item) {
-		if (ItemContentRegistries.FUEL_TIME.get(item.asItem()).isEmpty()) {
-			RegistryEntryAttachmentHolder.getBuiltin(Registry.ITEM).valueTagTable.remove(ItemContentRegistries.FUEL_TIME, item.asItem());
-		}
+		ItemContentRegistries.FUEL_TIME.remove(item.asItem());
 	}
 
 	@Override
 	public void clear(TagKey<Item> tag) {
-		if (ItemContentRegistries.FUEL_TIME.tagKeySet().contains(tag)) {
-			RegistryEntryAttachmentHolder.getBuiltin(Registry.ITEM).valueTagTable.remove(ItemContentRegistries.FUEL_TIME, tag);
-		}
+		ItemContentRegistries.FUEL_TIME.remove(tag);
 	}
 
 	public void apply(Map<Item, Integer> map) { }
