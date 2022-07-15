@@ -9,7 +9,6 @@
     "GiveGiftsToHeroTaskAccessor",
     "HoeItemAccessor",
     "HoneycombItemMixin",
-    "MixinAbstractFurnaceBlockEntity",
     "MixinFireBlock",
     "OxidizableMixin",
     "SculkSensorBlockMixin",

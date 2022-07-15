@@ -2,8 +2,8 @@ archivesBaseName = "quilted_fabric_content_registries_v0"
 version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
-loom {
-	accessWidenerPath = file("src/main/resources/quilted_fabric_content_registries_v0.accesswidener")
+dependencies {
+	modApi(getQslModule("item", "item_content_registry"))
 }
 
 moduleDependencies(project, [
