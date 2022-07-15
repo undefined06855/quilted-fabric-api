@@ -144,8 +144,8 @@ public final class ContentRegistryTest implements ModInitializer {
 		}
 
 		// These tests were added by us (Quilt), because we actually need to test them
-		CompostingChanceRegistry.INSTANCE.add(Items.BONE, 10.0F);
-		CompostingChanceRegistry.INSTANCE.add(ItemTags.ARROWS, 5.0F);
+		CompostingChanceRegistry.INSTANCE.add(Items.BONE, 1.0F);
+		CompostingChanceRegistry.INSTANCE.add(ItemTags.ARROWS, 0.5F);
 
 		FuelRegistry.INSTANCE.add(Items.FLOWERING_AZALEA_LEAVES, 777);
 		FuelRegistry.INSTANCE.add(ItemTags.COMPASSES, 10);
