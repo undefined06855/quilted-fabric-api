@@ -149,7 +149,6 @@ public final class ContentRegistryTest implements ModInitializer {
 
 		FuelRegistry.INSTANCE.add(Items.FLOWERING_AZALEA_LEAVES, 777);
 		FuelRegistry.INSTANCE.add(ItemTags.COMPASSES, 10);
-
 	}
 
 	public static class TestEventBlock extends Block {
