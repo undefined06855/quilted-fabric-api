@@ -56,4 +56,9 @@ public final class QuiltPacketSender implements PacketSender {
 	public void sendPacket(Packet<?> packet, @Nullable class_7648 callback) {
 		this.sender.sendPacket(packet, callback);
 	}
+
+	@Override
+	public void sendPacket(Identifier channel, PacketByteBuf buf, @Nullable GenericFutureListener<? extends Future<? super Void>> callback) {
+		this.sender.sendPacket(channel, buf, GenericFutureListenerHolder.create(callback));
+	}
 }

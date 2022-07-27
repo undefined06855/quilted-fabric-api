@@ -21,10 +21,10 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.jetbrains.annotations.Nullable;
 
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
@@ -33,6 +33,7 @@ import net.minecraft.util.Identifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
+import net.fabricmc.fabric.impl.networking.GenericFutureListenerHolder;
 
 /**
  * Offers access to login stage client-side networking functionalities.
@@ -59,7 +60,9 @@ public final class ClientLoginNetworking {
 	 * @see ClientLoginNetworking#registerReceiver(Identifier, LoginQueryRequestHandler)
 	 */
 	public static boolean registerGlobalReceiver(Identifier channelName, LoginQueryRequestHandler queryHandler) {
-		return org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.registerGlobalReceiver(channelName, queryHandler);
+		return org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.registerGlobalReceiver(channelName, 
+            (client, handler, buf, listenerAdder) -> queryHandler.receive(client, handler, buf, listener -> listenerAdder.accept(GenericFutureListenerHolder.create(listener)))
+        );
 	}
 
 	/**
@@ -80,7 +83,7 @@ public final class ClientLoginNetworking {
 		if (old instanceof LoginQueryRequestHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return old::receive;
+			return (client, handler, buf, listenerAdder) -> old.receive(client, handler, buf, listener -> {});
 		} else {
 			return null;
 		}
@@ -108,7 +111,9 @@ public final class ClientLoginNetworking {
 	 * @throws IllegalStateException if the client is not logging in
 	 */
 	public static boolean registerReceiver(Identifier channelName, LoginQueryRequestHandler queryHandler) throws IllegalStateException {
-		return org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.registerReceiver(channelName, queryHandler);
+		return org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.registerReceiver(channelName, 
+            (client, handler, buf, listenerAdder) -> queryHandler.receive(client, handler, buf, listener -> listenerAdder.accept(GenericFutureListenerHolder.create(listener)))
+        );
 	}
 
 	/**
@@ -127,7 +132,7 @@ public final class ClientLoginNetworking {
 		if (old instanceof LoginQueryRequestHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return old::receive;
+			return (client, handler, buf, listenerAdder) -> old.receive(client, handler, buf, listener -> {});
 		} else {
 			return null;
 		}
@@ -139,7 +144,7 @@ public final class ClientLoginNetworking {
 	@Deprecated
 	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
-	public interface LoginQueryRequestHandler extends org.quiltmc.qsl.networking.api.client.ClientLoginNetworking.QueryRequestReceiver {
+	public interface LoginQueryRequestHandler {
 		/**
 		 * Handles an incoming query request from a server.
 		 *
