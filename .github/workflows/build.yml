@@ -4,30 +4,38 @@ jobs:
   build:
     strategy:
       matrix:
-        java: [17-jdk, 18-jdk]
-    runs-on: ubuntu-20.04
-    container:
-      image: eclipse-temurin:${{ matrix.java }}
-      options: --user root
+        java: [17, 18]
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-java-${{ matrix.java }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-java-${{ matrix.java }}-gradle-
+      - uses: actions/setup-java@v3
+        with:
+            distribution: temurin
+            java-version: ${{ matrix.java }}
       - uses: gradle/wrapper-validation-action@v1
       # TODO - Re-enable once issues with Quilt Loader are solved
       # - run: ./gradlew check build publishToMavenLocal --stacktrace --warning-mode=fail -Porg.gradle.parallel.threads=4
       - run: ./gradlew build publishToMavenLocal --stacktrace --warning-mode=fail -Porg.gradle.parallel.threads=4
       # - run: mkdir run && echo "eula=true" >> run/eula.txt
       # - run: ./gradlew runAutoTestServer --stacktrace --warning-mode=fail
-      - uses: actions/upload-artifact@v2
+      - run: ./gradlew --stop
+      - uses: actions/upload-artifact@v3
         with:
           name: Artifacts
-          path: build/libs/
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Artifacts
-          path: ./*/build/libs/
-      - uses: actions/upload-artifact@v2
+          path: |
+            build/libs/
+            ./*/build/libs/
+      - uses: actions/upload-artifact@v3
         with:
           name: Maven Local
-          path: /root/.m2/repository
+          path: /home/runner/.m2/repository
