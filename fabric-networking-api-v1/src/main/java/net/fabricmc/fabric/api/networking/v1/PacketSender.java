@@ -17,14 +17,11 @@
 
 package net.fabricmc.fabric.api.networking.v1;
 
-import java.util.Objects;
-
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.class_7648;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
