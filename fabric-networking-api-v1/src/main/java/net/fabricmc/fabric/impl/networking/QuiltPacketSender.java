@@ -22,6 +22,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.class_7648;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -48,6 +49,11 @@ public final class QuiltPacketSender implements PacketSender {
 
 	@Override
 	public void sendPacket(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> callback) {
+		this.sender.sendPacket(packet, GenericFutureListenerHolder.create(callback));
+	}
+
+	@Override
+	public void sendPacket(Packet<?> packet, @Nullable class_7648 callback) {
 		this.sender.sendPacket(packet, callback);
 	}
 }
