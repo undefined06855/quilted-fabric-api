@@ -18,6 +18,7 @@
 package net.fabricmc.fabric.api.biome.v1;
 
 import net.minecraft.tag.TagKey;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 
 /**
@@ -25,6 +26,10 @@ import net.minecraft.world.biome.Biome;
  */
 @Deprecated
 public interface BiomeSelectionContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext {
+	default RegistryEntry<Biome> getBiomeRegistryEntry() {
+		return this.getBiomeHolder();
+	}
+
 	/**
 	 * {@return true if this biome is in the given {@link TagKey}}.
 	 */
