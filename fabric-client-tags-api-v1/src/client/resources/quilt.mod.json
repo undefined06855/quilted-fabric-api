@@ -30,6 +30,9 @@
 			}
 		]
 	},
+	"minecraft": {
+		"environment": "client"
+	},
 	"fabric-api:module-lifecycle": "deprecated",
 	"modmenu": {
 		"badges": [

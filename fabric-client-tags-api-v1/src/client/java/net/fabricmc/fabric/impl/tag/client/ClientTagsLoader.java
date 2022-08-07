@@ -32,6 +32,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.quiltmc.loader.impl.util.FileSystemUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,7 +123,21 @@ public class ClientTagsLoader {
 		HashSet<Path> out = new HashSet<>();
 
 		for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
-			mod.findPath(path).ifPresent(out::add);
+			// FIXME - this is a horrible hack to fix a horrible hack. Make the old way work!
+			if (mod.getRootPath().toString().endsWith(".jar")) {
+				try {
+					var fsDelegate = FileSystemUtil.getJarFileSystem(mod.getRootPath(), false);
+					var fsPath = fsDelegate.get().getPath(path);
+
+					if (Files.exists(fsPath)) {
+						out.add(fsPath);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				mod.findPath(path).ifPresent(out::add);
+			}
 		}
 
 		return out;
