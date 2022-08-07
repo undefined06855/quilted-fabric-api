@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2022 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +46,7 @@ import net.fabricmc.fabric.impl.tag.client.ClientTagsLoader;
  * directly, allowing for mods to query tags such as {@link net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags}
  * even when connected to a vanilla server.
  */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public final class ClientTags {
 	private static final Map<TagKey<?>, Set<Identifier>> LOCAL_TAG_CACHE = new ConcurrentHashMap<>();
