@@ -35,6 +35,7 @@
 			"quilted_fabric_biome_api_v1",
 			"quilted_fabric_blockrenderlayer_v1",
 			"quilted_fabric_command_api_v2",
+			"quilted_fabric_client_tags_api_v1",
 			"quilted_fabric_content_registries_v0",
 			"quilted_fabric_convention_tags_api_v1",
 			"quilted_fabric_crash_report_info_v1",
