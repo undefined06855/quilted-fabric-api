@@ -26,17 +26,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import net.minecraft.class_7648;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketCallbacks;
 
 import net.fabricmc.fabric.impl.networking.GenericFutureListenerHolder;
 
 @Mixin(ClientConnection.class)
 abstract class ClientConnectionMixin {
 	@Inject(method = "sendInternal", at = @At(value = "INVOKE_ASSIGN", target = "Lio/netty/channel/Channel;writeAndFlush(Ljava/lang/Object;)Lio/netty/channel/ChannelFuture;"), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void sendInternal(Packet<?> packet, @Nullable class_7648 listener, NetworkState packetState, NetworkState currentState, CallbackInfo ci, ChannelFuture channelFuture) {
+	private void sendInternal(Packet<?> packet, @Nullable PacketCallbacks listener, NetworkState packetState, NetworkState currentState, CallbackInfo ci, ChannelFuture channelFuture) {
 		if (listener instanceof GenericFutureListenerHolder holder) {
 			channelFuture.addListener(holder.getDelegate());
 			channelFuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);

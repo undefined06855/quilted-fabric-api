@@ -88,6 +88,10 @@
 		],
 		"provides": [
 			{
+				"id": "fabric-api",
+				"version": "${upstream_version}"
+			},
+			{
 				"id": "fabric",
 				"version": "${upstream_version}"
 			}

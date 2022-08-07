@@ -9,6 +9,7 @@ plugins {
 	id "eclipse"
 	id "idea"
 	id "maven-publish"
+	// TODO - Update to Quilt Loom 0.13 once that comes out
 	id "org.quiltmc.loom" version "0.12-SNAPSHOT" apply false
 	id "org.quiltmc.gradle.licenser" version "1.1.1"
 	id "org.ajoberstar.grgit" version "3.1.0"
@@ -208,6 +209,7 @@ allprojects {
 		testmodImplementation sourceSets.client.output
 	}
 
+	// TODO - Remove this with Quilt Loom 0.13
 	loom {
 		shareRemapCaches = true
 	}
@@ -575,7 +577,7 @@ curseforge {
 		id = "634179"
 		changelog = ENV.CHANGELOG ?: "No changelog provided"
 		releaseType = project.prerelease == "true" ? "beta" : "release"
-		addGameVersion "1.19.1"
+		addGameVersion "1.19.2"
 		addGameVersion "Quilt"
 
 		mainArtifact(renameJar) {

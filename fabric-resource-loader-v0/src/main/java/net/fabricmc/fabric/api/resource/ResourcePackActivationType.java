@@ -28,8 +28,6 @@ public enum ResourcePackActivationType {
 	NORMAL(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.NORMAL),
 	/**
 	 * Enabled by default. The user has still full control over the activation of the resource pack.
-	 *
-	 * <p>Note: this setting can only be satisfied on data packs, client resource packs cannot be by default enabled.
 	 */
 	DEFAULT_ENABLED(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.DEFAULT_ENABLED),
 	/**

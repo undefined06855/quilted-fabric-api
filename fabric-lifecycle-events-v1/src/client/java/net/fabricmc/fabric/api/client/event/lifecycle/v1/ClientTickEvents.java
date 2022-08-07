@@ -30,7 +30,7 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 @Deprecated
 @Environment(EnvType.CLIENT)
 public final class ClientTickEvents {
-	public ClientTickEvents() {
+	private ClientTickEvents() {
 	}
 
 	/**

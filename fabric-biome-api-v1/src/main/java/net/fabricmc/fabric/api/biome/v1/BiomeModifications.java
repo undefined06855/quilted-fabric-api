@@ -41,6 +41,9 @@ import net.minecraft.world.gen.feature.PlacedFeature;
  */
 @Deprecated
 public final class BiomeModifications {
+	private BiomeModifications() {
+	}
+
 	/**
 	 * Convenience method to add a feature to one or more biomes.
 	 *
