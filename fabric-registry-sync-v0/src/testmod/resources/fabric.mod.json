@@ -15,5 +15,8 @@
     "client": [
       "net.fabricmc.fabric.test.registry.sync.RegistrySyncTestClient"
     ]
-  }
+  },
+  "mixins": [
+    "quilted_fabric_registry_sync_testmod.mixins.json"
+  ]
 }

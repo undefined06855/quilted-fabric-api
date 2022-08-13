@@ -36,8 +36,6 @@ public final class BlockInitTracker implements RegistryEntryAddedCallback<Block>
 	}
 
 	public static void register(Registry<Block> registry) {
-		BlockInitTracker tracker = new BlockInitTracker(registry);
-		RegistryEntryAddedCallback.event(registry).register(tracker);
 	}
 
 	@Override

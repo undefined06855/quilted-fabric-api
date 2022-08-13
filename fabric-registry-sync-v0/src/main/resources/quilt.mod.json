@@ -21,12 +21,12 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"main": "net.fabricmc.fabric.impl.registry.sync.FabricRegistryInit",
-			"client": "net.fabricmc.fabric.impl.registry.sync.FabricRegistryClientInit"
+			"events": "net.fabricmc.fabric.impl.registry.sync.QuiltedRegistrySync"
 		},
 		"depends": [
 			"quilt_loader",
 			"quilt_registry",
+			"quilt_lifecycle_events",
 			"quilted_fabric_api_base",
 			"fabric-networking-api-v1"
 		],

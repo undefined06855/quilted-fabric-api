@@ -4,11 +4,7 @@
   "package": "net.fabricmc.fabric.mixin.registry.sync.client",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MixinBlockColorMap",
-    "MixinItemColorMap",
-    "MixinItemModelMap",
-    "MixinMinecraftClient",
-    "MixinParticleManager"
+    "MixinMinecraftClient"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -25,6 +25,7 @@ import org.apache.commons.lang3.Validate;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
@@ -48,6 +49,7 @@ import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.fabricmc.fabric.impl.registry.sync.packet.DirectRegistryPacketHandler;
 import net.fabricmc.fabric.impl.registry.sync.packet.NbtRegistryPacketHandler;
 import net.fabricmc.fabric.impl.registry.sync.packet.RegistryPacketHandler;
+import net.fabricmc.fabric.test.registry.sync.mixin.StatusEffectAccessor;
 
 public class RegistrySyncTest implements ModInitializer {
 	/**
@@ -117,7 +119,10 @@ public class RegistrySyncTest implements ModInitializer {
 		});
 
 		// Vanilla status effects don't have an entry for the int id 0, test we can handle this.
-		RegistryAttributeHolder.get(Registry.STATUS_EFFECT).addAttribute(RegistryAttribute.MODDED);
+		//RegistryAttributeHolder.get(Registry.STATUS_EFFECT).addAttribute(RegistryAttribute.MODDED);
+		Registry.register(Registry.STATUS_EFFECT, new Identifier("test", "status_effect"),
+				StatusEffectAccessor.createNewStatusEffect(StatusEffectCategory.NEUTRAL, 0xffff9900)
+		);
 	}
 
 	private static void registerBlocks(String namespace, int amount, int startingId) {

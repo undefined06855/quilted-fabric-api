@@ -26,27 +26,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.registry.Registry;
 
-import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
-import net.fabricmc.fabric.impl.registry.sync.RemapException;
 import net.fabricmc.fabric.impl.registry.sync.trackers.vanilla.BlockInitTracker;
 
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
 	@Unique
 	private static Logger FABRIC_LOGGER = LoggerFactory.getLogger(MixinMinecraftClient.class);
-
-	// Unmap the registry before loading a new SP/MP setup.
-	@Inject(at = @At("RETURN"), method = "disconnect(Lnet/minecraft/client/gui/screen/Screen;)V")
-	public void disconnectAfter(Screen screen_1, CallbackInfo info) {
-		try {
-			RegistrySyncManager.unmap();
-		} catch (RemapException e) {
-			FABRIC_LOGGER.warn("Failed to unmap Fabric registries!", e);
-		}
-	}
 
 	@Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;thread:Ljava/lang/Thread;", shift = At.Shift.AFTER, ordinal = 0), method = "run")
 	private void onStart(CallbackInfo ci) {

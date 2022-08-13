@@ -44,11 +44,25 @@ import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.world.SaveProperties;
 import net.minecraft.world.level.storage.LevelStorage;
 
+import net.fabricmc.fabric.impl.registry.sync.QuiltedRegistrySync;
 import net.fabricmc.fabric.impl.registry.sync.RegistryMapSerializer;
-import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.fabricmc.fabric.impl.registry.sync.RemapException;
-import net.fabricmc.fabric.impl.registry.sync.RemappableRegistry;
 
+/**
+ * Ok, here's some documentation for this long-lost Mixin.
+ *
+ * <p>So, this has tortured me quite a bit "why do we need this mixin"?
+ * The answer is quite scary!
+ *
+ * <p>This code actually has been written in 2016, for the first attempt at Fabric, during the 1.11 snapshot cycle.
+ * For the most observant, 1.11 would tickle your hear, it is before the 1.13 update, <b>before the flattening</b>.
+ *
+ * <p>So it makes sense to save the raw identifiers to identifiers map with the world, why wouldn't it?
+ * Except not in a post-1.13 world.
+ *
+ * <p>I investigated and found the only remnant of the pre-1.13 era: status effects.
+ * Those damn status effects still are saved to disk using raw identifiers, making this needed.
+ */
 @Mixin(LevelStorage.Session.class)
 public class MixinLevelStorageSession {
 	@Unique
@@ -57,8 +71,6 @@ public class MixinLevelStorageSession {
 	private static final Logger FABRIC_LOGGER = LoggerFactory.getLogger("FabricRegistrySync");
 	@Unique
 	private Map<Identifier, Object2IntMap<Identifier>> fabric_lastSavedRegistryMap = null;
-	@Unique
-	private Map<Identifier, Object2IntMap<Identifier>> fabric_activeRegistryMap = null;
 
 	@Shadow
 	@Final
@@ -74,8 +86,8 @@ public class MixinLevelStorageSession {
 			fileInputStream.close();
 
 			if (tag != null) {
-				fabric_activeRegistryMap = RegistryMapSerializer.fromNbt(tag);
-				RegistrySyncManager.apply(fabric_activeRegistryMap, RemappableRegistry.RemapMode.AUTHORITATIVE);
+				var fabric_activeRegistryMap = RegistryMapSerializer.fromNbt(tag);
+				QuiltedRegistrySync.applyStatusEffectsRegistryMap(fabric_activeRegistryMap);
 				return true;
 			}
 		}
@@ -91,7 +103,7 @@ public class MixinLevelStorageSession {
 	@Unique
 	private void fabric_saveRegistryData() {
 		FABRIC_LOGGER.debug("Starting registry save");
-		Map<Identifier, Object2IntMap<Identifier>> newMap = RegistrySyncManager.createAndPopulateRegistryMap(false, fabric_activeRegistryMap);
+		Map<Identifier, Object2IntMap<Identifier>> newMap = QuiltedRegistrySync.createStatusEffectsRegistryMap();
 
 		if (newMap == null) {
 			FABRIC_LOGGER.debug("Not saving empty registry data");
@@ -123,7 +135,7 @@ public class MixinLevelStorageSession {
 				}
 
 				FABRIC_LOGGER.debug("Saving registry data to " + file);
-				FileOutputStream fileOutputStream = new FileOutputStream(file);
+				var fileOutputStream = new FileOutputStream(file);
 				NbtIo.writeCompressed(RegistryMapSerializer.toNbt(newMap), fileOutputStream);
 				fileOutputStream.close();
 			} catch (IOException e) {
@@ -144,6 +156,7 @@ public class MixinLevelStorageSession {
 	}
 
 	// TODO: stop double save on client?
+	// TODO: Figure out what asie meant by this ^
 	@Inject(method = "readLevelProperties", at = @At("HEAD"))
 	public void readWorldProperties(CallbackInfoReturnable<SaveProperties> callbackInfo) {
 		// Load

@@ -39,7 +39,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.QuiltLoader;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -92,11 +91,6 @@ public final class RegistrySyncManager {
 	}
 
 	private static void sendPacket(ServerPlayerEntity player, RegistryPacketHandler handler) {
-		Map<Identifier, Object2IntMap<Identifier>> map = RegistrySyncManager.createAndPopulateRegistryMap(true, null);
-
-		if (map != null) {
-			handler.sendPacket(player, map);
-		}
 	}
 
 	public static void receivePacket(ThreadExecutor<?> executor, RegistryPacketHandler handler, PacketByteBuf buf, boolean accept, Consumer<Exception> errorHandler) {
@@ -233,13 +227,6 @@ public final class RegistrySyncManager {
 					//noinspection unchecked
 					Identifier id = registry.getId(o);
 					if (id == null) continue;
-
-					// We don't want to sync in ServerArgumentTypes
-					if (isClientSync) {
-						if (QuiltLoader.isModLoaded("quilt_command") && registry.equals(Registry.COMMAND_ARGUMENT_TYPE)) {
-							if (QuiltRegistryPatch.checkForServerArgumentType(id)) continue;
-						}
-					}
 
 					//noinspection unchecked
 					int rawId = registry.getRawId(o);

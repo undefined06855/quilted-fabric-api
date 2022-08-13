@@ -40,10 +40,6 @@ public class IdListTracker<V, OV> implements RegistryEntryAddedCallback<V>, Regi
 	}
 
 	public static <V, OV> void register(Registry<V> registry, String name, IdList<OV> mappers) {
-		IdListTracker<V, OV> updater = new IdListTracker<>(name, mappers);
-		RegistryEntryAddedCallback.event(registry).register(updater);
-		RegistryIdRemapCallback.event(registry).register(updater);
-		RegistryEntryRemovedCallback.event(registry).register(updater);
 	}
 
 	@Override

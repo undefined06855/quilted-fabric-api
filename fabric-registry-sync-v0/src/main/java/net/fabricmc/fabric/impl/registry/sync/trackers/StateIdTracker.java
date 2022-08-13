@@ -41,9 +41,6 @@ public final class StateIdTracker<T, S> implements RegistryIdRemapCallback<T>, R
 	private int currentHighestId = 0;
 
 	public static <T, S> void register(Registry<T> registry, IdList<S> stateList, Function<T, Collection<S>> stateGetter) {
-		StateIdTracker<T, S> tracker = new StateIdTracker<>(registry, stateList, stateGetter);
-		RegistryEntryAddedCallback.event(registry).register(tracker);
-		RegistryIdRemapCallback.event(registry).register(tracker);
 	}
 
 	private StateIdTracker(Registry<T> registry, IdList<S> stateList, Function<T, Collection<S>> stateGetter) {
