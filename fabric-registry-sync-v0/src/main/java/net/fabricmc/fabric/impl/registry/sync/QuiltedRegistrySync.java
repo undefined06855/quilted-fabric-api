@@ -104,12 +104,6 @@ public class QuiltedRegistrySync implements ServerLifecycleEvents.Starting, Serv
 			LOGGER.debug("Freezing registries");
 			Registry.freezeRegistries();
 		}
-
-		var syncedRegistry = getStatusEffectSynchronizedRegistryIfModded();
-
-		if (syncedRegistry != null) {
-			syncedRegistry.quilt$createIdSnapshot();
-		}
 	}
 
 	@Override
