@@ -21,12 +21,12 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.slf4j.LoggerFactory;
+import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
 import org.slf4j.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.state.property.Properties;
 
-import net.fabricmc.fabric.mixin.content.registry.AxeItemAccessor;
 import net.fabricmc.fabric.impl.content.registry.util.ImmutableCollectionUtils;
 
 /**
@@ -51,11 +51,11 @@ public final class StrippableBlockRegistry {
 		requireNonNullAndAxisProperty(input, "input block");
 		requireNonNullAndAxisProperty(stripped, "stripped block");
 
-		Block old = getRegistry().put(input, stripped);
-
-		if (old != null) {
+		BlockContentRegistries.STRIPPABLE_BLOCK.get(input).ifPresent(old -> {
 			LOGGER.debug("Replaced old stripping mapping from {} to {} with {}", input, old, stripped);
-		}
+		});
+
+		BlockContentRegistries.STRIPPABLE_BLOCK.put(input, stripped);
 	}
 
 	private static void requireNonNullAndAxisProperty(Block block, String name) {
@@ -64,9 +64,5 @@ public final class StrippableBlockRegistry {
 		if (!block.getStateManager().getProperties().contains(Properties.AXIS)) {
 			throw new IllegalArgumentException(name + " must have the 'axis' property");
 		}
-	}
-
-	private static Map<Block, Block> getRegistry() {
-		return ImmutableCollectionUtils.getAsMutableMap(AxeItemAccessor::getStrippedBlocks, AxeItemAccessor::setStrippedBlocks);
 	}
 }

@@ -70,6 +70,7 @@
 			"quilted_fabric_transitive_access_wideners_v1",
 			"quilt_base",
 			"quilt_biome",
+			"quilt_block_content_registry",
 			"quilt_block_entity",
 			"quilt_block_extensions",
 			"quilt_client_command",

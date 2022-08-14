@@ -17,6 +17,8 @@
 
 package net.fabricmc.fabric.api.registry;
 
+import org.quiltmc.qsl.block.content.registry.api.FlammableBlockEntry;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.tag.TagKey;
@@ -24,6 +26,7 @@ import net.minecraft.tag.TagKey;
 import net.fabricmc.fabric.api.util.Block2ObjectMap;
 import net.fabricmc.fabric.impl.content.registry.FlammableBlockRegistryImpl;
 
+@Deprecated
 public interface FlammableBlockRegistry extends Block2ObjectMap<FlammableBlockRegistry.Entry> {
 	static FlammableBlockRegistry getDefaultInstance() {
 		return getInstance(Blocks.FIRE);
@@ -47,6 +50,14 @@ public interface FlammableBlockRegistry extends Block2ObjectMap<FlammableBlockRe
 		public Entry(int burn, int spread) {
 			this.burn = burn;
 			this.spread = spread;
+		}
+
+		public static Entry fromQuilt(FlammableBlockEntry quiltEntry) {
+			return new Entry(quiltEntry.burn(), quiltEntry.spread());
+		}
+
+		public FlammableBlockEntry toQuilt() {
+			return new FlammableBlockEntry(this.burn, this.spread);
 		}
 
 		public int getBurnChance() {

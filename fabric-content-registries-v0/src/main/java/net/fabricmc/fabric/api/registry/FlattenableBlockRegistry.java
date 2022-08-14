@@ -20,16 +20,16 @@ package net.fabricmc.fabric.api.registry;
 import java.util.Objects;
 
 import org.slf4j.LoggerFactory;
+import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
 import org.slf4j.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 
-import net.fabricmc.fabric.mixin.content.registry.ShovelItemAccessor;
-
 /**
  * A registry for shovel flattening interactions. A vanilla example is turning dirt to dirt paths.
  */
+@Deprecated
 public final class FlattenableBlockRegistry {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FlattenableBlockRegistry.class);
 
@@ -45,10 +45,11 @@ public final class FlattenableBlockRegistry {
 	public static void register(Block input, BlockState flattened) {
 		Objects.requireNonNull(input, "input block cannot be null");
 		Objects.requireNonNull(flattened, "flattened block state cannot be null");
-		BlockState old = ShovelItemAccessor.getPathStates().put(input, flattened);
 
-		if (old != null) {
+		BlockContentRegistries.FLATTENABLE_BLOCK.get(input).ifPresent(old -> {
 			LOGGER.debug("Replaced old flattening mapping from {} to {} with {}", input, old, flattened);
-		}
+		});
+
+		BlockContentRegistries.FLATTENABLE_BLOCK.put(input, flattened);
 	}
 }

@@ -17,10 +17,10 @@
 
 package net.fabricmc.fabric.api.registry;
 
+import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minecraft.block.SculkSensorBlock;
 import net.minecraft.tag.GameEventTags;
 import net.minecraft.world.event.GameEvent;
 
@@ -51,10 +51,10 @@ public final class SculkSensorFrequencyRegistry {
 			throw new IllegalArgumentException("Attempted to register Sculk Sensor frequency for event "+event.getId()+" with frequency "+frequency+". Sculk Sensor frequencies must be between 1 and 15 inclusive.");
 		}
 
-		int replaced = SculkSensorBlock.FREQUENCIES.put(event, frequency);
-
-		if (replaced != 0) {
+		BlockContentRegistries.SCULK_FREQUENCY.get(event).ifPresent(replaced -> {
 			LOGGER.debug("Replaced old frequency mapping for {} - was {}, now {}", event.getId(), replaced, frequency);
-		}
+		});
+
+		BlockContentRegistries.SCULK_FREQUENCY.put(event, frequency);
 	}
 }
