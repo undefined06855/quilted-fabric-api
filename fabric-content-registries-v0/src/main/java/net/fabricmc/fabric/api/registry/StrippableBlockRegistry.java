@@ -17,7 +17,6 @@
 
 package net.fabricmc.fabric.api.registry;
 
-import java.util.Map;
 import java.util.Objects;
 
 import org.slf4j.LoggerFactory;
@@ -26,8 +25,6 @@ import org.slf4j.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.state.property.Properties;
-
-import net.fabricmc.fabric.impl.content.registry.util.ImmutableCollectionUtils;
 
 /**
  * A registry for axe stripping interactions. A vanilla example is turning logs to stripped logs.
