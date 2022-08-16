@@ -10,6 +10,7 @@ plugins {
 	id "idea"
 	id "maven-publish"
 	// TODO - Update to Quilt Loom 0.13 once that comes out
+	// id "fabric-loom" version "0.13.12" apply false
 	id "org.quiltmc.loom" version "0.12-SNAPSHOT" apply false
 	id "org.quiltmc.gradle.licenser" version "1.1.1"
 	id "org.ajoberstar.grgit" version "3.1.0"
@@ -275,6 +276,14 @@ allprojects {
 		addNestedDependencies = false
 	}
 	build.dependsOn remapTestmodJar
+
+	/*
+	task validateMixinNames(type: net.fabricmc.loom.task.ValidateMixinNameTask) {
+		source(sourceSets.main.output)
+		source(sourceSets.client.output)
+		source(sourceSets.testmod.output)
+	}
+	*/
 }
 
 remapTestmodJar {

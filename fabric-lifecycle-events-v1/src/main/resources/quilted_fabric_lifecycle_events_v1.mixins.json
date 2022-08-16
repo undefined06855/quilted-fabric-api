@@ -5,7 +5,7 @@
   "mixins": [
     "DataPackContentsMixin",
     "PlayerManagerMixin",
-    "ServerWorldEntityLoaderMixin",
+    "ServerWorldServerEntityHandlerMixin",
     "ThreadedAnvilChunkStorageMixin",
     "WorldMixin"
   ],

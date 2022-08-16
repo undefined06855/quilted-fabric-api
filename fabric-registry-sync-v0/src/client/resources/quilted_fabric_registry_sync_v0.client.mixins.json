@@ -4,7 +4,7 @@
   "package": "net.fabricmc.fabric.mixin.registry.sync.client",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MixinMinecraftClient"
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,7 +6,7 @@
   "client": [
     "ClientChunkManagerMixin",
     "ClientPlayNetworkHandlerMixin",
-    "ClientWorldEntityLoaderMixin",
+    "ClientWorldClientEntityHandlerMixin",
     "WorldChunkMixin"
   ],
   "injectors": {
