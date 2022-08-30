@@ -24,7 +24,8 @@
 			"quilt_loader",
 			"quilted_fabric_api_base",
 			"quilt_tooltip",
-			"quilt_item_setting"
+			"quilt_item_setting",
+			"quilt_item_extension"
 		],
 		"provides": [
 			{

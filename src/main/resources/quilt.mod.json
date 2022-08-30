@@ -78,6 +78,7 @@
 			"quilt_crash_info",
 			"quilt_datafixerupper",
 			"quilt_dimension",
+			"quilt_item_extension",
 			"quilt_item_group",
 			"quilt_item_setting",
 			"quilt_lifecycle_events",
@@ -87,6 +88,7 @@
 			"quilt_registry_entry_attachments",
 			"quilt_resource_loader",
 			"quilt_screen",
+			"quilt_surface_rule",
 			"quilt_tags",
 			"quilt_tooltip"
 		],
