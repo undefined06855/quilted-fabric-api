@@ -12,7 +12,7 @@ moduleDependencies(project, [
 ])
 
 
-//validateMixinNames {
-//	// Loom needs to handle inner mixins better
-//	exclude "**/ParticleManagerAccessor\$SimpleSpriteProviderAccessor.class"
-//}
+validateMixinNames {
+	// Loom needs to handle inner mixins better
+	exclude "**/ParticleManagerAccessor\$SimpleSpriteProviderAccessor.class"
+}

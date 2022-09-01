@@ -21,6 +21,6 @@ loom {
 }
 
 
-//validateMixinNames {
-//	exclude "**/ModelPredicateProviderRegistrySpecificAccessor.class"
-//}
+validateMixinNames {
+	exclude "**/ModelPredicateProviderRegistrySpecificAccessor.class"
+}
