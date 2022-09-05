@@ -18,6 +18,7 @@
 package net.fabricmc.fabric.api.registry;
 
 import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
+import org.quiltmc.quilted_fabric_api.impl.content.registry.util.QuiltDeferringQueues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +56,6 @@ public final class SculkSensorFrequencyRegistry {
 			LOGGER.debug("Replaced old frequency mapping for {} - was {}, now {}", event.getId(), replaced, frequency);
 		});
 
-		BlockContentRegistries.SCULK_FREQUENCY.put(event, frequency);
+		QuiltDeferringQueues.addEntry(BlockContentRegistries.SCULK_FREQUENCY, event, frequency);
 	}
 }

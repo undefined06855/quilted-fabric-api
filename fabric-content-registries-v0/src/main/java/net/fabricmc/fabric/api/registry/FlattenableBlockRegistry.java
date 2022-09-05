@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import org.slf4j.LoggerFactory;
 import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
+import org.quiltmc.quilted_fabric_api.impl.content.registry.util.QuiltDeferringQueues;
 import org.slf4j.Logger;
 
 import net.minecraft.block.Block;
@@ -50,6 +51,6 @@ public final class FlattenableBlockRegistry {
 			LOGGER.debug("Replaced old flattening mapping from {} to {} with {}", input, old, flattened);
 		});
 
-		BlockContentRegistries.FLATTENABLE_BLOCK.put(input, flattened);
+		QuiltDeferringQueues.addEntry(BlockContentRegistries.FLATTENABLE_BLOCK, input, flattened);
 	}
 }

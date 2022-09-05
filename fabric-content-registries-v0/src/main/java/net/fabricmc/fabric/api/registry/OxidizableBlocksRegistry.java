@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
 import org.quiltmc.qsl.block.content.registry.api.ReversibleBlockEntry;
+import org.quiltmc.quilted_fabric_api.impl.content.registry.util.QuiltDeferringQueues;
 
 import net.minecraft.block.Block;
 
@@ -40,7 +41,7 @@ public final class OxidizableBlocksRegistry {
 	public static void registerOxidizableBlockPair(Block less, Block more) {
 		Objects.requireNonNull(less, "Oxidizable block cannot be null!");
 		Objects.requireNonNull(more, "Oxidizable block cannot be null!");
-		BlockContentRegistries.OXIDIZABLE_BLOCK.put(less, new ReversibleBlockEntry(more, true));
+		QuiltDeferringQueues.addEntry(BlockContentRegistries.OXIDIZABLE_BLOCK, less, new ReversibleBlockEntry(more, true));
 	}
 
 	/**
@@ -52,6 +53,6 @@ public final class OxidizableBlocksRegistry {
 	public static void registerWaxableBlockPair(Block unwaxed, Block waxed) {
 		Objects.requireNonNull(unwaxed, "Unwaxed block cannot be null!");
 		Objects.requireNonNull(waxed, "Waxed block cannot be null!");
-		BlockContentRegistries.WAXABLE_BLOCK.put(unwaxed, new ReversibleBlockEntry(waxed, true));
+		QuiltDeferringQueues.addEntry(BlockContentRegistries.WAXABLE_BLOCK, unwaxed, new ReversibleBlockEntry(waxed, true));
 	}
 }

@@ -18,6 +18,7 @@
 package net.fabricmc.fabric.impl.content.registry;
 
 import org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries;
+import org.quiltmc.quilted_fabric_api.impl.content.registry.util.QuiltDeferringQueues;
 
 import net.minecraft.tag.TagKey;
 import net.minecraft.item.Item;
@@ -33,7 +34,7 @@ public class CompostingChanceRegistryImpl implements CompostingChanceRegistry {
 
 	@Override
 	public void add(ItemConvertible item, Float value) {
-		ItemContentRegistries.COMPOST_CHANCE.put(item.asItem(), value);
+		QuiltDeferringQueues.addEntry(ItemContentRegistries.COMPOST_CHANCE, item.asItem(), value);
 	}
 
 	/**
