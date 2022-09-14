@@ -631,7 +631,7 @@ modrinth {
 	versionType = project.prerelease == "true" ? "beta" : "release"
 	changelog = "Provides Fabric API ${project.upstream_version}\n" + (ENV.CHANGELOG ?: "No changelog provided")
 	dependencies = [
-		new ModDependency("fabric-api", "incompatible") // Incompatible dependency on Fabric API
+		new ModDependency("P7dR8mSH", "incompatible") // Incompatible dependency on Fabric API
 	]
 
 	uploadFile = signingEnabled ? signRemapJar.output : remapJar
