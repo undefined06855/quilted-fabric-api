@@ -632,9 +632,9 @@ modrinth {
 	versionName = "[$project.minecraft_version] QFAPI " + project.version.split("\\+")[0] + " and QSL " + project.qsl_version.split("\\+")[0]
 	versionType = project.prerelease == "true" ? "beta" : "release"
 	changelog = "Provides Fabric API ${project.upstream_version}\n" + (ENV.CHANGELOG ?: "No changelog provided")
-	dependencies = [
-		new ModDependency("fabric-api", "incompatible") // Incompatible dependency on Fabric API
-	]
+	dependencies {
+		embedded.project "fabric-api"
+	}
 
 	uploadFile = signingEnabled ? signRemapJar.output : remapJar
 }
