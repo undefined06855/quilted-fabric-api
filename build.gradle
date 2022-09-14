@@ -625,13 +625,15 @@ task github(dependsOn: renameJar) {
 	}
 }
 
+import com.modrinth.minotaur.dependencies.ModDependency
+
 modrinth {
 	projectId = "qsl"
 	versionName = "[$project.minecraft_version] QFAPI " + project.version.split("\\+")[0] + " and QSL " + project.qsl_version.split("\\+")[0]
 	versionType = project.prerelease == "true" ? "beta" : "release"
 	changelog = "Provides Fabric API ${project.upstream_version}\n" + (ENV.CHANGELOG ?: "No changelog provided")
 	dependencies = [
-		new ModDependency("P7dR8mSH", "incompatible") // Incompatible dependency on Fabric API
+		new ModDependency("fabric-api", "incompatible") // Incompatible dependency on Fabric API
 	]
 
 	uploadFile = signingEnabled ? signRemapJar.output : remapJar
