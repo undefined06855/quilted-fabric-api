@@ -17,12 +17,8 @@
 
 package net.fabricmc.fabric.test.transfer.ingame;
 
-import java.util.Collections;
-import java.util.Iterator;
-
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -36,10 +32,5 @@ public class TrashingStorage<T extends TransferVariant<?>> implements InsertionO
 
 		// Insertion always succeeds.
 		return maxAmount;
-	}
-
-	@Override
-	public Iterator<StorageView<T>> iterator() {
-		return Collections.emptyIterator();
 	}
 }

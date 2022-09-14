@@ -43,6 +43,11 @@
 			"library"
 		],
 		"parent": "quilted_fabric_api"
+	},
+	"quilt_loom": {
+		"injected_interfaces": {
+			"net/minecraft/class_3908": ["net/fabricmc/fabric/api/screenhandler/v1/FabricScreenHandlerFactory"]
+		}
 	}
 }
 
