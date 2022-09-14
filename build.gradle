@@ -625,8 +625,6 @@ task github(dependsOn: renameJar) {
 	}
 }
 
-import com.modrinth.minotaur.dependencies.ModDependency
-
 modrinth {
 	projectId = "qsl"
 	versionName = "[$project.minecraft_version] QFAPI " + project.version.split("\\+")[0] + " and QSL " + project.qsl_version.split("\\+")[0]
