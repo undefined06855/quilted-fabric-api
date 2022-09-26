@@ -85,7 +85,7 @@
 			"quilt_networking",
 			"quilt_recipe",
 			"quilt_registry",
-			"quilt_registry_entry_attachments",
+			"quilt_registry_entry_attachment",
 			"quilt_resource_loader",
 			"quilt_screen",
 			"quilt_surface_rule",
