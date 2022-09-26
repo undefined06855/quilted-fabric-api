@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "DataPackContentsMixin",
+    "LivingEntityMixin",
     "PlayerManagerMixin",
     "ServerWorldServerEntityHandlerMixin",
     "ThreadedAnvilChunkStorageMixin",

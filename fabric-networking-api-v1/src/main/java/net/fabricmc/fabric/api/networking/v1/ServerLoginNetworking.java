@@ -35,7 +35,6 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
  * <p>Server-side networking functionalities include receiving serverbound query responses and sending clientbound query requests.
  *
  * @see ServerPlayNetworking
- * @see net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking
  */
 @Deprecated
 public final class ServerLoginNetworking {
@@ -167,7 +166,7 @@ public final class ServerLoginNetworking {
 	}
 
 	/**
-	 * Allows blocking client log-in until all all futures passed into {@link LoginSynchronizer#waitFor(Future)} are completed.
+	 * Allows blocking client log-in until all futures passed into {@link LoginSynchronizer#waitFor(Future)} are completed.
 	 *
 	 * @apiNote this interface is not intended to be implemented by users of api.
 	 */

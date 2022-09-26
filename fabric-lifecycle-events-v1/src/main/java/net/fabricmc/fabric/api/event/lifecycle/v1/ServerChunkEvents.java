@@ -29,7 +29,7 @@ public final class ServerChunkEvents {
 	}
 
 	/**
-	 * Called when an chunk is loaded into a ServerWorld.
+	 * Called when a chunk is loaded into a ServerWorld.
 	 *
 	 * <p>When this event is called, the chunk is already in the world.
 	 */
@@ -53,7 +53,7 @@ public final class ServerChunkEvents {
 	});
 
 	/**
-	 * Called when an chunk is unloaded from a ServerWorld.
+	 * Called when a chunk is unloaded from a ServerWorld.
 	 *
 	 * <p>When this event is called, the chunk is still present in the world.
 	 */

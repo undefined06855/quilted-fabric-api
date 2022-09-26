@@ -31,12 +31,12 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  *
  * <p>To register some commands, you would register an event listener and implement the callback.
  *
- * <pre><code>
+ * <pre>{@code
  * CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
  *     // For example, this command is only registered on an integrated server like the vanilla publish command
  *     if (environment.integrated) dispatcher.register(CommandManager.literal("integrated_command").executes(context -> {...}));
  * })};
- * </code></pre>
+ * }</pre>
  */
 @Deprecated
 public interface CommandRegistrationCallback {

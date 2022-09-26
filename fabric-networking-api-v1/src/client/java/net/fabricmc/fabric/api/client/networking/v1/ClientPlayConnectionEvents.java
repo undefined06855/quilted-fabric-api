@@ -48,7 +48,7 @@ public final class ClientPlayConnectionEvents {
 	 * An event for notification when the client play network handler is ready to send packets to the server.
 	 *
 	 * <p>At this stage, the network handler is ready to send packets to the server.
-	 * Since the client's local state has been setup.
+	 * Since the client's local state has been set up.
 	 */
 	public static final Event<Join> JOIN = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents.JOIN,
 			join -> (handler, sender, client) -> join.onPlayReady(handler, new QuiltPacketSender(sender), client),

@@ -45,7 +45,7 @@ public final class BiomeSelectors {
 	}
 
 	/**
-	 * Matches Biomes that have not been originally defined in a datapack, but that are defined in code.
+	 * Matches Biomes that have not been originally defined in a data pack, but that are defined in code.
 	 */
 	public static Predicate<BiomeSelectionContext> builtIn() {
 		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.builtIn().test(context);
@@ -87,8 +87,7 @@ public final class BiomeSelectors {
 	/**
 	 * Returns a biome selector that will match all biomes in the given tag.
 	 *
-	 * @see net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-	 * @see net.fabricmc.fabric.impl.tag.convention.TagRegistration
+	 * @see net.minecraft.tag.BiomeTags
 	 */
 	public static Predicate<BiomeSelectionContext> tag(TagKey<Biome> tag) {
 		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.isIn(tag).test(context);
@@ -103,7 +102,7 @@ public final class BiomeSelectors {
 	}
 
 	/**
-	 * Returns a selector that will reject any biome whose keys are in the given collection of keys.
+	 * Returns a selector that will reject any biome whose key is in the given collection of keys.
 	 *
 	 * <p>This is useful for allowing a list of biomes to be defined in the config file, where
 	 * a certain feature should not spawn.
@@ -121,7 +120,7 @@ public final class BiomeSelectors {
 	}
 
 	/**
-	 * Returns a selector that will accept only biomes whos keys are in the given collection of keys.
+	 * Returns a selector that will accept only biomes whose keys are in the given collection of keys.
 	 *
 	 * <p>This is useful for allowing a list of biomes to be defined in the config file, where
 	 * a certain feature should spawn exclusively.
