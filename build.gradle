@@ -1,6 +1,6 @@
 buildscript {
 	dependencies {
-		classpath 'org.kohsuke:github-api:1.135'
+		classpath 'org.kohsuke:github-api:1.313'
 	}
 }
 
@@ -10,12 +10,12 @@ plugins {
 	id "idea"
 	id "maven-publish"
 	id "org.quiltmc.loom" version "1.0.+" apply false
-	id "org.quiltmc.gradle.licenser" version "1.1.1"
-	id "org.ajoberstar.grgit" version "3.1.0"
+	id "org.quiltmc.gradle.licenser" version "1.1.2"
+	id "net.kyori.indra.git" version "3.0.0"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
-	id "com.modrinth.minotaur" version "2.4.3"
+	id "com.modrinth.minotaur" version "2.4.4"
 	id "me.modmuss50.remotesign" version "0.3.0" apply false
-	id "io.github.p03w.machete" version "1.1.2"
+	id "io.github.p03w.machete" version "1.2.0"
 }
 
 def ENV = System.getenv()
@@ -24,8 +24,6 @@ def signingEnabled = ENV.SIGNING_SERVER
 version = project.version + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + project.upstream_version + "-" + getBranch() + (ENV.SNAPSHOTS_URL ? "-SNAPSHOT" : "")
 logger.lifecycle("Building Quilted Fabric API: " + version)
 
-
-import org.apache.commons.codec.digest.DigestUtils
 
 def getQslModule(String library, String module) {
 	return "org.quiltmc.qsl.${library}:${module}:${project.qsl_version}";
@@ -53,11 +51,11 @@ def getBranch() {
 		return branch.substring(branch.lastIndexOf("/") + 1)
 	}
 
-	if (grgit == null) {
+	if (!indraGit.isPresent()) {
 		return "unknown"
 	}
 
-	def branch = grgit.branch.current().name
+	def branch = indraGit.branchName()
 	return branch.substring(branch.lastIndexOf("/") + 1)
 }
 
@@ -220,11 +218,7 @@ allprojects {
 		inputs.property "version", project.version
 		inputs.property "upstream_version", project.upstream_version
 
-		filesMatching("fabric.mod.json") {
-			expand "version": project.version, "upstream_version": project.upstream_version
-		}
-
-		filesMatching("quilt.mod.json") {
+		filesMatching(["fabric.mod.json", "quilt.mod.json"]) {
 			expand "version": project.version, "upstream_version": project.upstream_version
 		}
 	}
