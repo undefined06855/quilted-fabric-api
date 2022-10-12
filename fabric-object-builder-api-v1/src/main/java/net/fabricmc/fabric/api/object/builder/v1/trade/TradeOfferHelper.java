@@ -20,15 +20,19 @@ package net.fabricmc.fabric.api.object.builder.v1.trade;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
-
-import net.fabricmc.fabric.impl.object.builder.TradeOfferInternals;
 
 /**
  * Utilities to help with registration of trade offers.
  */
+@Deprecated
 public final class TradeOfferHelper {
+	private static final Logger LOGGER = LoggerFactory.getLogger("fabric-object-builder-api-v1");
+
 	/**
 	 * Registers trade offer factories for use by villagers.
 	 *
@@ -44,7 +48,7 @@ public final class TradeOfferHelper {
 	 * @param factories a consumer to provide the factories
 	 */
 	public static void registerVillagerOffers(VillagerProfession profession, int level, Consumer<List<TradeOffers.Factory>> factories) {
-		TradeOfferInternals.registerVillagerOffers(profession, level, factories);
+		org.quiltmc.qsl.villager.api.TradeOfferHelper.registerVillagerOffers(profession, level, factories);
 	}
 
 	/**
@@ -54,7 +58,7 @@ public final class TradeOfferHelper {
 	 * @param factory a consumer to provide the factories
 	 */
 	public static void registerWanderingTraderOffers(int level, Consumer<List<TradeOffers.Factory>> factory) {
-		TradeOfferInternals.registerWanderingTraderOffers(level, factory);
+		org.quiltmc.qsl.villager.api.TradeOfferHelper.registerWanderingTraderOffers(level, factory);
 	}
 
 	/**
@@ -62,9 +66,8 @@ public final class TradeOfferHelper {
 	 */
 	@Deprecated
 	public static void refreshOffers() {
-		TradeOfferInternals.printRefreshOffersWarning();
-	}
-
-	private TradeOfferHelper() {
+		// TradeOfferInternals.printRefreshOffersWarning();
+		Throwable loggingThrowable = new Throwable();
+		LOGGER.warn("TradeOfferHelper#refreshOffers does not do anything, yet it was called! Stack trace:", loggingThrowable);
 	}
 }

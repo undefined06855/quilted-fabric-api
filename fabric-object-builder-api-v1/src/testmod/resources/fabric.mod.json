@@ -22,6 +22,7 @@
   "description": "Test mod for fabric object builder API v1.",
   "entrypoints": {
     "main": [
+      "net.fabricmc.fabric.test.object.builder.quilt.MinecartComparatorLogicTest",
       "net.fabricmc.fabric.test.object.builder.BlockEntityTypeBuilderTest",
       "net.fabricmc.fabric.test.object.builder.CriterionRegistryTest::init",
       "net.fabricmc.fabric.test.object.builder.VillagerTypeTest1",

@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
  * Provides custom comparator output for minecarts resting on detector rails.
  * @param <T> the handled minecart type
  */
+@Deprecated
 @FunctionalInterface
 public interface MinecartComparatorLogic<T extends AbstractMinecartEntity> {
 	/**

@@ -6,11 +6,8 @@
     "AbstractBlockAccessor",
     "AbstractBlockSettingsAccessor",
     "CriteriaAccessor",
-    "DefaultAttributeRegistryAccessor",
-    "DefaultAttributeRegistryMixin",
-    "DetectorRailBlockMixin",
     "MaterialBuilderAccessor",
-    "TradeOffersTypeAwareBuyForOneEmeraldFactoryMixin"
+    "MinecartComparatorLogicMixin"
   ],
   "injectors": {
     "defaultRequire": 1

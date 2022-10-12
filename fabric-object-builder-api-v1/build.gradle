@@ -5,6 +5,10 @@ upstream_version = getSubprojectUpstreamVersion(project)
 dependencies {
 	modApi(getQslModule("block", "block_entity"))
 	modApi(getQslModule("block", "block_extensions"))
+	modApi(getQslModule("entity", "entity"))
+	modApi(getQslModule("entity", "points_of_interest"))
+	modApi(getQslModule("entity", "vehicle"))
+	modApi(getQslModule("entity", "villager"))
 }
 
 moduleDependencies(project, [

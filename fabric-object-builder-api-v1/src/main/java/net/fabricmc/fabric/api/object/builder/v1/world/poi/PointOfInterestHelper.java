@@ -17,18 +17,12 @@
 
 package net.fabricmc.fabric.api.object.builder.v1.world.poi;
 
-import java.util.Set;
-
-import com.google.common.collect.ImmutableSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestType;
-import net.minecraft.world.poi.PointOfInterestTypes;
 
 /**
  * This class provides utilities to create a {@link PointOfInterestType}.
@@ -36,10 +30,8 @@ import net.minecraft.world.poi.PointOfInterestTypes;
  * <p>A point of interest is typically used by villagers to specify their workstation blocks, meeting zones and homes.
  * Points of interest are also used by bees to specify where their bee hive is and nether portals to find existing portals.
  */
+@Deprecated
 public final class PointOfInterestHelper {
-	private PointOfInterestHelper() {
-	}
-
 	/**
 	 * Creates and registers a {@link PointOfInterestType}.
 	 *
@@ -50,13 +42,9 @@ public final class PointOfInterestHelper {
 	 * @return a new {@link PointOfInterestType}.
 	 */
 	public static PointOfInterestType register(Identifier id, int ticketCount, int searchDistance, Block... blocks) {
-		final ImmutableSet.Builder<BlockState> builder = ImmutableSet.builder();
+		var key = org.quiltmc.qsl.points_of_interest.api.PointOfInterestHelper.register(id, ticketCount, searchDistance, blocks);
 
-		for (Block block : blocks) {
-			builder.addAll(block.getStateManager().getStates());
-		}
-
-		return register(id, ticketCount, searchDistance, builder.build());
+		return Registry.POINT_OF_INTEREST_TYPE.get(key);
 	}
 
 	/**
@@ -69,15 +57,8 @@ public final class PointOfInterestHelper {
 	 * @return a new {@link PointOfInterestType}.
 	 */
 	public static PointOfInterestType register(Identifier id, int ticketCount, int searchDistance, Iterable<BlockState> blocks) {
-		final ImmutableSet.Builder<BlockState> builder = ImmutableSet.builder();
+		var key = org.quiltmc.qsl.points_of_interest.api.PointOfInterestHelper.register(id, ticketCount, searchDistance, blocks);
 
-		return register(id, ticketCount, searchDistance, builder.addAll(blocks).build());
-	}
-
-	// INTERNAL METHODS
-
-	private static PointOfInterestType register(Identifier id, int ticketCount, int searchDistance, Set<BlockState> states) {
-		PointOfInterestTypes.POI_STATES.addAll(states);
-		return PointOfInterestTypes.register(Registry.POINT_OF_INTEREST_TYPE, RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, id), states, ticketCount, searchDistance);
+		return Registry.POINT_OF_INTEREST_TYPE.get(key);
 	}
 }

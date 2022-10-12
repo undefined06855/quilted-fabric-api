@@ -31,6 +31,7 @@ import net.minecraft.util.registry.Registry;
 /**
  * A registry for {@linkplain MinecartComparatorLogic custom minecart comparator logic}.
  */
+@Deprecated
 public final class MinecartComparatorLogicRegistry {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MinecartComparatorLogicRegistry.class);
 	private static final Map<EntityType<?>, MinecartComparatorLogic<?>> logics = new HashMap<>();

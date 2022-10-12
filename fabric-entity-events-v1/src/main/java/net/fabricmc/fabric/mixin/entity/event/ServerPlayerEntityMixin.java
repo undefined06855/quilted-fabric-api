@@ -48,8 +48,6 @@ import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 
 @Mixin(ServerPlayerEntity.class)
 abstract class ServerPlayerEntityMixin extends LivingEntityMixin {
@@ -70,20 +68,6 @@ abstract class ServerPlayerEntityMixin extends LivingEntityMixin {
 			attacker.onKilledOther(this.getWorld(), (ServerPlayerEntity) (Object) this);
 			ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.invoker().afterKilledOtherEntity(this.getWorld(), attacker, (ServerPlayerEntity) (Object) this);
 		}
-	}
-
-	/**
-	 * This is called by both "moveToWorld" and "teleport".
-	 * So this is suitable to handle the after event from both call sites.
-	 */
-	@Inject(method = "worldChanged(Lnet/minecraft/server/world/ServerWorld;)V", at = @At("TAIL"))
-	private void afterWorldChanged(ServerWorld origin, CallbackInfo ci) {
-		ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.invoker().afterChangeWorld((ServerPlayerEntity) (Object) this, origin, this.getWorld());
-	}
-
-	@Inject(method = "copyFrom", at = @At("TAIL"))
-	private void onCopyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
-		ServerPlayerEvents.COPY_FROM.invoker().copyFromPlayer(oldPlayer, (ServerPlayerEntity) (Object) this, alive);
 	}
 
 	@Redirect(method = "trySleep", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;get(Lnet/minecraft/state/property/Property;)Ljava/lang/Comparable;"))

@@ -23,7 +23,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+import net.fabricmc.fabric.mixin.entity.event.quilt.LivingEntityAccessor;
 
+@Deprecated
 public final class ServerPlayerEvents {
 	/**
 	 * An event that is called when the data from an old player is copied to a new player.
@@ -31,11 +34,11 @@ public final class ServerPlayerEvents {
 	 * <p>This event is typically called before a player is completely respawned.
 	 * Mods may use this event to copy old player data to a new player.
 	 */
-	public static final Event<ServerPlayerEvents.CopyFrom> COPY_FROM = EventFactory.createArrayBacked(ServerPlayerEvents.CopyFrom.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
-		for (CopyFrom callback : callbacks) {
-			callback.copyFromPlayer(oldPlayer, newPlayer, alive);
-		}
-	});
+	public static final Event<ServerPlayerEvents.CopyFrom> COPY_FROM = QuiltCompatEvent.fromQuilt(
+			org.quiltmc.qsl.entity_events.api.ServerPlayerEntityCopyCallback.EVENT,
+			playerCopyCallback -> (copy, original, wasDeath) -> playerCopyCallback.copyFromPlayer(original, copy, wasDeath),
+			invokerGetter -> (oldPlayer, newPlayer, alive) -> invokerGetter.get().onPlayerCopy(newPlayer, oldPlayer, alive)
+	);
 
 	/**
 	 * An event that is called after a player has been respawned.
@@ -63,15 +66,17 @@ public final class ServerPlayerEvents {
 	 *     apply</li>
 	 * </ul>
 	 */
-	public static final Event<AllowDeath> ALLOW_DEATH = EventFactory.createArrayBacked(AllowDeath.class, callbacks -> (player, damageSource, damageAmount) -> {
-		for (AllowDeath callback : callbacks) {
-			if (!callback.allowDeath(player, damageSource, damageAmount)) {
-				return false;
-			}
-		}
+	public static final Event<AllowDeath> ALLOW_DEATH = QuiltCompatEvent.fromQuilt(
+			org.quiltmc.qsl.entity_events.api.EntityReviveEvents.BEFORE_TOTEM,
+			beforeTotemCallback -> (entity, damageSource) -> {
+				if (entity instanceof ServerPlayerEntity player) {
+					return beforeTotemCallback.allowDeath(player, damageSource, ((LivingEntityAccessor) entity).getLastDamageTaken());
+				}
 
-		return true;
-	});
+				return false;
+			},
+			invokerGetter -> (player, damageSource, damageAmount) -> invokerGetter.get().tryReviveBeforeTotem(player, damageSource)
+	);
 
 	@FunctionalInterface
 	public interface CopyFrom {
