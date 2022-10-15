@@ -133,7 +133,6 @@ public class QuiltDeferringQueues<T> {
 					if (entry.getKey().registry().getKey().equals(Registry.ITEM_KEY)) {
 						if (listEntry.entry() instanceof Block block) {
 							if (Item.BLOCK_ITEMS.containsKey(block)) {
-								System.out.println("did this work?");
 								entry.getKey().put(block.asItem(), listEntry.value());
 								entriesToRemove2.add(listEntry.entry());
 							}
