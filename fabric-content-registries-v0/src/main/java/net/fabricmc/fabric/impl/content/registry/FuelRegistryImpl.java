@@ -39,7 +39,9 @@ public final class FuelRegistryImpl implements FuelRegistry {
 	public Map<Item, Integer> getFuelTimes() {
 		Map<Item, Integer> ret = new IdentityHashMap<>();
 
-		ItemContentRegistries.FUEL_TIME.entryIterator().forEachRemaining(entry -> ret.put(entry.entry(), entry.value()));
+		for (var entry : ItemContentRegistries.FUEL_TIME) {
+			ret.put(entry.entry(), entry.value());
+		}
 
 		return ret;
 	}
@@ -51,7 +53,7 @@ public final class FuelRegistryImpl implements FuelRegistry {
 
 	@Override
 	public void add(ItemConvertible item, Integer cookTime) {
-		QuiltDeferringQueues.addEntry(ItemContentRegistries.FUEL_TIME, item.asItem(), cookTime.intValue());
+		QuiltDeferringQueues.addEntryWithItemConvertible(ItemContentRegistries.FUEL_TIME, item, cookTime.intValue());
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class CompostingChanceRegistryImpl implements CompostingChanceRegistry {
 
 	@Override
 	public void add(ItemConvertible item, Float value) {
-		QuiltDeferringQueues.addEntry(ItemContentRegistries.COMPOST_CHANCE, item.asItem(), value);
+		QuiltDeferringQueues.addEntryWithItemConvertible(ItemContentRegistries.COMPOST_CHANCE, item, value);
 	}
 
 	/**

@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.event.GameEvent;
 
@@ -58,6 +59,33 @@ public class QuiltDeferringQueues<T> {
 			OMNIQUEUE.get(queue).add(new RegistryEntryAttachment.Entry<>(entry, value));
 		} else {
 			queue.put(entry, value);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <V> void addEntryWithItemConvertible(RegistryEntryAttachment<Item, V> queue, ItemConvertible entry, V value) {
+		if (entry instanceof Item item) {
+			addEntry(queue, item, value);
+		} else if (entry instanceof Block block) {
+			boolean hasDeferredKey = deferEntry(entry);
+			boolean hasNoBlockItem = !hasDeferredKey && !Item.BLOCK_ITEMS.containsKey(entry);
+			boolean hasDeferredValue = deferEntry(value);
+
+			if (hasDeferredKey || hasNoBlockItem || hasDeferredValue) {
+				if (!OMNIQUEUE.containsKey(queue)) {
+					OMNIQUEUE.put((RegistryEntryAttachment<Object, Object>) (Object) queue, new ArrayList<>());
+				}
+
+				OMNIQUEUE.get(queue).add(new RegistryEntryAttachment.Entry<>(block, value));
+
+				if (!hasDeferredKey && !hasDeferredValue) {
+					ITEM.activateWithForeverUpdate();
+				} else {
+					ITEM.enableForeverUpdate();
+				}
+			} else {
+				queue.put(entry.asItem(), value);
+			}
 		}
 	}
 
@@ -101,6 +129,19 @@ public class QuiltDeferringQueues<T> {
 
 			for (var listEntry : entry.getValue()) {
 				if (!isEntryDeferred(listEntry.entry()) && !isEntryDeferred(listEntry.value())) {
+					// Part of a dirty hack to make ItemConvertibles work fine on item REAs
+					if (entry.getKey().registry().getKey().equals(Registry.ITEM_KEY)) {
+						if (listEntry.entry() instanceof Block block) {
+							if (Item.BLOCK_ITEMS.containsKey(block)) {
+								System.out.println("did this work?");
+								entry.getKey().put(block.asItem(), listEntry.value());
+								entriesToRemove2.add(listEntry.entry());
+							}
+
+							continue;
+						}
+					}
+
 					entry.getKey().put(listEntry.entry(), listEntry.value());
 					entriesToRemove2.add(listEntry.entry());
 				}
@@ -117,11 +158,13 @@ public class QuiltDeferringQueues<T> {
 		private List<K> deferredEntries;
 		private boolean active;
 		private final Registry<K> registry;
+		private boolean foreverUpdate;
 
 		public DeferringQueue(Registry<K> registry) {
 			this.deferredEntries = new ArrayList<>();
 			this.active = false;
 			this.registry = registry;
+			this.foreverUpdate = false;
 		}
 
 		public boolean deferEntry(K entry) {
@@ -133,6 +176,15 @@ public class QuiltDeferringQueues<T> {
 			}
 
 			return false;
+		}
+
+		public void enableForeverUpdate() {
+			this.foreverUpdate = true;
+		}
+
+		public void activateWithForeverUpdate() {
+			this.foreverUpdate = true;
+			this.activate();
 		}
 
 		public void activate() {
@@ -170,7 +222,7 @@ public class QuiltDeferringQueues<T> {
 
 				this.deferredEntries.removeAll(entriesToRemove);
 
-				if (entriesToRemove.size() != 0) {
+				if (entriesToRemove.size() != 0 || this.foreverUpdate) {
 					updateOmniqueue();
 				}
 			});
