@@ -8,3 +8,7 @@ accessible method net/minecraft/entity/SpawnRestriction register (Lnet/minecraft
 
 accessible field net/minecraft/village/VillagerType BIOME_TO_TYPE Ljava/util/Map;
 accessible method net/minecraft/village/VillagerType <init> (Ljava/lang/String;)V
+
+# QFAPI-only AWs
+accessible method org/quiltmc/qsl/entity/api/QuiltEntityTypeBuilder$Living <init> (Lnet/minecraft/entity/SpawnGroup;Lnet/minecraft/entity/EntityType$EntityFactory;)V
+accessible method org/quiltmc/qsl/entity/api/QuiltEntityTypeBuilder$Mob <init> (Lnet/minecraft/entity/SpawnGroup;Lnet/minecraft/entity/EntityType$EntityFactory;)V

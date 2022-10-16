@@ -33,15 +33,21 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 
+import net.fabricmc.fabric.mixin.object.builder.quilt.QuiltEntityTypeBuilderLivingAccessor;
+import net.fabricmc.fabric.mixin.object.builder.quilt.QuiltEntityTypeBuilderMobAccessor;
+
 /**
  * Extended version of {@link EntityType.Builder} with added registration for
  * server-&gt;client entity tracking values.
  *
  * @param <T> Entity class.
  */
-public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBuilder<T> {
+@Deprecated
+public class FabricEntityTypeBuilder<T extends Entity> {
+	private QuiltEntityTypeBuilder<T> quiltBuilder;
+
 	protected FabricEntityTypeBuilder(SpawnGroup spawnGroup, EntityType.EntityFactory<T> factory) {
-		super(spawnGroup, factory);
+		this.quiltBuilder = QuiltEntityTypeBuilder.create(spawnGroup, factory);
 	}
 
 	/**
@@ -111,12 +117,12 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	}
 
 	public FabricEntityTypeBuilder<T> spawnGroup(SpawnGroup group) {
-		super.spawnGroup(group);
+		this.quiltBuilder.spawnGroup(group);
 		return this;
 	}
 
 	public <N extends T> FabricEntityTypeBuilder<N> entityFactory(EntityType.EntityFactory<N> factory) {
-		super.entityFactory(factory);
+		this.quiltBuilder.entityFactory(factory);
 		return (FabricEntityTypeBuilder<N>) this;
 	}
 
@@ -126,12 +132,12 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 * @return this builder for chaining
 	 */
 	public FabricEntityTypeBuilder<T> disableSummon() {
-		super.disableSummon();
+		this.quiltBuilder.disableSummon();
 		return this;
 	}
 
 	public FabricEntityTypeBuilder<T> disableSaving() {
-		super.disableSaving();
+		this.quiltBuilder.disableSaving();
 		return this;
 	}
 
@@ -141,7 +147,7 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 * @return this builder for chaining
 	 */
 	public FabricEntityTypeBuilder<T> fireImmune() {
-		super.makeFireImmune();
+		this.quiltBuilder.makeFireImmune();
 		return this;
 	}
 
@@ -151,7 +157,7 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 * @return this builder for chaining
 	 */
 	public FabricEntityTypeBuilder<T> spawnableFarFromPlayer() {
-		super.spawnableFarFromPlayer();
+		this.quiltBuilder.spawnableFarFromPlayer();
 		return this;
 	}
 
@@ -163,7 +169,7 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 * @return this builder for chaining
 	 */
 	public FabricEntityTypeBuilder<T> dimensions(EntityDimensions dimensions) {
-		super.setDimensions(dimensions);
+		this.quiltBuilder.setDimensions(dimensions);
 		return this;
 	}
 
@@ -194,7 +200,7 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 * @return this builder for chaining
 	 */
 	public FabricEntityTypeBuilder<T> trackRangeChunks(int range) {
-		super.maxChunkTrackingRange(range);
+		this.quiltBuilder.maxChunkTrackingRange(range);
 		return this;
 	}
 
@@ -210,12 +216,12 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	}
 
 	public FabricEntityTypeBuilder<T> trackedUpdateRate(int rate) {
-		super.trackingTickInterval(rate);
+		this.quiltBuilder.trackingTickInterval(rate);
 		return this;
 	}
 
 	public FabricEntityTypeBuilder<T> forceTrackedVelocityUpdates(boolean forceTrackedVelocityUpdates) {
-		super.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
+		this.quiltBuilder.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
 		return this;
 	}
 
@@ -226,7 +232,7 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 * @return this builder for chaining
 	 */
 	public FabricEntityTypeBuilder<T> specificSpawnBlocks(Block... blocks) {
-		super.allowSpawningInside(blocks);
+		this.quiltBuilder.allowSpawningInside(blocks);
 		return this;
 	}
 
@@ -236,7 +242,7 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 * @return a new {@link EntityType}
 	 */
 	public EntityType<T> build() {
-		return super.build();
+		return this.quiltBuilder.build();
 	}
 
 	/**
@@ -244,48 +250,52 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 *
 	 * @param <T> Entity class.
 	 */
-	public static class Living<T extends LivingEntity> extends QuiltEntityTypeBuilder.Living<T> {
+	@Deprecated
+	public static class Living<T extends LivingEntity> extends FabricEntityTypeBuilder<T> {
+		private QuiltEntityTypeBuilder.Living<T> quiltBuilder;
+
 		protected Living(SpawnGroup spawnGroup, EntityType.EntityFactory<T> function) {
 			super(spawnGroup, function);
+			this.quiltBuilder = QuiltEntityTypeBuilderLivingAccessor.callInit(spawnGroup, function);
 		}
 
 		@Override
 		public FabricEntityTypeBuilder.Living<T> spawnGroup(SpawnGroup group) {
-			super.spawnGroup(group);
+			this.quiltBuilder.spawnGroup(group);
 			return this;
 		}
 
 		@Override
 		public <N extends T> FabricEntityTypeBuilder.Living<N> entityFactory(EntityType.EntityFactory<N> factory) {
-			super.entityFactory(factory);
+			this.quiltBuilder.entityFactory(factory);
 			return (FabricEntityTypeBuilder.Living<N>) this;
 		}
 
 		@Override
 		public FabricEntityTypeBuilder.Living<T> disableSummon() {
-			super.disableSummon();
+			this.quiltBuilder.disableSummon();
 			return this;
 		}
 
 		@Override
 		public FabricEntityTypeBuilder.Living<T> disableSaving() {
-			super.disableSaving();
+			this.quiltBuilder.disableSaving();
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Living<T> fireImmune() {
-			super.makeFireImmune();
+			this.quiltBuilder.makeFireImmune();
 			return this;
 		}
 
 		@Override
 		public FabricEntityTypeBuilder.Living<T> spawnableFarFromPlayer() {
-			super.spawnableFarFromPlayer();
+			this.quiltBuilder.spawnableFarFromPlayer();
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Living<T> dimensions(EntityDimensions dimensions) {
-			super.setDimensions(dimensions);
+			this.quiltBuilder.setDimensions(dimensions);
 			return this;
 		}
 
@@ -294,9 +304,9 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 		 */
 		@Deprecated
 		public FabricEntityTypeBuilder.Living<T> trackable(int trackRangeBlocks, int trackedUpdateRate) {
-			super.maxBlockTrackingRange(trackRangeBlocks);
-			super.trackingTickInterval(trackedUpdateRate);
-			super.alwaysUpdateVelocity(true);
+			this.quiltBuilder.maxBlockTrackingRange(trackRangeBlocks);
+			this.quiltBuilder.trackingTickInterval(trackedUpdateRate);
+			this.quiltBuilder.alwaysUpdateVelocity(true);
 			return this;
 		}
 
@@ -305,34 +315,34 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 		 */
 		@Deprecated
 		public FabricEntityTypeBuilder.Living<T> trackable(int trackRangeBlocks, int trackedUpdateRate, boolean forceTrackedVelocityUpdates) {
-			super.maxBlockTrackingRange(trackRangeBlocks);
-			super.trackingTickInterval(trackedUpdateRate);
-			super.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
+			this.quiltBuilder.maxBlockTrackingRange(trackRangeBlocks);
+			this.quiltBuilder.trackingTickInterval(trackedUpdateRate);
+			this.quiltBuilder.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Living<T> trackRangeChunks(int range) {
-			super.maxChunkTrackingRange(range);
+			this.quiltBuilder.maxChunkTrackingRange(range);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Living<T> trackRangeBlocks(int range) {
-			super.maxBlockTrackingRange(range);
+			this.quiltBuilder.maxBlockTrackingRange(range);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Living<T> trackedUpdateRate(int rate) {
-			super.trackingTickInterval(rate);
+			this.quiltBuilder.trackingTickInterval(rate);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Living<T> forceTrackedVelocityUpdates(boolean forceTrackedVelocityUpdates) {
-			super.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
+			this.quiltBuilder.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Living<T> specificSpawnBlocks(Block... blocks) {
-			super.allowSpawningInside(blocks);
+			this.quiltBuilder.allowSpawningInside(blocks);
 			return this;
 		}
 
@@ -353,13 +363,13 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 		 * @return this builder for chaining
 		 */
 		public FabricEntityTypeBuilder.Living<T> defaultAttributes(Supplier<DefaultAttributeContainer.Builder> defaultAttributeBuilder) {
-			super.defaultAttributes(defaultAttributeBuilder.get());
+			this.quiltBuilder.defaultAttributes(defaultAttributeBuilder.get());
 			return this;
 		}
 
 		@Override
 		public EntityType<T> build() {
-			return super.build();
+			return this.quiltBuilder.build();
 		}
 	}
 
@@ -368,48 +378,52 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 	 *
 	 * @param <T> Entity class.
 	 */
-	public static class Mob<T extends MobEntity> extends QuiltEntityTypeBuilder.Mob<T> {
+	@Deprecated
+	public static class Mob<T extends MobEntity> extends FabricEntityTypeBuilder.Living<T> {
+		private QuiltEntityTypeBuilder.Mob<T> quiltBuilder;
+
 		protected Mob(SpawnGroup spawnGroup, EntityType.EntityFactory<T> function) {
 			super(spawnGroup, function);
+			this.quiltBuilder = QuiltEntityTypeBuilderMobAccessor.callInit(spawnGroup, function);
 		}
 
 		@Override
 		public FabricEntityTypeBuilder.Mob<T> spawnGroup(SpawnGroup group) {
-			super.spawnGroup(group);
+			this.quiltBuilder.spawnGroup(group);
 			return this;
 		}
 
 		@Override
 		public <N extends T> FabricEntityTypeBuilder.Mob<N> entityFactory(EntityType.EntityFactory<N> factory) {
-			super.entityFactory(factory);
+			this.quiltBuilder.entityFactory(factory);
 			return (FabricEntityTypeBuilder.Mob<N>) this;
 		}
 
 		@Override
 		public FabricEntityTypeBuilder.Mob<T> disableSummon() {
-			super.disableSummon();
+			this.quiltBuilder.disableSummon();
 			return this;
 		}
 
 		@Override
 		public FabricEntityTypeBuilder.Mob<T> disableSaving() {
-			super.disableSaving();
+			this.quiltBuilder.disableSaving();
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Mob<T> fireImmune() {
-			super.makeFireImmune();
+			this.quiltBuilder.makeFireImmune();
 			return this;
 		}
 
 		@Override
 		public FabricEntityTypeBuilder.Mob<T> spawnableFarFromPlayer() {
-			super.spawnableFarFromPlayer();
+			this.quiltBuilder.spawnableFarFromPlayer();
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Mob<T> dimensions(EntityDimensions dimensions) {
-			super.setDimensions(dimensions);
+			this.quiltBuilder.setDimensions(dimensions);
 			return this;
 		}
 
@@ -418,9 +432,9 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 		 */
 		@Deprecated
 		public FabricEntityTypeBuilder.Mob<T> trackable(int trackRangeBlocks, int trackedUpdateRate) {
-			super.maxBlockTrackingRange(trackRangeBlocks);
-			super.trackingTickInterval(trackedUpdateRate);
-			super.alwaysUpdateVelocity(true);
+			this.quiltBuilder.maxBlockTrackingRange(trackRangeBlocks);
+			this.quiltBuilder.trackingTickInterval(trackedUpdateRate);
+			this.quiltBuilder.alwaysUpdateVelocity(true);
 			return this;
 		}
 
@@ -429,39 +443,39 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 		 */
 		@Deprecated
 		public FabricEntityTypeBuilder.Mob<T> trackable(int trackRangeBlocks, int trackedUpdateRate, boolean forceTrackedVelocityUpdates) {
-			super.maxBlockTrackingRange(trackRangeBlocks);
-			super.trackingTickInterval(trackedUpdateRate);
-			super.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
+			this.quiltBuilder.maxBlockTrackingRange(trackRangeBlocks);
+			this.quiltBuilder.trackingTickInterval(trackedUpdateRate);
+			this.quiltBuilder.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Mob<T> trackRangeChunks(int range) {
-			super.maxChunkTrackingRange(range);
+			this.quiltBuilder.maxChunkTrackingRange(range);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Mob<T> trackRangeBlocks(int range) {
-			super.maxBlockTrackingRange(range);
+			this.quiltBuilder.maxBlockTrackingRange(range);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Mob<T> trackedUpdateRate(int rate) {
-			super.trackingTickInterval(rate);
+			this.quiltBuilder.trackingTickInterval(rate);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Mob<T> forceTrackedVelocityUpdates(boolean forceTrackedVelocityUpdates) {
-			super.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
+			this.quiltBuilder.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Mob<T> specificSpawnBlocks(Block... blocks) {
-			super.allowSpawningInside(blocks);
+			this.quiltBuilder.allowSpawningInside(blocks);
 			return this;
 		}
 
 		public FabricEntityTypeBuilder.Mob<T> defaultAttributes(Supplier<DefaultAttributeContainer.Builder> defaultAttributeBuilder) {
-			super.defaultAttributes(defaultAttributeBuilder.get());
+			this.quiltBuilder.defaultAttributes(defaultAttributeBuilder.get());
 			return this;
 		}
 
@@ -473,13 +487,13 @@ public class FabricEntityTypeBuilder<T extends Entity> extends QuiltEntityTypeBu
 		 * @return this builder for chaining.
 		 */
 		public FabricEntityTypeBuilder.Mob<T> spawnRestriction(SpawnRestriction.Location location, Heightmap.Type heightmap, SpawnRestriction.SpawnPredicate<T> spawnPredicate) {
-			super.spawnRestriction(location, heightmap, spawnPredicate);
+			this.quiltBuilder.spawnRestriction(location, heightmap, spawnPredicate);
 			return this;
 		}
 
 		@Override
 		public EntityType<T> build() {
-			return super.build();
+			return this.quiltBuilder.build();
 		}
 	}
 }
