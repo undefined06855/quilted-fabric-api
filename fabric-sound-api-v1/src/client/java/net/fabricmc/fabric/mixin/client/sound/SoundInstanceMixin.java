@@ -1,4 +1,5 @@
 /*
+ * Copyright 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +15,14 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.mixin.object.builder.quilt;
+package net.fabricmc.fabric.mixin.client.sound;
 
-import org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Invoker;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.client.sound.SoundInstance;
 
-@Mixin(QuiltEntityTypeBuilder.Mob.class)
-public interface QuiltEntityTypeBuilderMobAccessor {
-	@Invoker("<init>")
-	static QuiltEntityTypeBuilder.Mob callInit(SpawnGroup spawnGroup, EntityType.EntityFactory function) {
-		throw new IllegalStateException("Mixin injection failed.");
-	}
+import net.fabricmc.fabric.api.client.sound.v1.FabricSoundInstance;
+
+@Mixin(SoundInstance.class)
+public interface SoundInstanceMixin extends FabricSoundInstance {
 }
