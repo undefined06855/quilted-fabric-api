@@ -24,7 +24,7 @@
 			"quilt_loader",
 			{
 				"id": "minecraft",
-				"version": ">=1.19.2"
+				"version": ">=1.19.1"
 			}
 		],
 		"provides": [
