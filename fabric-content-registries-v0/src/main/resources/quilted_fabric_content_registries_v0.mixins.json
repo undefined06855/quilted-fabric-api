@@ -7,6 +7,7 @@
     "FarmerWorkTaskAccessor",
     "GiveGiftsToHeroTaskAccessor",
     "HoeItemAccessor",
+    "LandPathNodeMakerMixin",
     "FireBlockMixin",
     "VillagerEntityAccessor",
     "VillagerEntityMixin"
