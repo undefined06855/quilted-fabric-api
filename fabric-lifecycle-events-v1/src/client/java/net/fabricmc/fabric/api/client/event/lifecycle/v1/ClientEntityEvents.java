@@ -25,6 +25,10 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
+/**
+ * @deprecated Use Quilt Entity Events's {@link org.quiltmc.qsl.entity_events.api.client.ClientEntityLoadEvents} instead.
+ */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public final class ClientEntityEvents {
 	private ClientEntityEvents() {
