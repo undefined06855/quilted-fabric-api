@@ -6,6 +6,7 @@
     "DataPackContentsMixin",
     "LivingEntityMixin",
     "PlayerManagerMixin",
+    "ServerWorldServerEntityHandlerMixin",
     "ThreadedAnvilChunkStorageMixin",
     "WorldMixin"
   ],
