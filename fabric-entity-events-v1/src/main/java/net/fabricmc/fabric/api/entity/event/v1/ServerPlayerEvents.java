@@ -27,7 +27,7 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 import net.fabricmc.fabric.mixin.entity.event.quilt.LivingEntityAccessor;
 
 /**
- * @deprecated Use Quilt Entity Events's {@link org.quiltmc.qsl.entity_events.api.ServerPlayerEntityCopyCallback} and {@link org.quiltmc.qsl.entity_events.api.EntityReviveEvents} instead.
+ * @deprecated Use Quilt Entity Events' {@link org.quiltmc.qsl.entity_events.api.ServerPlayerEntityCopyCallback} and {@link org.quiltmc.qsl.entity_events.api.EntityReviveEvents} instead.
  */
 @Deprecated
 public final class ServerPlayerEvents {
