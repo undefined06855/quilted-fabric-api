@@ -24,6 +24,9 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
+/**
+ * @deprecated Use Quilt Lifecycle Events's {@link org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents} instead.
+ */
 @Deprecated
 @Environment(EnvType.CLIENT)
 public final class ClientLifecycleEvents {

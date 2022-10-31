@@ -43,6 +43,7 @@ import net.minecraft.util.profiler.Profiler;
  * {@link IdentifiableResourceReloadListener}.
  *
  * @param <T> The data object.
+ * @deprecated Use Quilt Resource Loader API's {@link org.quiltmc.qsl.resource.loader.api.reloader.SimpleResourceReloader} instead.
  */
 @Deprecated
 public interface SimpleResourceReloadListener<T> extends IdentifiableResourceReloadListener {

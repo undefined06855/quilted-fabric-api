@@ -27,7 +27,10 @@ import net.minecraft.world.event.GameEvent;
 
 /**
  * Provides a method for registering sculk sensor frequencies.
+ *
+ * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#SCULK_FREQUENCY} registry attachment instead.
  */
+@Deprecated
 public final class SculkSensorFrequencyRegistry {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SculkSensorFrequencyRegistry.class);
 

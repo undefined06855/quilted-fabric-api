@@ -27,6 +27,8 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to events related to the connection to a client on a logical server while a client is logging in.
+ *
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.ServerLoginConnectionEvents} instead.
  */
 @Deprecated
 public final class ServerLoginConnectionEvents {

@@ -32,6 +32,8 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to events related to the indication of a connected server's ability to receive packets in certain channels.
+ *
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.C2SPlayChannelEvents} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)

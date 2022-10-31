@@ -23,6 +23,8 @@ import net.minecraft.network.PacketByteBuf;
 
 /**
  * Helper methods for working with and creating {@link PacketByteBuf}s.
+ *
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.PacketByteBufs} instead.
  */
 @Deprecated
 public final class PacketByteBufs {

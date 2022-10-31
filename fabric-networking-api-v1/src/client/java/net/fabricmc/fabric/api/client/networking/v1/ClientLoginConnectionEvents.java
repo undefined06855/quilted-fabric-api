@@ -28,6 +28,8 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 /**
  * Offers access to events related to the connection to a server on the client while the server is processing the client's login request.
+ *
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientLoginConnectionEvents} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)

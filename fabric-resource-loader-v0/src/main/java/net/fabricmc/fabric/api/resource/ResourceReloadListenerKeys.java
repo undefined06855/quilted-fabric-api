@@ -25,6 +25,7 @@ import net.minecraft.util.Identifier;
  * This class contains default keys for various Minecraft resource reload listeners.
  *
  * @see IdentifiableResourceReloadListener
+ * @deprecated Use Quilt Resource Loader API's {@link org.quiltmc.qsl.resource.loader.api.reloader.ResourceReloaderKeys} instead.
  */
 @Deprecated
 public final class ResourceReloadListenerKeys {

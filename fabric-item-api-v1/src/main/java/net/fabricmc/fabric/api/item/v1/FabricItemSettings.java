@@ -31,6 +31,8 @@ import net.minecraft.util.Rarity;
  *
  * <p>To use it, simply replace {@code new Item.Settings()} with
  * {@code new FabricItemSettings()}.
+ *
+ * @deprecated Use Quilt Item Setting API's {@link org.quiltmc.qsl.item.setting.api.QuiltItemSettings} instead.
  */
 @Deprecated
 public class FabricItemSettings extends QuiltItemSettings {

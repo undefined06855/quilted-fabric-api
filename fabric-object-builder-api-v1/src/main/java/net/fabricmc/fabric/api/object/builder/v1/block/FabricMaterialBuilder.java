@@ -23,6 +23,9 @@ import net.minecraft.block.MapColor;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.util.DyeColor;
 
+/**
+ * @deprecated Use Quilt Block Extensions API's {@link org.quiltmc.qsl.block.extensions.api.QuiltMaterialBuilder} instead.
+ */
 @Deprecated
 public class FabricMaterialBuilder extends QuiltMaterialBuilder {
 	public FabricMaterialBuilder(MapColor color) {

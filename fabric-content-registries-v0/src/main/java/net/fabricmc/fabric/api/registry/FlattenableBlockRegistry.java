@@ -29,6 +29,8 @@ import net.minecraft.block.BlockState;
 
 /**
  * A registry for shovel flattening interactions. A vanilla example is turning dirt to dirt paths.
+ *
+ * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#FLATTENABLE_BLOCK} registry attachment instead.
  */
 @Deprecated
 public final class FlattenableBlockRegistry {

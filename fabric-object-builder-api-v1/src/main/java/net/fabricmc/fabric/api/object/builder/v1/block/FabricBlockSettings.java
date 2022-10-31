@@ -42,6 +42,8 @@ import net.fabricmc.fabric.mixin.object.builder.AbstractBlockAccessor;
  *
  * <p>To use it, simply replace Block.Settings.of() with
  * FabricBlockSettings.of().
+ *
+ * @deprecated Use Quilt Block Extensions API's {@link org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings} instead.
  */
 @Deprecated
 public class FabricBlockSettings extends QuiltBlockSettings {

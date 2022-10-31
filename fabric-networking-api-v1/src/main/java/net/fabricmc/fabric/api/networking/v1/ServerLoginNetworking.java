@@ -35,6 +35,7 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
  * <p>Server-side networking functionalities include receiving serverbound query responses and sending clientbound query requests.
  *
  * @see ServerPlayNetworking
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.ServerLoginNetworking} instead.
  */
 @Deprecated
 public final class ServerLoginNetworking {

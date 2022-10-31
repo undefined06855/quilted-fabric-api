@@ -33,6 +33,7 @@ import net.minecraft.util.Identifier;
  * themselves.
  *
  * @see ResourceReloadListenerKeys
+ * @deprecated Use Quilt Resource Loader API's {@link org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader} instead.
  */
 @Deprecated
 public interface IdentifiableResourceReloadListener extends ResourceReloader, IdentifiableResourceReloader {

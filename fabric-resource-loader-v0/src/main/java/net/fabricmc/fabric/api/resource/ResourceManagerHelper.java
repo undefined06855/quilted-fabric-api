@@ -31,6 +31,8 @@ import net.fabricmc.loader.api.ModContainer;
 
 /**
  * Helper for working with {@link ResourceManager} instances, and other resource loader generalities.
+ *
+ * @deprecated Use Quilt Resource Loader API's {@link org.quiltmc.qsl.resource.loader.api.ResourceLoader} instead.
  */
 @Deprecated
 public interface ResourceManagerHelper {

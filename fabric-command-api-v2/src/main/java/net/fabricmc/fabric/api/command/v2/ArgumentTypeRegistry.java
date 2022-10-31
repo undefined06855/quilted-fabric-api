@@ -24,6 +24,10 @@ import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+/**
+ * @deprecated If possible, use Quilt Command API's {@link org.quiltmc.qsl.command.api.ServerArgumentType}'s registry instead.
+*/
+@Deprecated
 public final class ArgumentTypeRegistry {
 	/**
 	 * Register a new argument type.

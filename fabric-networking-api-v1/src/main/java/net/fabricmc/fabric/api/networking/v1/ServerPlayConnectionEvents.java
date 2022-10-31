@@ -27,6 +27,8 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to events related to the connection to a client on a logical server while a client is in game.
+ *
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents} instead.
  */
 @Deprecated
 public final class ServerPlayConnectionEvents {

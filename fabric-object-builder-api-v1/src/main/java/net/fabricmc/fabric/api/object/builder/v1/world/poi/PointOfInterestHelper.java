@@ -29,6 +29,8 @@ import net.minecraft.world.poi.PointOfInterestType;
  *
  * <p>A point of interest is typically used by villagers to specify their workstation blocks, meeting zones and homes.
  * Points of interest are also used by bees to specify where their bee hive is and nether portals to find existing portals.
+ *
+ * @deprecated Use Quilt Point of Interest's {@link org.quiltmc.qsl.points_of_interest.api.PointOfInterestHelper} instead.
  */
 @Deprecated
 public final class PointOfInterestHelper {

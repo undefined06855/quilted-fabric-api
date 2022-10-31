@@ -28,6 +28,8 @@ import net.minecraft.village.VillagerProfession;
 
 /**
  * Utilities to help with registration of trade offers.
+ *
+ * @deprecated Use Quilt Villager API's {@link org.quiltmc.qsl.villager.api.TradeOfferHelper} instead.
  */
 @Deprecated
 public final class TradeOfferHelper {

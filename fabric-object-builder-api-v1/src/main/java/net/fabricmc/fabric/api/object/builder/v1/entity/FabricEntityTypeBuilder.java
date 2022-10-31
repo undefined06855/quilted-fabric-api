@@ -41,6 +41,7 @@ import net.fabricmc.fabric.mixin.object.builder.quilt.QuiltEntityTypeBuilderMobA
  * server-&gt;client entity tracking values.
  *
  * @param <T> Entity class.
+ * @deprecated Use Quilt Entity API's {@link org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder} instead.
  */
 @Deprecated
 public class FabricEntityTypeBuilder<T extends Entity> {
@@ -249,6 +250,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * An extended version of {@link FabricEntityTypeBuilder} with support for features on present on {@link LivingEntity living entities}, such as default attributes.
 	 *
 	 * @param <T> Entity class.
+	 * @deprecated Use Quilt Entity API's {@link org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder.Living} instead.
 	 */
 	@Deprecated
 	public static class Living<T extends LivingEntity> extends FabricEntityTypeBuilder<T> {
@@ -377,6 +379,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * An extended version of {@link FabricEntityTypeBuilder} with support for features on present on {@link MobEntity mob entities}, such as spawn restrictions.
 	 *
 	 * @param <T> Entity class.
+	 * @deprecated Use Quilt Entity API's {@link org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder.Mob} instead.
 	 */
 	@Deprecated
 	public static class Mob<T extends MobEntity> extends FabricEntityTypeBuilder.Living<T> {

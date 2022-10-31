@@ -35,7 +35,7 @@ import net.minecraft.util.math.BlockPos;
  * <p>Alternatively, use the access widener for {@link BlockEntityType.BlockEntityFactory}
  * in Fabric Transitive Access Wideners (v1).
  *
- * @see org.quiltmc.qsl.block.entity.api.QuiltBlockEntityTypeBuilder
+ * @deprecated Use Quilt Block Entity API's {@link org.quiltmc.qsl.block.entity.api.QuiltBlockEntityTypeBuilder} instead.
  */
 @Deprecated
 public final class FabricBlockEntityTypeBuilder<T extends BlockEntity> {

@@ -30,6 +30,8 @@ import net.minecraft.util.registry.Registry;
 
 /**
  * A registry for {@linkplain MinecartComparatorLogic custom minecart comparator logic}.
+ *
+ * @deprecated Override Quilt Vehicle API's injected {@link org.quiltmc.qsl.vehicle.api.MinecartComparatorLogic#getComparatorValue} method instead.
  */
 @Deprecated
 public final class MinecartComparatorLogicRegistry {

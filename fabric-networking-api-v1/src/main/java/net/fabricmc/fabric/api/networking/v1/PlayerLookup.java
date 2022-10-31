@@ -35,6 +35,8 @@ import net.minecraft.util.math.Vec3i;
  * <p>The word "tracking" means that an entity/chunk on the server is known to a player's client (within in view distance) and the (block) entity should notify tracking clients of changes.
  *
  * <p>These methods should only be called on the server thread and only be used on logical a server.
+ *
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.PlayerLookup} instead.
  */
 @Deprecated
 public final class PlayerLookup {

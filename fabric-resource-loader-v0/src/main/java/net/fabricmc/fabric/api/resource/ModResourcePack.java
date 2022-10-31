@@ -23,6 +23,8 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 
 /**
  * Interface implemented by mod-provided resource packs.
+ *
+ * @deprecated On Quilt Resource Loader, the pack's mod metadata is no longer exposed.
  */
 @Deprecated
 public interface ModResourcePack extends ResourcePack {

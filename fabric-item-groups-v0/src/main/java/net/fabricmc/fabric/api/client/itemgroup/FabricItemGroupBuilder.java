@@ -65,6 +65,8 @@ import net.minecraft.util.collection.DefaultedList;
  * different NBT), override {@link Item#appendStacks(ItemGroup, DefaultedList)} on your
  * item as well. This should be called by {@link #appendItems(BiConsumer)} to actually add
  * items to your item group.</p>
+ *
+ * @deprecated Use Quilt Item Group API's {@link org.quiltmc.qsl.item.group.api.QuiltItemGroup} instead.
  */
 @Deprecated
 public final class FabricItemGroupBuilder {

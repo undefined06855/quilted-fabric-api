@@ -38,6 +38,7 @@ import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
  * If the result of the Allow event is false, then Before and After are not called.
  *
  * @see ScreenEvents
+ * @deprecated Use Quilt Screen API's {@link org.quiltmc.qsl.screen.api.client.ScreenKeyboardEvents} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)

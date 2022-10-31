@@ -28,6 +28,7 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  * Events related to an entity being moved to another world.
  *
  * @apiNote For a {@link ServerPlayerEntity}, please use {@link ServerEntityWorldChangeEvents#AFTER_PLAYER_CHANGE_WORLD}.
+ * @deprecated Use Quilt Entity Events's {@link org.quiltmc.qsl.entity_events.api.EntityWorldChangeEvents} instead.
  */
 @Deprecated
 public final class ServerEntityWorldChangeEvents {

@@ -23,6 +23,8 @@ import net.minecraft.world.biome.Biome;
 
 /**
  * Context given to a biome selector for deciding whether it applies to a biome or not.
+ *
+ * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext} instead.
  */
 @Deprecated
 public interface BiomeSelectionContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext {

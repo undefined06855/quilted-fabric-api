@@ -32,6 +32,8 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  * <p>To register some commands, you would register an event listener and implement the callback.
  *
  * <p>See {@link ClientCommandManager} for more details and an example.
+ *
+ * @deprecated Use Quilt Command API's {@link org.quiltmc.qsl.command.api.client.ClientCommandRegistrationCallback} instead.
  */
 @SuppressWarnings("unchecked")
 public interface ClientCommandRegistrationCallback {

@@ -30,6 +30,7 @@ import net.minecraft.util.Identifier;
  * <b>Experimental feature</b>, may be removed or changed without further notice.
  *
  * @see BiomeModifications
+ * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.BiomeModification} instead.
  */
 @Deprecated
 public class BiomeModification {

@@ -28,6 +28,8 @@ import net.minecraft.item.ItemStack;
  * the stack itself.
  *
  * <p>Custom damage handlers can be set with {@link FabricItemSettings#customDamage}.
+ *
+ * @deprecated Use Quilt Item Setting API's {@link org.quiltmc.qsl.item.setting.api.CustomDamageHandler} instead.
  */
 @Deprecated
 @FunctionalInterface

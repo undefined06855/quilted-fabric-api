@@ -22,6 +22,8 @@ import net.fabricmc.fabric.impl.content.registry.FuelRegistryImpl;
 
 /**
  * Registry of items to 0-32767 fuel burn time values, in in-game ticks.
+ *
+ * @deprecated Use Quilt Item Content Registry API's {@link org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries#FUEL_TIME} registry attachment instead.
  */
 @Deprecated
 public interface FuelRegistry extends Item2ObjectMap<Integer> {

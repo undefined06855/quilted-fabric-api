@@ -35,6 +35,8 @@ import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
  * via {@code BlendMode}.
  *
  * <p>Client-side only.
+ *
+ * @deprecated Use Quilt Block Extensions API's {@link org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap} instead.
  */
 @Deprecated
 public interface BlockRenderLayerMap {

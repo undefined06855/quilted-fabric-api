@@ -26,6 +26,8 @@ package net.fabricmc.fabric.api.item.v1;
  *
  * <p>Note that items extending {@link net.minecraft.item.ArmorItem} don't need to use this
  * as there's {@link net.minecraft.item.ArmorItem#getSlotType()}.
+ *
+ * @deprecated Use Quilt Item Setting API's {@link org.quiltmc.qsl.item.setting.api.EquipmentSlotProvider} instead.
  */
 @Deprecated
 @FunctionalInterface

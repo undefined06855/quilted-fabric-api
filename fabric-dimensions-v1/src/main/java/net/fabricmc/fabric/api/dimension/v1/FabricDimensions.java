@@ -25,6 +25,8 @@ import net.minecraft.world.TeleportTarget;
 
 /**
  * This class consists exclusively of static methods that operate on world dimensions.
+ *
+ * @deprecated Use Quilt Dimension API's {@link org.quiltmc.qsl.worldgen.dimension.api.QuiltDimensions} instead.
  */
 @Deprecated
 public final class FabricDimensions {

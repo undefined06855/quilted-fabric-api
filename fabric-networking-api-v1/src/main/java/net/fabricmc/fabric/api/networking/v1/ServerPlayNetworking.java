@@ -38,6 +38,7 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
  * <p>This class should be only used for the logical server.
  *
  * @see ServerLoginNetworking
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.ServerPlayNetworking} instead.
  */
 @Deprecated
 public final class ServerPlayNetworking {

@@ -30,6 +30,7 @@ import net.minecraft.network.PacketByteBuf;
  *
  * @see FutureListener
  * @see ChannelFutureListener
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.FutureListeners} instead.
  */
 @Deprecated
 public final class FutureListeners {

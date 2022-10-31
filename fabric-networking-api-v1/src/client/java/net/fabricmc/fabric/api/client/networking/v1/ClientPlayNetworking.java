@@ -43,6 +43,7 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
  *
  * @see ClientLoginNetworking
  * @see ServerPlayNetworking
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientPlayNetworking} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)

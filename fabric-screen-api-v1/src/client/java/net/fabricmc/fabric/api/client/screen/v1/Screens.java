@@ -35,6 +35,7 @@ import net.fabricmc.api.Environment;
  * Utility methods related to screens.
  *
  * @see ScreenEvents
+ * @deprecated Use Quilt Screen API's {@link org.quiltmc.qsl.screen.api.client.QuiltScreen} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)

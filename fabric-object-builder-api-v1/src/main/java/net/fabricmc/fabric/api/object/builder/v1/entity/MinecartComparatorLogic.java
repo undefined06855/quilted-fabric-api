@@ -24,6 +24,8 @@ import net.minecraft.util.math.BlockPos;
 /**
  * Provides custom comparator output for minecarts resting on detector rails.
  * @param <T> the handled minecart type
+ *
+ * @deprecated Use Quilt Vehicle API's {@link org.quiltmc.qsl.vehicle.api.MinecartComparatorLogic} instead.
  */
 @Deprecated
 @FunctionalInterface

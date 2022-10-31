@@ -38,6 +38,7 @@ public final class ClientPlayConnectionEvents {
 	 * Event indicating a connection entered the PLAY state, ready for registering channel handlers.
 	 *
 	 * @see ClientPlayNetworking#registerReceiver(Identifier, ClientPlayNetworking.PlayChannelHandler)
+	 * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents} instead.
 	 */
 	public static final Event<Init> INIT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents.INIT,
 			init -> init::onPlayInit,

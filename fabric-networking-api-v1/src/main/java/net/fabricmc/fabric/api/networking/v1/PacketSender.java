@@ -32,6 +32,7 @@ import net.fabricmc.fabric.impl.networking.GenericFutureListenerHolder;
  * Represents something that supports sending packets to channels.
  *
  * @see PacketByteBufs
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.PacketSender} instead.
  */
 @Deprecated
 public interface PacketSender extends org.quiltmc.qsl.networking.api.PacketSender {

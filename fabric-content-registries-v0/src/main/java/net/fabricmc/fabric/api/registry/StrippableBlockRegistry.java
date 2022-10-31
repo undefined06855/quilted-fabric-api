@@ -29,7 +29,10 @@ import net.minecraft.state.property.Properties;
 
 /**
  * A registry for axe stripping interactions. A vanilla example is turning logs to stripped logs.
+ *
+ * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#STRIPPABLE_BLOCK} registry attachment instead.
  */
+@Deprecated
 public final class StrippableBlockRegistry {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StrippableBlockRegistry.class);
 

@@ -27,6 +27,8 @@ import net.minecraft.block.Block;
 
 /**
  * Provides methods for registering oxidizable and waxable blocks.
+ *
+ * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#OXIDIZABLE_BLOCK} registry attachment instead.
  */
 public final class OxidizableBlocksRegistry {
 	private OxidizableBlocksRegistry() {

@@ -61,6 +61,8 @@ import net.fabricmc.api.Environment;
  * });
  * }
  * </pre>
+ *
+ * @deprecated Use Quilt Command API's {@link org.quiltmc.qsl.command.api.client.ClientCommandManager} instead.
  */
 @Deprecated
 @SuppressWarnings("unchecked")

@@ -26,6 +26,9 @@ import net.minecraft.tag.TagKey;
 import net.fabricmc.fabric.api.util.Block2ObjectMap;
 import net.fabricmc.fabric.impl.content.registry.FlammableBlockRegistryImpl;
 
+/**
+ * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#FLAMMABLE_BLOCK} registry attachment instead.
+*/
 @Deprecated
 public interface FlammableBlockRegistry extends Block2ObjectMap<FlammableBlockRegistry.Entry> {
 	static FlammableBlockRegistry getDefaultInstance() {

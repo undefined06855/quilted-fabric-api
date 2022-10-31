@@ -23,6 +23,8 @@ import net.fabricmc.fabric.impl.content.registry.CompostingChanceRegistryImpl;
 /**
  * Registry of items to 0.0-1.0 values, defining the chance of a given item
  * increasing the Composter block's level.
+ *
+ * @deprecated Use Quilt Item Content Registry API's {@link org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries#COMPOST_CHANCE} registry attachment instead.
  */
 @Deprecated
 public interface CompostingChanceRegistry extends Item2ObjectMap<Float> {

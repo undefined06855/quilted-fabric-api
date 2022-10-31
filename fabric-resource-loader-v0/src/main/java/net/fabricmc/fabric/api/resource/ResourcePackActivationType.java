@@ -19,6 +19,8 @@ package net.fabricmc.fabric.api.resource;
 
 /**
  * Represents the resource pack activation type.
+ *
+ * @deprecated Use Quilt Resource Loader API's {@link org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType} instead.
  */
 @Deprecated
 public enum ResourcePackActivationType {

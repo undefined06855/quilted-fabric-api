@@ -26,6 +26,8 @@ import net.fabricmc.api.Environment;
 
 /**
  * Extensions to {@link CommandSource} for client-sided commands.
+ *
+ * @deprecated Use Quilt Command API's {@link org.quiltmc.qsl.command.api.client.QuiltClientCommandSource} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)

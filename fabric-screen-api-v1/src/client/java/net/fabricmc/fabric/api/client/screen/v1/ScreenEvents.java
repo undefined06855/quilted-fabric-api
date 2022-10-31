@@ -43,6 +43,7 @@ import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
  * @see Screens
  * @see ScreenKeyboardEvents
  * @see ScreenMouseEvents
+ * @deprecated Use Quilt Screen API's {@link org.quiltmc.qsl.screen.api.client.ScreenEvents} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)

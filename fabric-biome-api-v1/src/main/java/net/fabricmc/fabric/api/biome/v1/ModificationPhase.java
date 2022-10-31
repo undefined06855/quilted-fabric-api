@@ -32,6 +32,8 @@ import org.jetbrains.annotations.ApiStatus;
  * </ol>
  *
  * <p><b>Experimental feature</b>, may be removed or changed without further notice.
+ *
+ * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.ModificationPhase} instead.
  */
 @Deprecated
 public enum ModificationPhase {

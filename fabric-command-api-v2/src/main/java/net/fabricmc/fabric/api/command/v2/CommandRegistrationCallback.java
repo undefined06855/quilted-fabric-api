@@ -37,6 +37,8 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  *     if (environment.integrated) dispatcher.register(CommandManager.literal("integrated_command").executes(context -> {...}));
  * })};
  * }</pre>
+ *
+ * @deprecated Use Quilt Command API's {@link org.quiltmc.qsl.command.api.CommandRegistrationCallback} instead.
  */
 @Deprecated
 public interface CommandRegistrationCallback {

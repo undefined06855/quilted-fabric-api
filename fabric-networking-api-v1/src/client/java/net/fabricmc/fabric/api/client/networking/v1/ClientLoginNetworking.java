@@ -42,6 +42,7 @@ import net.fabricmc.fabric.impl.networking.GenericFutureListenerHolder;
  *
  * @see ClientPlayNetworking
  * @see ServerLoginNetworking
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientLoginNetworking} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)
