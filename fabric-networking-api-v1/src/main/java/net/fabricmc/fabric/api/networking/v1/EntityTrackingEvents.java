@@ -25,6 +25,8 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 /**
  * Events related to a tracking entities within a player's view distance.
+ *
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.EntityTrackingEvents} instead.
  */
 @Deprecated
 public final class EntityTrackingEvents {
