@@ -19,7 +19,6 @@
 			"license": "Apache-2.0",
 			"icon": "assets/quilted_fabric_rendering_v0/icon.png"
 		},
-		"load_type": "if_possible",
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"client": "net.fabricmc.fabric.impl.client.rendering.RenderingCallbackInvoker"
