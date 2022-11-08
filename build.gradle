@@ -639,7 +639,7 @@ modrinth {
 		embedded.project "fabric-api"
 	}
 
-	uploadFile = signingEnabled ? signRemapJar.output : remapJar
+	uploadFile = signingEnabled ? signRemapJar.output : renameJar
 }
 
 tasks.modrinth.dependsOn renameJar
