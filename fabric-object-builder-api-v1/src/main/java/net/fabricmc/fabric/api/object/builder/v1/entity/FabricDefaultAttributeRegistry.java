@@ -52,6 +52,17 @@ public final class FabricDefaultAttributeRegistry {
 	/**
 	 * Registers a default attribute for a type of living entity.
 	 *
+	 * @param type    the entity type
+	 * @param builder the builder that creates the default attribute
+	 * @see	FabricDefaultAttributeRegistry#register(EntityType, DefaultAttributeContainer)
+	 */
+	public static void register(EntityType<? extends LivingEntity> type, DefaultAttributeContainer.Builder builder) {
+		register(type, builder.build());
+	}
+
+	/**
+	 * Registers a default attribute for a type of living entity.
+	 *
 	 * <p>It can be used in a fashion similar to this:
 	 * <blockquote><pre>
 	 * EntityAttributeRegistry.INSTANCE.register(type, LivingEntity.createLivingAttributes());
@@ -63,11 +74,11 @@ public final class FabricDefaultAttributeRegistry {
 	 *
 	 * <p>For convenience, this can also be done on the {@link FabricEntityTypeBuilder} to simplify the building process.
 	 *
-	 * @param type    the entity type
-	 * @param builder the builder that creates the default attribute
+	 * @param type      the entity type
+	 * @param container the container for the default attribute
 	 * @see	FabricEntityTypeBuilder.Living#defaultAttributes(Supplier)
 	 */
-	public static void register(EntityType<? extends LivingEntity> type, DefaultAttributeContainer.Builder builder) {
+	public static void register(EntityType<? extends LivingEntity> type, DefaultAttributeContainer container) {
 		if (DefaultAttributeRegistry.DEFAULT_ATTRIBUTE_REGISTRY.put(type, builder.build()) != null) {
 			LOGGER.debug("Overriding existing registration for entity type {}", Registry.ENTITY_TYPE.getId(type));
 		}

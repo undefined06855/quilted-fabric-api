@@ -47,6 +47,7 @@ import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 
 @Mixin(LivingEntity.class)
 abstract class LivingEntityMixin {
@@ -61,6 +62,13 @@ abstract class LivingEntityMixin {
 		// FIXME: Cannot use shadowed fields from supermixins - needs a fix so people can use fabric api in a dev environment even though this is fine in this repo and prod.
 		//  A temporary fix is to just cast the mixin to LivingEntity and access the world field with a few ugly casts.
 		ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.invoker().afterKilledOtherEntity((ServerWorld) ((LivingEntity) (Object) this).world, attacker, (LivingEntity) (Object) this);
+	}
+
+	@Inject(method = "damage", at = @At(value = "INVOKE", target = "net/minecraft/entity/LivingEntity.isSleeping()Z"), cancellable = true)
+	private void beforeDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+		if (!ServerLivingEntityEvents.ALLOW_DAMAGE.invoker().allowDamage((LivingEntity) (Object) this, source, amount)) {
+			cir.setReturnValue(false);
+		}
 	}
 
 	@Inject(method = "sleep", at = @At("RETURN"))
