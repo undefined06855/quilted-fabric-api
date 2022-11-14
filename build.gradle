@@ -561,8 +561,8 @@ machete {
 	optimizations.json = false
 }
 // This prevents issues with execution optimizations and therefore, Gradle deprecation warnings
-prepareRemapJar.dependsOn("optimizeOutputsOfJar")
-prepareRemapMavenJar.dependsOn("optimizeOutputsOfJar")
+tasks.prepareRemapJar.dependsOn("optimizeOutputsOfJar")
+tasks.prepareRemapMavenJar.dependsOn("optimizeOutputsOfJar")
 
 task renameJar(type: Jar, dependsOn: (signingEnabled ? signRemapJar : remapJar)) {
 	with remapJar
@@ -590,7 +590,7 @@ curseforge {
 		}
 
 		afterEvaluate {
-			uploadTask.dependsOn("remapJar")
+			uploadTask.dependsOn("renameJar")
 		}
 	}
 

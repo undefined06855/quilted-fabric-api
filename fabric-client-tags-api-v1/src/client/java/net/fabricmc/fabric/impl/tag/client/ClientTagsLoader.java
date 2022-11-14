@@ -123,7 +123,7 @@ public class ClientTagsLoader {
 		HashSet<Path> out = new HashSet<>();
 
 		for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
-			// FIXME - this is a horrible hack to fix a horrible hack. Make the old way work!
+			// FIXME - This horrible hack can be reverted with Quilt Loader 0.18.1's release
 			if (mod.getRootPath().toString().endsWith(".jar")) {
 				try {
 					var fsDelegate = FileSystemUtil.getJarFileSystem(mod.getRootPath(), false);
