@@ -15,14 +15,19 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.impl.client.rendering;
+package net.fabricmc.fabric.test.item.mixin;
 
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.InvalidateRenderStateCallback;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
-public class RenderingCallbackInvoker implements ClientModInitializer {
-	@Override
-	public void onInitializeClient() {
-		InvalidateRenderStateCallback.EVENT.register(() -> net.fabricmc.fabric.api.client.render.InvalidateRenderStateCallback.EVENT.invoker().onInvalidate());
+import net.minecraft.item.Item;
+import net.minecraft.potion.Potion;
+import net.minecraft.recipe.BrewingRecipeRegistry;
+
+@Mixin(BrewingRecipeRegistry.class)
+public interface BrewingRecipeRegistryAccessor {
+	@Invoker
+	static void callRegisterPotionRecipe(Potion input, Item item, Potion output) {
+		throw new UnsupportedOperationException();
 	}
 }
