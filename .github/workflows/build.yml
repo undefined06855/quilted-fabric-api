@@ -23,14 +23,14 @@ jobs:
             distribution: temurin
             java-version: ${{ matrix.java }}
       - uses: gradle/wrapper-validation-action@v1
-      - run: ./gradlew check build publishToMavenLocal --stacktrace --warning-mode=fail -Porg.gradle.parallel.threads=4
+      # TODO - Re-enable once issues with Quilt Loader are solved
+      # - run: ./gradlew check build publishToMavenLocal --stacktrace --warning-mode=fail -Porg.gradle.parallel.threads=4
       - run: ./gradlew build publishToMavenLocal --stacktrace --warning-mode=fail -Porg.gradle.parallel.threads=4
       - uses: Juuxel/publish-checkstyle-report@v1
         if: ${{ failure() }}
         with:
           reports: |
             **/build/reports/checkstyle/*.xml
-      # TODO - Re-enable once issues with Quilt Loader are solved
       # - run: mkdir run && echo "eula=true" >> run/eula.txt
       # - run: ./gradlew runAutoTestServer --stacktrace --warning-mode=fail
       - run: ./gradlew --stop
