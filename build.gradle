@@ -257,9 +257,19 @@ allprojects {
 		archiveClassifier = "testmod"
 	}
 
-	[jar, testmodJar, sourcesJar].each {
+	[jar, sourcesJar].each {
 		it.from(rootProject.file("LICENSE")) {
 			rename { "${it}-${project.archivesBaseName}"}
+		}
+	}
+
+	if (file("src/client").exists() && !file("src/main").exists()) {
+		remapJar {
+			additionalClientOnlyEntries.add("LICENSE-${project.archivesBaseName}")
+		}
+
+		remapSourcesJar {
+			additionalClientOnlyEntries.add("LICENSE-${project.archivesBaseName}")
 		}
 	}
 
@@ -275,6 +285,9 @@ allprojects {
 		source(sourceSets.client.output)
 		source(sourceSets.testmod.output)
 	}
+
+	// Apply to each valid subproject.
+	apply from: rootProject.file('gradle/package-info.gradle')
 }
 
 remapTestmodJar {
@@ -320,8 +333,8 @@ javadoc {
 	allprojects.each {
 		if (it.name == "deprecated") return
 
-		source(it.sourceSets.main.allJava.srcDirs)
-		source(it.sourceSets.client.allJava.srcDirs)
+		source(it.sourceSets.main.allJava)
+		source(it.sourceSets.client.allJava)
 	}
 
 	classpath = files(sourceSets.main.compileClasspath, sourceSets.client.compileClasspath)
@@ -359,7 +372,7 @@ loom {
 		}
 	}
 }
-// test.dependsOn runGametest
+test.dependsOn runGametest
 
 subprojects {
 	if (it.name == "deprecated") return
@@ -411,24 +424,11 @@ subprojects {
 	}
 }
 
-task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
-	input = jar.archiveFile
-	archiveFileName = "${archivesBaseName}-${project.version}-maven.jar"
-	addNestedDependencies = false
-}
-build.dependsOn remapMavenJar
-
-if (signingEnabled) {
-	remoteSign {
-		sign remapMavenJar
-	}
-}
-
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			artifact(signingEnabled ? signRemapMavenJar.output : remapMavenJar) {
-				builtBy(signingEnabled ? signRemapMavenJar : remapMavenJar)
+			artifact(signingEnabled ? signRemapJar.output : remapJar) {
+				builtBy(signingEnabled ? signRemapJar : remapJar)
 			}
 
 			artifact(sourcesJar) {
@@ -562,7 +562,6 @@ machete {
 }
 // This prevents issues with execution optimizations and therefore, Gradle deprecation warnings
 tasks.prepareRemapJar.dependsOn("optimizeOutputsOfJar")
-tasks.prepareRemapMavenJar.dependsOn("optimizeOutputsOfJar")
 
 task renameJar(type: Jar, dependsOn: (signingEnabled ? signRemapJar : remapJar)) {
 	with remapJar

@@ -19,7 +19,6 @@ package net.fabricmc.fabric.impl.client.screen;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.quiltmc.qsl.base.api.util.TriState;
 import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 
@@ -36,60 +35,54 @@ import net.fabricmc.fabric.api.event.EventFactory;
 /**
  * Factory methods for creating event instances used in {@link ScreenExtensions}.
  */
-@ApiStatus.Internal
 @Environment(EnvType.CLIENT)
 public final class ScreenEventFactory {
 	private static final Set<Screen> ACTIVE_SCREENS = new ReferenceArraySet<>(2);
 
 	public static Event<ScreenEvents.Remove> createRemoveEvent() {
-		var event = EventFactory.createArrayBacked(ScreenEvents.Remove.class, callbacks -> screen -> {
+		return EventFactory.createArrayBacked(ScreenEvents.Remove.class, callbacks -> screen -> {
 			for (var callback : callbacks) {
 				callback.onRemove(screen);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenEvents.BeforeRender> createBeforeRenderEvent() {
-		var event = EventFactory.createArrayBacked(ScreenEvents.BeforeRender.class, callbacks -> (screen, matrices, mouseX, mouseY, tickDelta) -> {
+		return EventFactory.createArrayBacked(ScreenEvents.BeforeRender.class, callbacks -> (screen, matrices, mouseX, mouseY, tickDelta) -> {
 			for (var callback : callbacks) {
 				callback.beforeRender(screen, matrices, mouseX, mouseY, tickDelta);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenEvents.AfterRender> createAfterRenderEvent() {
-		var event = EventFactory.createArrayBacked(ScreenEvents.AfterRender.class, callbacks -> (screen, matrices, mouseX, mouseY, tickDelta) -> {
+		return EventFactory.createArrayBacked(ScreenEvents.AfterRender.class, callbacks -> (screen, matrices, mouseX, mouseY, tickDelta) -> {
 			for (var callback : callbacks) {
 				callback.afterRender(screen, matrices, mouseX, mouseY, tickDelta);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenEvents.BeforeTick> createBeforeTickEvent() {
-		var event = EventFactory.createArrayBacked(ScreenEvents.BeforeTick.class, callbacks -> screen -> {
+		return EventFactory.createArrayBacked(ScreenEvents.BeforeTick.class, callbacks -> screen -> {
 			for (var callback : callbacks) {
 				callback.beforeTick(screen);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenEvents.AfterTick> createAfterTickEvent() {
-		var event = EventFactory.createArrayBacked(ScreenEvents.AfterTick.class, callbacks -> screen -> {
+		return EventFactory.createArrayBacked(ScreenEvents.AfterTick.class, callbacks -> screen -> {
 			for (var callback : callbacks) {
 				callback.afterTick(screen);
 			}
 		});
-		return event;
 	}
 
 	// Keyboard events
 
 	public static Event<ScreenKeyboardEvents.AllowKeyPress> createAllowKeyPressEvent() {
-		var event = EventFactory.createArrayBacked(ScreenKeyboardEvents.AllowKeyPress.class, callbacks -> (screen, key, scancode, modifiers) -> {
+		return EventFactory.createArrayBacked(ScreenKeyboardEvents.AllowKeyPress.class, callbacks -> (screen, key, scancode, modifiers) -> {
 			for (var callback : callbacks) {
 				if (!callback.allowKeyPress(screen, key, scancode, modifiers)) {
 					return false;
@@ -98,29 +91,26 @@ public final class ScreenEventFactory {
 
 			return true;
 		});
-		return event;
 	}
 
 	public static Event<ScreenKeyboardEvents.BeforeKeyPress> createBeforeKeyPressEvent() {
-		var event = EventFactory.createArrayBacked(ScreenKeyboardEvents.BeforeKeyPress.class, callbacks -> (screen, key, scancode, modifiers) -> {
+		return EventFactory.createArrayBacked(ScreenKeyboardEvents.BeforeKeyPress.class, callbacks -> (screen, key, scancode, modifiers) -> {
 			for (var callback : callbacks) {
 				callback.beforeKeyPress(screen, key, scancode, modifiers);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenKeyboardEvents.AfterKeyPress> createAfterKeyPressEvent() {
-		var event = EventFactory.createArrayBacked(ScreenKeyboardEvents.AfterKeyPress.class, callbacks -> (screen, key, scancode, modifiers) -> {
+		return EventFactory.createArrayBacked(ScreenKeyboardEvents.AfterKeyPress.class, callbacks -> (screen, key, scancode, modifiers) -> {
 			for (var callback : callbacks) {
 				callback.afterKeyPress(screen, key, scancode, modifiers);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenKeyboardEvents.AllowKeyRelease> createAllowKeyReleaseEvent() {
-		var event = EventFactory.createArrayBacked(ScreenKeyboardEvents.AllowKeyRelease.class, callbacks -> (screen, key, scancode, modifiers) -> {
+		return EventFactory.createArrayBacked(ScreenKeyboardEvents.AllowKeyRelease.class, callbacks -> (screen, key, scancode, modifiers) -> {
 			for (var callback : callbacks) {
 				if (!callback.allowKeyRelease(screen, key, scancode, modifiers)) {
 					return false;
@@ -129,31 +119,28 @@ public final class ScreenEventFactory {
 
 			return true;
 		});
-		return event;
 	}
 
 	public static Event<ScreenKeyboardEvents.BeforeKeyRelease> createBeforeKeyReleaseEvent() {
-		var event = EventFactory.createArrayBacked(ScreenKeyboardEvents.BeforeKeyRelease.class, callbacks -> (screen, key, scancode, modifiers) -> {
+		return EventFactory.createArrayBacked(ScreenKeyboardEvents.BeforeKeyRelease.class, callbacks -> (screen, key, scancode, modifiers) -> {
 			for (var callback : callbacks) {
 				callback.beforeKeyRelease(screen, key, scancode, modifiers);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenKeyboardEvents.AfterKeyRelease> createAfterKeyReleaseEvent() {
-		var event = EventFactory.createArrayBacked(ScreenKeyboardEvents.AfterKeyRelease.class, callbacks -> (screen, key, scancode, modifiers) -> {
+		return EventFactory.createArrayBacked(ScreenKeyboardEvents.AfterKeyRelease.class, callbacks -> (screen, key, scancode, modifiers) -> {
 			for (var callback : callbacks) {
 				callback.afterKeyRelease(screen, key, scancode, modifiers);
 			}
 		});
-		return event;
 	}
 
 	// Mouse Events
 
 	public static Event<ScreenMouseEvents.AllowMouseClick> createAllowMouseClickEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.AllowMouseClick.class, callbacks -> (screen, mouseX, mouseY, button) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.AllowMouseClick.class, callbacks -> (screen, mouseX, mouseY, button) -> {
 			for (var callback : callbacks) {
 				if (!callback.allowMouseClick(screen, mouseX, mouseY, button)) {
 					return false;
@@ -162,29 +149,26 @@ public final class ScreenEventFactory {
 
 			return true;
 		});
-		return event;
 	}
 
 	public static Event<ScreenMouseEvents.BeforeMouseClick> createBeforeMouseClickEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.BeforeMouseClick.class, callbacks -> (screen, mouseX, mouseY, button) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.BeforeMouseClick.class, callbacks -> (screen, mouseX, mouseY, button) -> {
 			for (var callback : callbacks) {
 				callback.beforeMouseClick(screen, mouseX, mouseY, button);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenMouseEvents.AfterMouseClick> createAfterMouseClickEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.AfterMouseClick.class, callbacks -> (screen, mouseX, mouseY, button) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.AfterMouseClick.class, callbacks -> (screen, mouseX, mouseY, button) -> {
 			for (var callback : callbacks) {
 				callback.afterMouseClick(screen, mouseX, mouseY, button);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenMouseEvents.AllowMouseRelease> createAllowMouseReleaseEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.AllowMouseRelease.class, callbacks -> (screen, mouseX, mouseY, button) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.AllowMouseRelease.class, callbacks -> (screen, mouseX, mouseY, button) -> {
 			for (var callback : callbacks) {
 				if (!callback.allowMouseRelease(screen, mouseX, mouseY, button)) {
 					return false;
@@ -193,29 +177,26 @@ public final class ScreenEventFactory {
 
 			return true;
 		});
-		return event;
 	}
 
 	public static Event<ScreenMouseEvents.BeforeMouseRelease> createBeforeMouseReleaseEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.BeforeMouseRelease.class, callbacks -> (screen, mouseX, mouseY, button) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.BeforeMouseRelease.class, callbacks -> (screen, mouseX, mouseY, button) -> {
 			for (var callback : callbacks) {
 				callback.beforeMouseRelease(screen, mouseX, mouseY, button);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenMouseEvents.AfterMouseRelease> createAfterMouseReleaseEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.AfterMouseRelease.class, callbacks -> (screen, mouseX, mouseY, button) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.AfterMouseRelease.class, callbacks -> (screen, mouseX, mouseY, button) -> {
 			for (var callback : callbacks) {
 				callback.afterMouseRelease(screen, mouseX, mouseY, button);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenMouseEvents.AllowMouseScroll> createAllowMouseScrollEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.AllowMouseScroll.class, callbacks -> (screen, mouseX, mouseY, horizontalAmount, verticalAmount) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.AllowMouseScroll.class, callbacks -> (screen, mouseX, mouseY, horizontalAmount, verticalAmount) -> {
 			for (var callback : callbacks) {
 				if (!callback.allowMouseScroll(screen, mouseX, mouseY, horizontalAmount, verticalAmount)) {
 					return false;
@@ -224,25 +205,22 @@ public final class ScreenEventFactory {
 
 			return true;
 		});
-		return event;
 	}
 
 	public static Event<ScreenMouseEvents.BeforeMouseScroll> createBeforeMouseScrollEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.BeforeMouseScroll.class, callbacks -> (screen, mouseX, mouseY, horizontalAmount, verticalAmount) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.BeforeMouseScroll.class, callbacks -> (screen, mouseX, mouseY, horizontalAmount, verticalAmount) -> {
 			for (var callback : callbacks) {
 				callback.beforeMouseScroll(screen, mouseX, mouseY, horizontalAmount, verticalAmount);
 			}
 		});
-		return event;
 	}
 
 	public static Event<ScreenMouseEvents.AfterMouseScroll> createAfterMouseScrollEvent() {
-		var event = EventFactory.createArrayBacked(ScreenMouseEvents.AfterMouseScroll.class, callbacks -> (screen, mouseX, mouseY, horizontalAmount, verticalAmount) -> {
+		return EventFactory.createArrayBacked(ScreenMouseEvents.AfterMouseScroll.class, callbacks -> (screen, mouseX, mouseY, horizontalAmount, verticalAmount) -> {
 			for (var callback : callbacks) {
 				callback.afterMouseScroll(screen, mouseX, mouseY, horizontalAmount, verticalAmount);
 			}
 		});
-		return event;
 	}
 
 	public static void activateScreen(Screen screen) {

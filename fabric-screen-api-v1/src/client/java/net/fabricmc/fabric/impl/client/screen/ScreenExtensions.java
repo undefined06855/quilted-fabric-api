@@ -17,8 +17,6 @@
 
 package net.fabricmc.fabric.impl.client.screen;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import net.minecraft.client.gui.screen.Screen;
 
 import net.fabricmc.api.EnvType;
@@ -28,7 +26,6 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.fabricmc.fabric.api.event.Event;
 
-@ApiStatus.Internal
 @Environment(EnvType.CLIENT)
 public interface ScreenExtensions {
 	static ScreenExtensions getExtensions(Screen screen) {
