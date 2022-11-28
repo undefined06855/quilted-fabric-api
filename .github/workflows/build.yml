@@ -23,8 +23,9 @@ jobs:
             distribution: temurin
             java-version: ${{ matrix.java }}
       - uses: gradle/wrapper-validation-action@v1
-      - run: ./gradlew check build publishToMavenLocal --stacktrace --warning-mode=fail -Porg.gradle.parallel.threads=4
-      - run: ./gradlew build publishToMavenLocal --stacktrace --warning-mode=fail -Porg.gradle.parallel.threads=4
+      # TODO - Go back to "--warning-mode=fail"
+      - run: ./gradlew check build publishToMavenLocal --stacktrace --warning-mode=all -Porg.gradle.parallel.threads=4
+      - run: ./gradlew build publishToMavenLocal --stacktrace --warning-mode=all -Porg.gradle.parallel.threads=4
       - uses: Juuxel/publish-checkstyle-report@v1
         if: ${{ failure() }}
         with:
