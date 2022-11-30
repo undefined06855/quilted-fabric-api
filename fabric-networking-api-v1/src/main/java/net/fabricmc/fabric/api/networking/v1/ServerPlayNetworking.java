@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -204,8 +205,9 @@ public final class ServerPlayNetworking {
 	 * @param buf         the packet byte buf which represents the payload of the packet
 	 * @return a new packet
 	 */
-	public static Packet<?> createS2CPacket(Identifier channelName, PacketByteBuf buf) {
-		return org.quiltmc.qsl.networking.api.ServerPlayNetworking.createS2CPacket(channelName, buf);
+	@SuppressWarnings("unchecked")
+	public static Packet<ClientPlayPacketListener> createS2CPacket(Identifier channelName, PacketByteBuf buf) {
+		return (Packet<ClientPlayPacketListener>) org.quiltmc.qsl.networking.api.ServerPlayNetworking.createS2CPacket(channelName, buf);
 	}
 
 	/**
