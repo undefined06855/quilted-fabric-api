@@ -31,9 +31,10 @@ import org.quiltmc.qsl.registry.impl.sync.SynchronizedRegistry;
 import org.slf4j.Logger;
 
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.api.EnvType;
 
@@ -41,7 +42,7 @@ import net.fabricmc.api.EnvType;
 public class QuiltedRegistrySync implements ServerLifecycleEvents.Starting, ServerLifecycleEvents.Stopped {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	@SuppressWarnings("unchecked")
-	private static final Identifier STATUS_EFFECTS_REGISTRY_ID = ((Registry<Registry<?>>) Registry.REGISTRIES).getId(Registry.STATUS_EFFECT);
+	private static final Identifier STATUS_EFFECTS_REGISTRY_ID = ((Registry<Registry<?>>) Registries.REGISTRIES).getId(Registries.STATUS_EFFECT);
 
 	/**
 	 * This patch allows to save to disk the registry map of the status effect registry specifically as it's the only
@@ -101,8 +102,9 @@ public class QuiltedRegistrySync implements ServerLifecycleEvents.Starting, Serv
 	public void startingServer(MinecraftServer server) {
 		if (MinecraftQuiltLoader.getEnvironmentType() == EnvType.SERVER) {
 			// Freeze the registries on the server
+			// FIXME - This port was powered by midnight Ennui, double-check this later!
 			LOGGER.debug("Freezing registries");
-			Registry.freezeRegistries();
+			Registries.bootstrap();
 		}
 	}
 
@@ -117,7 +119,7 @@ public class QuiltedRegistrySync implements ServerLifecycleEvents.Starting, Serv
 
 	@SuppressWarnings("unchecked")
 	public static SynchronizedRegistry<StatusEffect> getStatusEffectSynchronizedRegistry() {
-		var statusEffectRegistry = Registry.STATUS_EFFECT;
+		var statusEffectRegistry = Registries.STATUS_EFFECT;
 
 		if (statusEffectRegistry instanceof SynchronizedRegistry<?>) {
 			return (SynchronizedRegistry<StatusEffect>) statusEffectRegistry;

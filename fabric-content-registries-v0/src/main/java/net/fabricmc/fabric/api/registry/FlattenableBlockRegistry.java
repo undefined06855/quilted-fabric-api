@@ -30,7 +30,7 @@ import net.minecraft.block.BlockState;
 /**
  * A registry for shovel flattening interactions. A vanilla example is turning dirt to dirt paths.
  *
- * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#FLATTENABLE_BLOCK} registry attachment instead.
+ * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#FLATTENABLE} registry attachment instead.
  */
 @Deprecated
 public final class FlattenableBlockRegistry {
@@ -49,10 +49,10 @@ public final class FlattenableBlockRegistry {
 		Objects.requireNonNull(input, "input block cannot be null");
 		Objects.requireNonNull(flattened, "flattened block state cannot be null");
 
-		BlockContentRegistries.FLATTENABLE_BLOCK.get(input).ifPresent(old -> {
+		BlockContentRegistries.FLATTENABLE.get(input).ifPresent(old -> {
 			LOGGER.debug("Replaced old flattening mapping from {} to {} with {}", input, old, flattened);
 		});
 
-		QuiltDeferringQueues.addEntry(BlockContentRegistries.FLATTENABLE_BLOCK, input, flattened);
+		QuiltDeferringQueues.addEntry(BlockContentRegistries.FLATTENABLE, input, flattened);
 	}
 }

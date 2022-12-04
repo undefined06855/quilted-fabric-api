@@ -46,10 +46,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
+import net.minecraft.registry.MutableRegistry;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
@@ -65,7 +66,7 @@ import net.fabricmc.fabric.impl.registry.sync.RemapStateImpl;
 import net.fabricmc.fabric.impl.registry.sync.RemappableRegistry;
 
 @Mixin(SimpleRegistry.class)
-public abstract class SimpleRegistryMixin<T> extends Registry<T> implements RemappableRegistry, ListenableRegistry<T> {
+public abstract class SimpleRegistryMixin<T> implements MutableRegistry<T>, RemappableRegistry, ListenableRegistry<T> {
 	// Namespaces used by the vanilla game. "brigadier" is used by command argument type registry.
 	// While Realms use "realms" namespace, it is irrelevant for Registry Sync.
 	@Unique
@@ -92,12 +93,11 @@ public abstract class SimpleRegistryMixin<T> extends Registry<T> implements Rema
 	@Shadow
 	public abstract @Nullable T get(@Nullable Identifier id);
 
+	@Shadow
+	public abstract RegistryKey<? extends Registry<T>> getKey();
+
 	@Unique
 	private static final Logger FABRIC_LOGGER = LoggerFactory.getLogger(SimpleRegistryMixin.class);
-
-	public SimpleRegistryMixin(RegistryKey<? extends Registry<T>> key, Lifecycle lifecycle) {
-		super(key, lifecycle);
-	}
 
 	@Unique
 	private final Event<RegistryEntryAddedCallback<T>> fabric_addObjectEvent = EventFactory.createArrayBacked(RegistryEntryAddedCallback.class,
@@ -156,25 +156,32 @@ public abstract class SimpleRegistryMixin<T> extends Registry<T> implements Rema
 	}
 
 	@Inject(method = "set", at = @At("RETURN"))
-	private <V extends T> void set(int rawId, RegistryKey<Registry<T>> registryKey, V entry, Lifecycle lifecycle, CallbackInfoReturnable<V> info) {
+	private <V extends T> void set(int rawId, RegistryKey<Registry<T>> registryKey, V entry, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry<T>> info) {
+		// We need to restore the 1.19 behavior of binding the value to references immediately.
+		// Unfrozen registries cannot be interacted with otherwise, because the references would throw when
+		// trying to access their values.
+		if (info.getReturnValue() instanceof RegistryEntry.Reference<T> reference) {
+			reference.setValue(entry);
+		}
+
 		onChange(registryKey);
 	}
 
 	@Unique
 	private void onChange(RegistryKey<Registry<T>> registryKey) {
 		if (RegistrySyncManager.postBootstrap || !VANILLA_NAMESPACES.contains(registryKey.getValue().getNamespace())) {
-			RegistryAttributeHolder holder = RegistryAttributeHolder.get(this);
+			RegistryAttributeHolder holder = RegistryAttributeHolder.get(getKey());
 
 			if (!holder.hasAttribute(RegistryAttribute.MODDED)) {
 				Identifier id = getKey().getValue();
 				FABRIC_LOGGER.debug("Registry {} has been marked as modded, registry entry {} was changed", id, registryKey.getValue());
-				RegistryAttributeHolder.get(this).addAttribute(RegistryAttribute.MODDED);
+				RegistryAttributeHolder.get(getKey()).addAttribute(RegistryAttribute.MODDED);
 			}
 		}
 	}
 
-	@Inject(method = "set(ILnet/minecraft/util/registry/RegistryKey;Ljava/lang/Object;Lcom/mojang/serialization/Lifecycle;Z)Lnet/minecraft/util/registry/RegistryEntry;", at = @At("HEAD"))
-	public void setPre(int id, RegistryKey<T> registryId, T object, Lifecycle lifecycle, boolean checkDuplicateKeys, CallbackInfoReturnable<T> info) {
+	@Inject(method = "set", at = @At("HEAD"))
+	public void setPre(int id, RegistryKey<T> registryId, T object, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry<T>> info) {
 		int indexedEntriesId = entryToRawId.getInt(object);
 
 		if (indexedEntriesId >= 0) {
@@ -189,7 +196,7 @@ public abstract class SimpleRegistryMixin<T> extends Registry<T> implements Rema
 			if (oldObject != null && oldObject.value() != null && oldObject.value() != object) {
 				int oldId = entryToRawId.getInt(oldObject.value());
 
-				if (oldId != id && checkDuplicateKeys) {
+				if (oldId != id) {
 					throw new RuntimeException("Attempted to register ID " + registryId + " at different raw IDs (" + oldId + ", " + id + ")! If you're trying to override an item, use .set(), not .register()!");
 				}
 
@@ -201,8 +208,8 @@ public abstract class SimpleRegistryMixin<T> extends Registry<T> implements Rema
 		}
 	}
 
-	@Inject(method = "set(ILnet/minecraft/util/registry/RegistryKey;Ljava/lang/Object;Lcom/mojang/serialization/Lifecycle;Z)Lnet/minecraft/util/registry/RegistryEntry;", at = @At("RETURN"))
-	public void setPost(int id, RegistryKey<T> registryId, T object, Lifecycle lifecycle, boolean checkDuplicateKeys, CallbackInfoReturnable<T> info) {
+	@Inject(method = "set", at = @At("RETURN"))
+	public void setPost(int id, RegistryKey<T> registryId, T object, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry<T>> info) {
 		if (fabric_isObjectNew) {
 			fabric_addObjectEvent.invoker().onEntryAdded(id, registryId.getValue(), object);
 		}

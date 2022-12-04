@@ -20,8 +20,8 @@ package net.fabricmc.fabric.test.mininglevel;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -30,11 +30,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -80,8 +80,8 @@ public final class MiningLevelTest implements ModInitializer {
 
 	private static void register(String id, Block block) {
 		Identifier identifier = new Identifier(ID, id);
-		Registry.register(Registry.BLOCK, identifier, block);
-		Registry.register(Registry.ITEM, identifier, new BlockItem(block, new Item.Settings().group(ItemGroup.MISC)));
+		Registry.register(Registries.BLOCK, identifier, block);
+		Registry.register(Registries.ITEM, identifier, new BlockItem(block, new Item.Settings()));
 	}
 
 	private static void test() {

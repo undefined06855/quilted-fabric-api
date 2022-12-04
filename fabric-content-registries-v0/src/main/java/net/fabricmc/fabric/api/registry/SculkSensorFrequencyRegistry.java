@@ -17,20 +17,16 @@
 
 package net.fabricmc.fabric.api.registry;
 
-import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
-import org.quiltmc.quilted_fabric_api.impl.content.registry.util.QuiltDeferringQueues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minecraft.tag.GameEventTags;
+import net.minecraft.registry.tag.GameEventTags;
 import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.event.listener.VibrationListener;
 
 /**
  * Provides a method for registering sculk sensor frequencies.
- *
- * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#SCULK_FREQUENCY} registry attachment instead.
  */
-@Deprecated
 public final class SculkSensorFrequencyRegistry {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SculkSensorFrequencyRegistry.class);
 
@@ -56,10 +52,10 @@ public final class SculkSensorFrequencyRegistry {
 			throw new IllegalArgumentException("Attempted to register Sculk Sensor frequency for event "+event.getId()+" with frequency "+frequency+". Sculk Sensor frequencies must be between 1 and 15 inclusive.");
 		}
 
-		BlockContentRegistries.SCULK_FREQUENCY.get(event).ifPresent(replaced -> {
-			LOGGER.debug("Replaced old frequency mapping for {} - was {}, now {}", event.getId(), replaced, frequency);
-		});
+		int replaced = VibrationListener.FREQUENCIES.put(event, frequency);
 
-		QuiltDeferringQueues.addEntry(BlockContentRegistries.SCULK_FREQUENCY, event, frequency);
+		if (replaced != 0) {
+			LOGGER.debug("Replaced old frequency mapping for {} - was {}, now {}", event.getId(), replaced, frequency);
+		}
 	}
 }

@@ -26,6 +26,7 @@ import static net.fabricmc.fabric.test.datagen.DataGeneratorTestContent.SIMPLE_I
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementFrame;
 import net.minecraft.advancement.criterion.OnKilledCriterion;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
@@ -48,18 +50,19 @@ import net.minecraft.loot.LootTables;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.ItemTags;
-import net.minecraft.tag.TagKey;
+import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -77,56 +80,38 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
-		dataGenerator.addProvider(TestRecipeProvider::new);
-		dataGenerator.addProvider(TestConditionalRecipeProvider::new);
-		dataGenerator.addProvider(TestModelProvider::new);
-		dataGenerator.addProvider(TestAdvancementProvider::new);
-		dataGenerator.addProvider(TestBlockLootTableProvider::new);
-		dataGenerator.addProvider(TestBarterLootTableProvider::new);
-		dataGenerator.addProvider(ExistingEnglishLangProvider::new);
-		dataGenerator.addProvider(JapaneseLangProvider::new);
+		final FabricDataGenerator.Pack pack = dataGenerator.createPack();
 
-		TestBlockTagProvider blockTagProvider = dataGenerator.addProvider(TestBlockTagProvider::new);
-		dataGenerator.addProvider(new TestItemTagProvider(dataGenerator, blockTagProvider));
-		dataGenerator.addProvider(TestBiomeTagProvider::new);
+		pack.addProvider(TestRecipeProvider::new);
+		pack.addProvider(TestModelProvider::new);
+		pack.addProvider(TestAdvancementProvider::new);
+		pack.addProvider(TestBlockLootTableProvider::new);
+		pack.addProvider(TestBarterLootTableProvider::new);
+		pack.addProvider(ExistingEnglishLangProvider::new);
+		pack.addProvider(JapaneseLangProvider::new);
 
-		try {
-			new FabricTagProvider<>(dataGenerator, BuiltinRegistries.BIOME) {
-				@Override
-				protected void generateTags() {
-				}
-			};
-			throw new AssertionError("Using FabricTagProvider with built-in registry didn't throw an exception!");
-		} catch (IllegalArgumentException e) {
-			// no-op
-		}
-
-		try {
-			new FabricTagProvider.DynamicRegistryTagProvider<>(dataGenerator, Registry.ITEM_KEY) {
-				@Override
-				protected void generateTags() {
-				}
-			};
-			throw new AssertionError("Using DynamicRegistryTagProvider with static registry didn't throw an exception!");
-		} catch (IllegalArgumentException e) {
-			// no-op
-		}
+		TestBlockTagProvider blockTagProvider = pack.addProvider(TestBlockTagProvider::new);
+		pack.addProvider((output, registries) -> new TestItemTagProvider(output, registries, blockTagProvider));
+		pack.addProvider(TestBiomeTagProvider::new);
 	}
 
 	private static class TestRecipeProvider extends FabricRecipeProvider {
-		private TestRecipeProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
+		private TestRecipeProvider(FabricDataOutput output) {
+			super(output);
 		}
 
 		@Override
-		protected void generateRecipes(Consumer<RecipeJsonProvider> exporter) {
-			offerPlanksRecipe2(exporter, SIMPLE_BLOCK, ItemTags.ACACIA_LOGS);
+		public void generate(Consumer<RecipeJsonProvider> exporter) {
+			offerPlanksRecipe2(exporter, SIMPLE_BLOCK, ItemTags.ACACIA_LOGS, 1);
+
+			ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, Items.GOLD_INGOT).input(Items.DIRT).criterion("has_dirt", conditionsFromItem(Items.DIRT)).offerTo(withConditions(exporter, NEVER_LOADED));
+			ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, Items.DIAMOND).input(Items.STICK).criterion("has_stick", conditionsFromItem(Items.STICK)).offerTo(withConditions(exporter, ALWAYS_LOADED));
 		}
 	}
 
 	private static class ExistingEnglishLangProvider extends FabricLanguageProvider {
-		private ExistingEnglishLangProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
+		private ExistingEnglishLangProvider(FabricDataOutput output) {
+			super(output);
 		}
 
 		@Override
@@ -137,7 +122,7 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 			translationBuilder.add(EntityAttributes.GENERIC_ARMOR, "Generic Armor");
 
 			try {
-				Optional<Path> path = dataGenerator.getModContainer().findPath("assets/testmod/lang/en_us.base.json");
+				Optional<Path> path = dataOutput.getModContainer().findPath("assets/testmod/lang/en_us.base.json");
 
 				if (path.isPresent()) {
 					translationBuilder.add(path.get());
@@ -157,8 +142,8 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 	}
 
 	private static class JapaneseLangProvider extends FabricLanguageProvider {
-		private JapaneseLangProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, "ja_jp");
+		private JapaneseLangProvider(FabricDataOutput output) {
+			super(output, "ja_jp");
 		}
 
 		@Override
@@ -169,21 +154,9 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 		}
 	}
 
-	private static class TestConditionalRecipeProvider extends FabricRecipeProvider {
-		private TestConditionalRecipeProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
-		}
-
-		@Override
-		protected void generateRecipes(Consumer<RecipeJsonProvider> exporter) {
-			ShapelessRecipeJsonBuilder.create(Items.GOLD_INGOT).input(Items.DIRT).criterion("has_dirt", conditionsFromItem(Items.DIRT)).offerTo(withConditions(exporter, NEVER_LOADED));
-			ShapelessRecipeJsonBuilder.create(Items.DIAMOND).input(Items.STICK).criterion("has_stick", conditionsFromItem(Items.STICK)).offerTo(withConditions(exporter, ALWAYS_LOADED));
-		}
-	}
-
 	private static class TestModelProvider extends FabricModelProvider {
-		private TestModelProvider(FabricDataGenerator generator) {
-			super(generator);
+		private TestModelProvider(FabricDataOutput output) {
+			super(output);
 		}
 
 		@Override
@@ -200,52 +173,45 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 	}
 
 	private static class TestBlockTagProvider extends FabricTagProvider.BlockTagProvider {
-		private TestBlockTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
+		TestBlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+			super(output, registriesFuture);
 		}
 
 		@Override
-		protected void generateTags() {
+		protected void configure(RegistryWrapper.WrapperLookup registries) {
 			getOrCreateTagBuilder(BlockTags.FIRE).add(SIMPLE_BLOCK);
-			getOrCreateTagBuilder(BlockTags.ANVIL).setReplace(true).add(SIMPLE_BLOCK, BLOCK_WITHOUT_ITEM);
+			getOrCreateTagBuilder(BlockTags.ANVIL).setReplace(true).add(SIMPLE_BLOCK);
 			getOrCreateTagBuilder(BlockTags.ACACIA_LOGS).forceAddTag(BlockTags.ANIMALS_SPAWNABLE_ON);
 		}
 	}
 
 	private static class TestItemTagProvider extends FabricTagProvider.ItemTagProvider {
-		private TestItemTagProvider(FabricDataGenerator dataGenerator, BlockTagProvider blockTagProvider) {
-			super(dataGenerator, blockTagProvider);
+		private TestItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture, BlockTagProvider blockTagProvider) {
+			super(output, registriesFuture, blockTagProvider);
 		}
 
 		@Override
-		protected void generateTags() {
+		protected void configure(RegistryWrapper.WrapperLookup registries) {
 			copy(BlockTags.ANVIL, ItemTags.ANVIL);
 		}
 	}
 
-	private static class TestBiomeTagProvider extends FabricTagProvider.DynamicRegistryTagProvider<Biome> {
-		private TestBiomeTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.BIOME_KEY);
+	private static class TestBiomeTagProvider extends FabricTagProvider<Biome> {
+		private TestBiomeTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+			super(output, RegistryKeys.BIOME, registriesFuture);
 		}
 
 		@Override
-		protected void generateTags() {
-			FabricTagBuilder<Biome> builder = getOrCreateTagBuilder(TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "biome_tag_test")))
+		protected void configure(RegistryWrapper.WrapperLookup registries) {
+			getOrCreateTagBuilder(TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "biome_tag_test")))
 					.add(BiomeKeys.BADLANDS, BiomeKeys.BAMBOO_JUNGLE)
 					.add(BiomeKeys.BASALT_DELTAS);
-
-			try {
-				builder.add(BuiltinRegistries.BIOME.get(BiomeKeys.PLAINS));
-				throw new AssertionError("Adding built-in entry to dynamic registry tag builder didn't throw an exception!");
-			} catch (UnsupportedOperationException e) {
-				// no-op
-			}
 		}
 	}
 
 	private static class TestAdvancementProvider extends FabricAdvancementProvider {
-		private TestAdvancementProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
+		private TestAdvancementProvider(FabricDataOutput output) {
+			super(output);
 		}
 
 		@Override
@@ -274,12 +240,12 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 	}
 
 	private static class TestBlockLootTableProvider extends FabricBlockLootTableProvider {
-		private TestBlockLootTableProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
+		private TestBlockLootTableProvider(FabricDataOutput output) {
+			super(output);
 		}
 
 		@Override
-		protected void generateBlockLootTables() {
+		public void generate() {
 			addDrop(SIMPLE_BLOCK);
 			addDrop(BLOCK_WITHOUT_ITEM, drops(SIMPLE_BLOCK));
 
@@ -288,8 +254,8 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 	}
 
 	private static class TestBarterLootTableProvider extends SimpleFabricLootTableProvider {
-		private TestBarterLootTableProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, LootContextTypes.BARTER);
+		private TestBarterLootTableProvider(FabricDataOutput output) {
+			super(output, LootContextTypes.BARTER);
 		}
 
 		@Override

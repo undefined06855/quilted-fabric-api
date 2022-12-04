@@ -27,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
@@ -44,9 +45,6 @@ public abstract class ModelLoaderMixin implements ModelLoaderHooks {
 	public static ModelIdentifier MISSING_ID;
 	@Final
 	@Shadow
-	private ResourceManager resourceManager;
-	@Final
-	@Shadow
 	private Set<Identifier> modelsToLoad;
 	@Final
 	@Shadow
@@ -58,15 +56,19 @@ public abstract class ModelLoaderMixin implements ModelLoaderHooks {
 	private ModelLoadingRegistryImpl.LoaderInstance fabric_mlrLoaderInstance;
 
 	@Shadow
-	private void addModel(ModelIdentifier id) { }
+	private void addModel(ModelIdentifier id) {
+	}
 
 	@Shadow
-	private void putModel(Identifier id, UnbakedModel unbakedModel) { }
+	private void putModel(Identifier id, UnbakedModel unbakedModel) {
+	}
 
 	@Shadow
-	private void loadModel(Identifier id) { }
+	private void loadModel(Identifier id) {
+	}
 
-	@Shadow public abstract UnbakedModel getOrLoadModel(Identifier id);
+	@Shadow
+	public abstract UnbakedModel getOrLoadModel(Identifier id);
 
 	@Inject(at = @At("HEAD"), method = "loadModel", cancellable = true)
 	private void loadModelHook(Identifier id, CallbackInfo ci) {
@@ -84,6 +86,7 @@ public abstract class ModelLoaderMixin implements ModelLoaderHooks {
 			//noinspection RedundantCast
 			ModelLoaderHooks hooks = this;
 
+			ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
 			fabric_mlrLoaderInstance = ModelLoadingRegistryImpl.begin((ModelLoader) (Object) this, resourceManager);
 			fabric_mlrLoaderInstance.onModelPopulation(hooks::fabric_addModel);
 		}

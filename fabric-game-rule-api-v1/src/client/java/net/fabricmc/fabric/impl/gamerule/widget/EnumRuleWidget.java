@@ -41,10 +41,10 @@ public final class EnumRuleWidget<E extends Enum<E>> extends EditGameRulesScreen
 
 		// Base translation key needs to be set before the button widget is created.
 		this.rootTranslationKey = translationKey;
-		this.buttonWidget = new ButtonWidget(10, 5, 88, 20, this.getValueText(rule.get()), (buttonWidget) -> {
+		this.buttonWidget = ButtonWidget.builder(this.getValueText(rule.get()), (buttonWidget) -> {
 			rule.cycle();
 			buttonWidget.setMessage(this.getValueText(rule.get()));
-		});
+		}).position(10, 5).size(88, 20).build();
 
 		this.children.add(this.buttonWidget);
 	}
@@ -63,8 +63,7 @@ public final class EnumRuleWidget<E extends Enum<E>> extends EditGameRulesScreen
 		// FIXME: Param names nightmare
 		this.drawName(matrices, y, x);
 
-		this.buttonWidget.x = x + entryWidth - 89;
-		this.buttonWidget.y = y;
+		this.buttonWidget.setPos(x + entryWidth - 89, y);
 		this.buttonWidget.render(matrices, mouseX, mouseY, tickDelta);
 	}
 }

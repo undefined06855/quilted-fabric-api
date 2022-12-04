@@ -28,14 +28,14 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.world.World;
 
 import net.fabricmc.api.ModInitializer;
@@ -67,14 +67,14 @@ public class BlockEntityTypeBuilderTest implements ModInitializer {
 		register(FIRST_MULTI_BETRAYAL_BLOCK_ID, FIRST_MULTI_BETRAYAL_BLOCK);
 		register(SECOND_MULTI_BETRAYAL_BLOCK_ID, SECOND_MULTI_BETRAYAL_BLOCK);
 
-		Registry.register(Registry.BLOCK_ENTITY_TYPE, BLOCK_ENTITY_TYPE_ID, BLOCK_ENTITY_TYPE);
+		Registry.register(Registries.BLOCK_ENTITY_TYPE, BLOCK_ENTITY_TYPE_ID, BLOCK_ENTITY_TYPE);
 	}
 
 	private static void register(Identifier id, Block block) {
-		Registry.register(Registry.BLOCK, id, block);
+		Registry.register(Registries.BLOCK, id, block);
 
-		Item item = new BlockItem(block, new Item.Settings().group(ItemGroup.MISC));
-		Registry.register(Registry.ITEM, id, item);
+		Item item = new BlockItem(block, new Item.Settings());
+		Registry.register(Registries.ITEM, id, item);
 	}
 
 	private static class BetrayalBlock extends Block implements BlockEntityProvider {

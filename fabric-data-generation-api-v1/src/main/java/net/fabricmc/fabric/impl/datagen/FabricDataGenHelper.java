@@ -19,10 +19,13 @@ package net.fabricmc.fabric.impl.datagen;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Lifecycle;
@@ -32,15 +35,17 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minecraft.data.server.AbstractTagProvider;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
+import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registerable;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryBuilder;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.Util;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.DynamicRegistryTagProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -101,6 +106,10 @@ public final class FabricDataGenHelper {
 					DataGeneratorEntrypoint.class.getName(), ENTRYPOINT_KEY);
 		}
 
+		// Ensure that the DataGeneratorEntrypoint is constructed on the main thread.
+		final List<DataGeneratorEntrypoint> entrypoints = dataGeneratorInitializers.stream().map(EntrypointContainer::getEntrypoint).toList();
+		CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture = CompletableFuture.supplyAsync(() -> createRegistryWrapper(entrypoints), Util.getMainWorkerExecutor());
+
 		for (EntrypointContainer<DataGeneratorEntrypoint> entrypointContainer : dataGeneratorInitializers) {
 			final String id = entrypointContainer.getProvider().getMetadata().getId();
 
@@ -121,7 +130,7 @@ public final class FabricDataGenHelper {
 					modContainer = FabricLoader.getInstance().getModContainer(effectiveModId).orElseThrow(() -> new RuntimeException("Failed to find effective mod container for mod id (%s)".formatted(effectiveModId)));
 				}
 
-				FabricDataGenerator dataGenerator = new FabricDataGenerator(outputDir, modContainer, STRICT_VALIDATION);
+				FabricDataGenerator dataGenerator = new FabricDataGenerator(outputDir, modContainer, STRICT_VALIDATION, registriesFuture);
 				entrypoint.onInitializeDataGenerator(dataGenerator);
 				dataGenerator.run();
 			} catch (Throwable t) {
@@ -130,21 +139,64 @@ public final class FabricDataGenHelper {
 		}
 	}
 
-	/**
-	 * A fake registry instance to be used for {@link DynamicRegistryTagProvider}.
-	 *
-	 * <p>In {@link AbstractTagProvider#run}, it checks for whether the registry has all the elements added to the builder.
-	 * This would be fine for static registry, but there won't be any instance dynamic registry available.
-	 * Therefore, this simply return true for all {@link Registry#containsId} call.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static <T> Registry<T> getFakeDynamicRegistry(RegistryKey<? extends Registry<T>> registryKey) {
-		return new SimpleRegistry<>(registryKey, Lifecycle.experimental(), null) {
-			@Override
-			public boolean containsId(Identifier id) {
-				return true;
+	private static RegistryWrapper.WrapperLookup createRegistryWrapper(List<DataGeneratorEntrypoint> dataGeneratorInitializers) {
+		// Build a list of all the RegistryBuilder's including vanilla's
+		List<RegistryBuilder> builders = new ArrayList<>();
+		builders.add(BuiltinRegistries.REGISTRY_BUILDER);
+
+		for (DataGeneratorEntrypoint entrypoint : dataGeneratorInitializers) {
+			final var registryBuilder = new RegistryBuilder();
+			entrypoint.buildRegistry(registryBuilder);
+			builders.add(registryBuilder);
+		}
+
+		// Collect all the bootstrap functions, and merge the lifecycles.
+		class BuilderData {
+			final RegistryKey key;
+			List<RegistryBuilder.BootstrapFunction<?>> bootstrapFunctions;
+			Lifecycle lifecycle;
+
+			BuilderData(RegistryKey key) {
+				this.key = key;
+				this.bootstrapFunctions = new ArrayList<>();
+				this.lifecycle = null;
 			}
-		};
+
+			void with(RegistryBuilder.RegistryInfo<?> registryInfo) {
+				bootstrapFunctions.add(registryInfo.bootstrap());
+				lifecycle = registryInfo.lifecycle().add(lifecycle);
+			}
+
+			void apply(RegistryBuilder builder) {
+				builder.addRegistry(key, lifecycle, this::bootstrap);
+			}
+
+			void bootstrap(Registerable registerable) {
+				for (RegistryBuilder.BootstrapFunction<?> function : bootstrapFunctions) {
+					function.run(registerable);
+				}
+			}
+		}
+
+		Map<RegistryKey<?>, BuilderData> builderDataMap = new HashMap<>();
+
+		for (RegistryBuilder builder : builders) {
+			for (RegistryBuilder.RegistryInfo<?> info : builder.registries) {
+				builderDataMap.computeIfAbsent(info.key(), BuilderData::new)
+						.with(info);
+			}
+		}
+
+		// Apply all the builders into one.
+		RegistryBuilder merged = new RegistryBuilder();
+
+		for (BuilderData value : builderDataMap.values()) {
+			value.apply(merged);
+		}
+
+		RegistryWrapper.WrapperLookup wrapperLookup = merged.createWrapperLookup(DynamicRegistryManager.of(Registries.REGISTRIES));
+		BuiltinRegistries.validate(wrapperLookup);
+		return wrapperLookup;
 	}
 
 	/**

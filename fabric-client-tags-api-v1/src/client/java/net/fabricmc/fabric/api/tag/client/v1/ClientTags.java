@@ -24,11 +24,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.RegistryKey;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -103,7 +104,7 @@ public final class ClientTags {
 		Optional<RegistryKey<T>> maybeKey = registry.getKey(entry);
 
 		// Check synced tag
-		if (registry.containsTag(tagKey)) {
+		if (registry.getEntryList(tagKey).isPresent()) {
 			return maybeKey.filter(registryKey -> registry.entryOf(registryKey).isIn(tagKey))
 					.isPresent();
 		}
@@ -132,7 +133,7 @@ public final class ClientTags {
 		Optional<? extends Registry<T>> maybeRegistry = getRegistry(tagKey);
 
 		if (maybeRegistry.isPresent()) {
-			if (maybeRegistry.get().containsTag(tagKey)) {
+			if (maybeRegistry.get().getEntryList(tagKey).isPresent()) {
 				return registryEntry.isIn(tagKey);
 			}
 		}
@@ -179,6 +180,6 @@ public final class ClientTags {
 			}
 		}
 
-		return (Optional<? extends Registry<T>>) Registry.REGISTRIES.getOrEmpty(tagKey.registry().getValue());
+		return (Optional<? extends Registry<T>>) Registries.REGISTRIES.getOrEmpty(tagKey.registry().getValue());
 	}
 }

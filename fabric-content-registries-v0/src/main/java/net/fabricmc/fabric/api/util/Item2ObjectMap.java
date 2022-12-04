@@ -17,7 +17,7 @@
 
 package net.fabricmc.fabric.api.util;
 
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 

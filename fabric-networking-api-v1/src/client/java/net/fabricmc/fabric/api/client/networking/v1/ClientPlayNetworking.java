@@ -56,7 +56,7 @@ public final class ClientPlayNetworking {
 	 * <p>If a handler is already registered to the {@code channel}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterGlobalReceiver(Identifier)} to unregister the existing handler.
 	 *
-	 * @param channelName    the id of the channel
+	 * @param channelName the id of the channel
 	 * @param channelHandler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientPlayNetworking#unregisterGlobalReceiver(Identifier)
@@ -175,12 +175,11 @@ public final class ClientPlayNetworking {
 	 * Creates a packet which may be sent to the connected server.
 	 *
 	 * @param channelName the channel name
-	 * @param buf         the packet byte buf which represents the payload of the packet
+	 * @param buf the packet byte buf which represents the payload of the packet
 	 * @return a new packet
 	 */
-	@SuppressWarnings("unchecked")
 	public static Packet<ServerPlayPacketListener> createC2SPacket(Identifier channelName, PacketByteBuf buf) {
-		return (Packet<ServerPlayPacketListener>) org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.createC2SPacket(channelName, buf);
+		return org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.createC2SPacket(channelName, buf);
 	}
 
 	/**
@@ -197,7 +196,7 @@ public final class ClientPlayNetworking {
 	 * Sends a packet to the connected server.
 	 *
 	 * @param channelName the channel of the packet
-	 * @param buf         the payload of the packet
+	 * @param buf the payload of the packet
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static void send(Identifier channelName, PacketByteBuf buf) throws IllegalStateException {
@@ -230,13 +229,12 @@ public final class ClientPlayNetworking {
 		 * 	// All operations on the server or world must be executed on the server thread
 		 * 	client.execute(() -&rt; {
 		 * 		client.inGameHud.setOverlayMessage(message, true);
-		 *    });
+		 * 	});
 		 * });
 		 * }</pre>
-		 *
-		 * @param client         the client
-		 * @param handler        the network handler that received this packet
-		 * @param buf            the payload of the packet
+		 *  @param client the client
+		 * @param handler the network handler that received this packet
+		 * @param buf the payload of the packet
 		 * @param responseSender the packet sender
 		 */
 		void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);

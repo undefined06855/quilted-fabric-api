@@ -23,9 +23,9 @@ import java.util.Map;
 import org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries;
 import org.quiltmc.quilted_fabric_api.impl.content.registry.util.QuiltDeferringQueues;
 
-import net.minecraft.tag.TagKey;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.registry.tag.TagKey;
 
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 
@@ -39,7 +39,7 @@ public final class FuelRegistryImpl implements FuelRegistry {
 	public Map<Item, Integer> getFuelTimes() {
 		Map<Item, Integer> ret = new IdentityHashMap<>();
 
-		for (var entry : ItemContentRegistries.FUEL_TIME) {
+		for (var entry : ItemContentRegistries.FUEL_TIMES) {
 			ret.put(entry.entry(), entry.value());
 		}
 
@@ -48,37 +48,37 @@ public final class FuelRegistryImpl implements FuelRegistry {
 
 	@Override
 	public Integer get(ItemConvertible item) {
-		return ItemContentRegistries.FUEL_TIME.getNullable(item.asItem());
+		return ItemContentRegistries.FUEL_TIMES.getNullable(item.asItem());
 	}
 
 	@Override
 	public void add(ItemConvertible item, Integer cookTime) {
-		QuiltDeferringQueues.addEntryWithItemConvertible(ItemContentRegistries.FUEL_TIME, item, cookTime.intValue());
+		QuiltDeferringQueues.addEntryWithItemConvertible(ItemContentRegistries.FUEL_TIMES, item, cookTime.intValue());
 	}
 
 	@Override
 	public void add(TagKey<Item> tag, Integer cookTime) {
-		ItemContentRegistries.FUEL_TIME.put(tag, cookTime.intValue());
+		ItemContentRegistries.FUEL_TIMES.put(tag, cookTime.intValue());
 	}
 
 	@Override
 	public void remove(ItemConvertible item) {
-		ItemContentRegistries.FUEL_TIME.put(item.asItem(), 0);
+		ItemContentRegistries.FUEL_TIMES.put(item.asItem(), 0);
 	}
 
 	@Override
 	public void remove(TagKey<Item> tag) {
-		ItemContentRegistries.FUEL_TIME.put(tag, 0);
+		ItemContentRegistries.FUEL_TIMES.put(tag, 0);
 	}
 
 	@Override
 	public void clear(ItemConvertible item) {
-		ItemContentRegistries.FUEL_TIME.remove(item.asItem());
+		ItemContentRegistries.FUEL_TIMES.remove(item.asItem());
 	}
 
 	@Override
 	public void clear(TagKey<Item> tag) {
-		ItemContentRegistries.FUEL_TIME.remove(tag);
+		ItemContentRegistries.FUEL_TIMES.remove(tag);
 	}
 
 	public void apply(Map<Item, Integer> map) { }

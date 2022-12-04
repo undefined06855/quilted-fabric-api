@@ -20,6 +20,7 @@ package net.fabricmc.fabric.test.transfer.ingame.client;
 import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import org.joml.Matrix4f;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -35,7 +36,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Matrix4f;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -54,6 +54,8 @@ public class FluidVariantRenderTest implements ClientModInitializer {
 		HudRenderCallback.EVENT.register((matrices, tickDelta) -> {
 			PlayerEntity player = MinecraftClient.getInstance().player;
 			if (player == null) return;
+
+			if (MinecraftClient.getInstance().options.debugEnabled) return;
 
 			int renderY = 0;
 			List<FluidVariant> variants = List.of(FluidVariant.of(Fluids.WATER), FluidVariant.of(Fluids.LAVA));
@@ -92,7 +94,7 @@ public class FluidVariantRenderTest implements ClientModInitializer {
 		float b = (color & 255) / 255f;
 		RenderSystem.disableDepthTest();
 
-		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+		RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
 		float x0 = (float) i;
@@ -109,7 +111,7 @@ public class FluidVariantRenderTest implements ClientModInitializer {
 		bufferBuilder.vertex(model, x1, y1, z).color(r, g, b, 1).texture(u1, v1).next();
 		bufferBuilder.vertex(model, x1, y0, z).color(r, g, b, 1).texture(u1, v0).next();
 		bufferBuilder.vertex(model, x0, y0, z).color(r, g, b, 1).texture(u0, v0).next();
-		BufferRenderer.drawWithShader(bufferBuilder.end());
+		BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
 
 		RenderSystem.enableDepthTest();
 	}

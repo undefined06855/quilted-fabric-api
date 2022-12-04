@@ -20,21 +20,21 @@ package net.fabricmc.fabric.impl.content.registry;
 import org.quiltmc.qsl.item.content.registry.api.ItemContentRegistries;
 import org.quiltmc.quilted_fabric_api.impl.content.registry.util.QuiltDeferringQueues;
 
-import net.minecraft.tag.TagKey;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.registry.tag.TagKey;
 
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 
 public class CompostingChanceRegistryImpl implements CompostingChanceRegistry {
 	@Override
 	public Float get(ItemConvertible item) {
-		return ItemContentRegistries.COMPOST_CHANCE.get(item.asItem()).orElse(0.0F);
+		return ItemContentRegistries.COMPOST_CHANCES.get(item.asItem()).orElse(0.0F);
 	}
 
 	@Override
 	public void add(ItemConvertible item, Float value) {
-		QuiltDeferringQueues.addEntryWithItemConvertible(ItemContentRegistries.COMPOST_CHANCE, item, value);
+		QuiltDeferringQueues.addEntryWithItemConvertible(ItemContentRegistries.COMPOST_CHANCES, item, value);
 	}
 
 	/**
@@ -42,12 +42,12 @@ public class CompostingChanceRegistryImpl implements CompostingChanceRegistry {
 	 */
 	@Override
 	public void add(TagKey<Item> tag, Float value) throws UnsupportedOperationException {
-		ItemContentRegistries.COMPOST_CHANCE.put(tag, value);
+		ItemContentRegistries.COMPOST_CHANCES.put(tag, value);
 	}
 
 	@Override
 	public void remove(ItemConvertible item) {
-		ItemContentRegistries.COMPOST_CHANCE.remove(item.asItem());
+		ItemContentRegistries.COMPOST_CHANCES.remove(item.asItem());
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class CompostingChanceRegistryImpl implements CompostingChanceRegistry {
 	 */
 	@Override
 	public void remove(TagKey<Item> tag) {
-		ItemContentRegistries.COMPOST_CHANCE.remove(tag);
+		ItemContentRegistries.COMPOST_CHANCES.remove(tag);
 	}
 
 	@Override

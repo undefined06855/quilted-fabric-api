@@ -9,6 +9,7 @@
     "HoeItemAccessor",
     "LandPathNodeMakerMixin",
     "FireBlockMixin",
+    "VibrationListenerMixin",
     "VillagerEntityAccessor",
     "VillagerEntityMixin"
   ],

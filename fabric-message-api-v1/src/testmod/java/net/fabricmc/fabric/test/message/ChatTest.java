@@ -96,7 +96,7 @@ public class ChatTest implements ModInitializer {
 
 		// ServerMessageEvents blocking
 		ServerMessageEvents.ALLOW_CHAT_MESSAGE.register(
-				(message, sender, params) -> !message.getContent().getString().contains("sadtater")
+				(message, sender, params) -> !message.getSignedContent().contains("sadtater")
 		);
 		ServerMessageEvents.ALLOW_GAME_MESSAGE.register((server, message, overlay) -> {
 			if (message.getContent() instanceof TranslatableTextContent translatable) {
@@ -106,7 +106,7 @@ public class ChatTest implements ModInitializer {
 			return true;
 		});
 		ServerMessageEvents.ALLOW_COMMAND_MESSAGE.register(
-				(message, source, params) -> !message.getContent().getString().contains("sadtater")
+				(message, source, params) -> !message.getSignedContent().contains("sadtater")
 		);
 	}
 }

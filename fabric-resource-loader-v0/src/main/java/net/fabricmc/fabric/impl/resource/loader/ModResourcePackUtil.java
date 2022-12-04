@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.text.Text;
 
 import net.fabricmc.loader.api.metadata.ModMetadata;
 
@@ -63,11 +64,11 @@ public final class ModResourcePackUtil {
 		return GSON.toJson(metadata);
 	}
 
-	public static String getName(ModMetadata info) {
+	public static Text getName(ModMetadata info) {
 		if (info.getName() != null) {
-			return info.getName();
+			return Text.literal(info.getName());
 		} else {
-			return "Fabric Mod \"" + info.getId() + "\"";
+			return Text.translatable("pack.name.fabricMod", info.getId());
 		}
 	}
 }

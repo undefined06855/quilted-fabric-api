@@ -17,8 +17,6 @@
 
 package net.fabricmc.fabric.test.datagen;
 
-import java.util.Objects;
-
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -27,11 +25,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
 public class DataGeneratorTestContent implements ModInitializer {
 	public static final String MOD_ID = "fabric-data-gen-api-v1-testmod";
@@ -39,24 +40,27 @@ public class DataGeneratorTestContent implements ModInitializer {
 	public static Block SIMPLE_BLOCK;
 	public static Block BLOCK_WITHOUT_ITEM;
 	public static Block BLOCK_WITHOUT_LOOT_TABLE;
-	public static ItemGroup SIMPLE_ITEM_GROUP;
+
+	public static final ItemGroup SIMPLE_ITEM_GROUP = FabricItemGroup.builder(new Identifier(MOD_ID, "simple"))
+			.icon(() -> new ItemStack(Items.DIAMOND_PICKAXE))
+			.displayName(Text.literal("Data gen test"))
+			.build();
 
 	@Override
 	public void onInitialize() {
-		SIMPLE_ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MOD_ID, "default"), () -> new ItemStack(Items.BONE));
 		SIMPLE_BLOCK = createBlock("simple_block", true);
 		BLOCK_WITHOUT_ITEM = createBlock("block_without_item", false);
 		BLOCK_WITHOUT_LOOT_TABLE = createBlock("block_without_loot_table", false);
+
+		ItemGroupEvents.modifyEntriesEvent(SIMPLE_ITEM_GROUP).register(entries -> entries.add(SIMPLE_BLOCK));
 	}
 
 	private static Block createBlock(String name, boolean hasItem) {
 		Identifier identifier = new Identifier(MOD_ID, name);
-		Block block = Registry.register(Registry.BLOCK, identifier, new Block(AbstractBlock.Settings.of(Material.STONE)));
+		Block block = Registry.register(Registries.BLOCK, identifier, new Block(AbstractBlock.Settings.of(Material.STONE)));
 
 		if (hasItem) {
-			Registry.register(Registry.ITEM, identifier, new BlockItem(block, new Item.Settings().group(ItemGroup.MISC)));
-
-			Objects.requireNonNull(block.asItem().getGroup());
+			Registry.register(Registries.ITEM, identifier, new BlockItem(block, new Item.Settings()));
 		}
 
 		return block;

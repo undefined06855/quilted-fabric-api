@@ -20,7 +20,6 @@ package net.fabricmc.fabric.impl.resource.loader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
 
 import net.minecraft.resource.ResourceType;
@@ -28,7 +27,6 @@ import net.minecraft.resource.ResourceType;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 
-@ApiStatus.Internal
 public class ResourceManagerHelperImpl implements ResourceManagerHelper {
 	private static final Map<ResourceType, ResourceManagerHelperImpl> registryMap = new HashMap<>();
 

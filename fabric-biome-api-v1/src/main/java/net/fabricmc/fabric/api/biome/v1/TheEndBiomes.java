@@ -17,7 +17,7 @@
 
 package net.fabricmc.fabric.api.biome.v1;
 
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
 /**
@@ -31,7 +31,8 @@ import net.minecraft.world.biome.Biome;
  */
 @Deprecated
 public final class TheEndBiomes {
-	private TheEndBiomes() { }
+	private TheEndBiomes() {
+	}
 
 	/**
 	 * <p>Adds the biome as a main end island biome with the specified weight; note that this includes the main island

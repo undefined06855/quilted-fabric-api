@@ -36,13 +36,13 @@ import org.quiltmc.loader.impl.util.FileSystemUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minecraft.tag.TagEntry;
-import net.minecraft.tag.TagFile;
-import net.minecraft.tag.TagKey;
-import net.minecraft.tag.TagManagerLoader;
+import net.minecraft.registry.tag.TagEntry;
+import net.minecraft.registry.tag.TagFile;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.tag.TagManagerLoader;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags;
 import net.fabricmc.loader.api.FabricLoader;
@@ -53,7 +53,7 @@ public class ClientTagsLoader {
 	private static final Logger LOGGER = LoggerFactory.getLogger("fabric-client-tags-api-v1");
 	/**
 	 * Load a given tag from the available mods into a set of {@code Identifier}s.
-	 * Parsing based on {@link net.minecraft.tag.TagGroupLoader#loadTags(net.minecraft.resource.ResourceManager)}
+	 * Parsing based on {@link net.minecraft.registry.tag.TagGroupLoader#loadTags(net.minecraft.resource.ResourceManager)}
 	 */
 	public static Set<Identifier> loadTag(TagKey<?> tagKey) {
 		var tags = new HashSet<TagEntry>();

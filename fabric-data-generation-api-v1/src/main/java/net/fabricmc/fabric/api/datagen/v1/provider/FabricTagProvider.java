@@ -18,39 +18,50 @@
 package net.fabricmc.fabric.api.datagen.v1.provider;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.data.server.AbstractTagProvider;
+import net.minecraft.data.server.tag.AbstractTagProvider;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagBuilder;
-import net.minecraft.tag.EntityTypeTags;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.tag.GameEventTags;
-import net.minecraft.tag.ItemTags;
-import net.minecraft.tag.TagEntry;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryBuilder;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.EntityTypeTags;
+import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.GameEventTags;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagBuilder;
+import net.minecraft.registry.tag.TagEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.event.GameEvent;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.impl.datagen.ForcedTagEntry;
-import net.fabricmc.fabric.mixin.datagen.DynamicRegistryManagerAccessor;
 
 /**
  * Implement this class (or one of the inner classes) to generate a tag list.
  *
- * <p>Register your implementation using {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
+ * <p>Register your implementation using {@link FabricDataGenerator.Pack#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}.
+ *
+ * <p>When generating tags for modded dynamic registry entries (such as biomes), either the entry
+ * must be added to the registry using {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint#buildRegistry(RegistryBuilder)}
+ * or {@link TagBuilder#addOptional(Identifier)} must be used. Otherwise, the data generator cannot
+ * find the entry and crashes.
  *
  * <p>Commonly used implementations of this class are provided:
  *
@@ -59,32 +70,42 @@ import net.fabricmc.fabric.mixin.datagen.DynamicRegistryManagerAccessor;
  * @see FluidTagProvider
  * @see EntityTypeTagProvider
  * @see GameEventTagProvider
- * @see DynamicRegistryTagProvider
  */
 public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
-	private final FabricDataGenerator fabricDataGenerator;
-
 	/**
-	 * Construct a new {@link FabricTagProvider} with the default computed path.
+	 * Constructs a new {@link FabricTagProvider} with the default computed path.
 	 *
-	 * <p>Common implementations of this class are provided. For example @see BlockTagProvider
+	 * <p>Common implementations of this class are provided.
 	 *
-	 * @param dataGenerator The data generator instance
-	 * @param registry The backing registry for the Tag type.
+	 * @param output        the {@link FabricDataOutput} instance
+	 * @param registriesFuture      the backing registry for the tag type
 	 */
-	public FabricTagProvider(FabricDataGenerator dataGenerator, Registry<T> registry) {
-		super(dataGenerator, registry);
-		this.fabricDataGenerator = dataGenerator;
-
-		if (!(this instanceof DynamicRegistryTagProvider) && BuiltinRegistries.REGISTRIES.contains((RegistryKey) registry.getKey())) {
-			throw new IllegalArgumentException("Using FabricTagProvider to generate dynamic registry tags is not supported, Use DynamicRegistryTagProvider instead.");
-		}
+	public FabricTagProvider(FabricDataOutput output, RegistryKey<? extends Registry<T>> registryKey, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+		super(output, registryKey, registriesFuture);
 	}
 
 	/**
 	 * Implement this method and then use {@link FabricTagProvider#getOrCreateTagBuilder} to get and register new tag builders.
 	 */
-	protected abstract void generateTags();
+	protected abstract void configure(RegistryWrapper.WrapperLookup arg);
+
+	/**
+	 * Override to enable adding objects to the tag builder directly.
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	protected RegistryKey<T> reverseLookup(T element) {
+		Registry registry = Registries.REGISTRIES.get((RegistryKey) registryRef);
+
+		if (registry != null) {
+			Optional<RegistryEntry<T>> key = registry.getKey(element);
+
+			if (key.isPresent()) {
+				return (RegistryKey<T>) key.get();
+			}
+		}
+
+		throw new UnsupportedOperationException("Adding objects is not supported by " + getClass());
+	}
 
 	/**
 	 * Creates a new instance of {@link FabricTagBuilder} for the given {@link TagKey} tag.
@@ -93,21 +114,21 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 	 * @return The {@link FabricTagBuilder} instance
 	 */
 	@Override
-	protected FabricTagBuilder<T> getOrCreateTagBuilder(TagKey<T> tag) {
-		return new FabricTagBuilder<>(super.getOrCreateTagBuilder(tag));
-	}
-
-	@Override
-	protected final void configure() {
-		generateTags();
+	protected FabricTagBuilder getOrCreateTagBuilder(TagKey<T> tag) {
+		return new FabricTagBuilder(super.getOrCreateTagBuilder(tag));
 	}
 
 	/**
 	 * Extend this class to create {@link Block} tags in the "/blocks" tag directory.
 	 */
 	public abstract static class BlockTagProvider extends FabricTagProvider<Block> {
-		public BlockTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.BLOCK);
+		public BlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+			super(output, RegistryKeys.BLOCK, registriesFuture);
+		}
+
+		@Override
+		protected RegistryKey<Block> reverseLookup(Block element) {
+			return element.getRegistryEntry().registryKey();
 		}
 	}
 
@@ -121,10 +142,10 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		/**
 		 * Construct an {@link ItemTagProvider} tag provider <b>with</b> an associated {@link BlockTagProvider} tag provider.
 		 *
-		 * @param dataGenerator a {@link ItemTagProvider} tag provider
+		 * @param output The {@link FabricDataOutput} instance
 		 */
-		public ItemTagProvider(FabricDataGenerator dataGenerator, @Nullable FabricTagProvider.BlockTagProvider blockTagProvider) {
-			super(dataGenerator, Registry.ITEM);
+		public ItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture, @Nullable FabricTagProvider.BlockTagProvider blockTagProvider) {
+			super(output, RegistryKeys.ITEM, completableFuture);
 
 			this.blockTagBuilderProvider = blockTagProvider == null ? null : blockTagProvider::getTagBuilder;
 		}
@@ -132,10 +153,10 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		/**
 		 * Construct an {@link ItemTagProvider} tag provider <b>without</b> an associated {@link BlockTagProvider} tag provider.
 		 *
-		 * @param dataGenerator a {@link ItemTagProvider} tag provider
+		 * @param output The {@link FabricDataOutput} instance
 		 */
-		public ItemTagProvider(FabricDataGenerator dataGenerator) {
-			this(dataGenerator, null);
+		public ItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+			this(output, completableFuture, null);
 		}
 
 		/**
@@ -143,15 +164,18 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 *
 		 * <p>The {@link ItemTagProvider} tag provider must be constructed with an associated {@link BlockTagProvider} tag provider to use this method.
 		 *
-		 * <p>Any block ids that do not exist in the item registry will be filtered out automatically.
-		 *
 		 * @param blockTag The block tag to copy from.
-		 * @param itemTag The item tag to copy to.
+		 * @param itemTag  The item tag to copy to.
 		 */
 		public void copy(TagKey<Block> blockTag, TagKey<Item> itemTag) {
 			TagBuilder blockTagBuilder = Objects.requireNonNull(this.blockTagBuilderProvider, "Pass Block tag provider via constructor to use copy").apply(blockTag);
 			TagBuilder itemTagBuilder = this.getTagBuilder(itemTag);
-			blockTagBuilder.build().stream().filter((entry) -> entry.canAdd(this.registry::containsId, (id) -> true)).forEach(itemTagBuilder::add);
+			blockTagBuilder.build().forEach(itemTagBuilder::add);
+		}
+
+		@Override
+		protected RegistryKey<Item> reverseLookup(Item element) {
+			return element.getRegistryEntry().registryKey();
 		}
 	}
 
@@ -159,8 +183,28 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 	 * Extend this class to create {@link Fluid} tags in the "/fluids" tag directory.
 	 */
 	public abstract static class FluidTagProvider extends FabricTagProvider<Fluid> {
-		public FluidTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.FLUID);
+		public FluidTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+			super(output, RegistryKeys.FLUID, completableFuture);
+		}
+
+		@Override
+		protected RegistryKey<Fluid> reverseLookup(Fluid element) {
+			return element.getRegistryEntry().registryKey();
+		}
+	}
+
+	/**
+	 * Extend this class to create {@link Enchantment} tags in the "/enchantments" tag directory.
+	 */
+	public abstract static class EnchantmentTagProvider extends FabricTagProvider<Enchantment> {
+		public EnchantmentTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+			super(output, RegistryKeys.ENCHANTMENT, completableFuture);
+		}
+
+		@Override
+		protected RegistryKey<Enchantment> reverseLookup(Enchantment element) {
+			return Registries.ENCHANTMENT.getKey(element)
+					.orElseThrow(() -> new IllegalArgumentException("Enchantment " + element + " is not registered"));
 		}
 	}
 
@@ -168,8 +212,13 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 	 * Extend this class to create {@link EntityType} tags in the "/entity_types" tag directory.
 	 */
 	public abstract static class EntityTypeTagProvider extends FabricTagProvider<EntityType<?>> {
-		public EntityTypeTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.ENTITY_TYPE);
+		public EntityTypeTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+			super(output, RegistryKeys.ENTITY_TYPE, completableFuture);
+		}
+
+		@Override
+		protected RegistryKey<EntityType<?>> reverseLookup(EntityType<?> element) {
+			return element.getRegistryEntry().registryKey();
 		}
 	}
 
@@ -177,36 +226,24 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 	 * Extend this class to create {@link GameEvent} tags in the "/game_events" tag directory.
 	 */
 	public abstract static class GameEventTagProvider extends FabricTagProvider<GameEvent> {
-		public GameEventTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.GAME_EVENT);
+		public GameEventTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+			super(output, RegistryKeys.GAME_EVENT, completableFuture);
+		}
+
+		@Override
+		protected RegistryKey<GameEvent> reverseLookup(GameEvent element) {
+			return element.getRegistryEntry().registryKey();
 		}
 	}
 
 	/**
-	 * Extend this class to create dynamic registry tags.
+	 * An extension to {@link ProvidedTagBuilder} that provides additional functionality.
 	 */
-	public abstract static class DynamicRegistryTagProvider<T> extends FabricTagProvider<T> {
-		/**
-		 * Construct a new {@link DynamicRegistryTagProvider}.
-		 *
-		 * @param dataGenerator The data generator instance
-		 * @param registryKey The registry key of the dynamic registry
-		 * @throws IllegalArgumentException if the registry is static registry
-		 */
-		protected DynamicRegistryTagProvider(FabricDataGenerator dataGenerator, RegistryKey<? extends Registry<T>> registryKey) {
-			super(dataGenerator, FabricDataGenHelper.getFakeDynamicRegistry(registryKey));
-			Preconditions.checkArgument(DynamicRegistryManagerAccessor.getInfos().containsKey(registryKey), "Only dynamic registries are supported in this tag provider.");
-		}
-	}
+	public final class FabricTagBuilder extends ProvidedTagBuilder<T> {
+		private final AbstractTagProvider.ProvidedTagBuilder<T> parent;
 
-	/**
-	 * An extension to {@link net.minecraft.data.server.AbstractTagProvider.ObjectBuilder} that provides additional functionality.
-	 */
-	public final class FabricTagBuilder<T> extends ObjectBuilder<T> {
-		private final AbstractTagProvider.ObjectBuilder<T> parent;
-
-		private FabricTagBuilder(ObjectBuilder<T> parent) {
-			super(parent.builder, parent.registry);
+		private FabricTagBuilder(ProvidedTagBuilder<T> parent) {
+			super(parent.builder);
 			this.parent = parent;
 		}
 
@@ -217,22 +254,41 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 *
 		 * @return the {@link FabricTagBuilder} instance
 		 */
-		public FabricTagBuilder<T> setReplace(boolean replace) {
+		public FabricTagBuilder setReplace(boolean replace) {
 			((net.fabricmc.fabric.impl.datagen.FabricTagBuilder) builder).fabric_setReplace(replace);
 			return this;
 		}
 
 		/**
-		 * Add a single element to the tag.
+		 * Add an element to the tag.
 		 *
 		 * @return the {@link FabricTagBuilder} instance
-		 * @throws UnsupportedOperationException if the provider is an instance of {@link DynamicRegistryTagProvider}
+		 */
+		public FabricTagBuilder add(T element) {
+			add(reverseLookup(element));
+			return this;
+		}
+
+		/**
+		 * Add multiple elements to the tag.
+		 *
+		 * @return the {@link FabricTagBuilder} instance
+		 */
+		@SafeVarargs
+		public final FabricTagBuilder add(T... element) {
+			Stream.of(element).map(FabricTagProvider.this::reverseLookup).forEach(this::add);
+			return this;
+		}
+
+		/**
+		 * Add an element to the tag.
+		 *
+		 * @return the {@link FabricTagBuilder} instance
 		 * @see #add(Identifier)
 		 */
 		@Override
-		public FabricTagBuilder<T> add(T element) {
-			assertStaticRegistry();
-			parent.add(element);
+		public FabricTagBuilder add(RegistryKey<T> registryKey) {
+			parent.add(registryKey);
 			return this;
 		}
 
@@ -241,18 +297,9 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 *
 		 * @return the {@link FabricTagBuilder} instance
 		 */
-		public FabricTagBuilder<T> add(Identifier id) {
+		public FabricTagBuilder add(Identifier id) {
 			builder.add(id);
 			return this;
-		}
-
-		/**
-		 * Add a single element to the tag.
-		 *
-		 * @return the {@link FabricTagBuilder} instance
-		 */
-		public FabricTagBuilder<T> add(RegistryKey<? extends T> registryKey) {
-			return add(registryKey.getValue());
 		}
 
 		/**
@@ -261,7 +308,7 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 * @return the {@link FabricTagBuilder} instance
 		 */
 		@Override
-		public FabricTagBuilder<T> addOptional(Identifier id) {
+		public FabricTagBuilder addOptional(Identifier id) {
 			parent.addOptional(id);
 			return this;
 		}
@@ -271,7 +318,7 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 *
 		 * @return the {@link FabricTagBuilder} instance
 		 */
-		public FabricTagBuilder<T> addOptional(RegistryKey<? extends T> registryKey) {
+		public FabricTagBuilder addOptional(RegistryKey<? extends T> registryKey) {
 			return addOptional(registryKey.getValue());
 		}
 
@@ -291,7 +338,7 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 * @see ItemTags
 		 */
 		@Override
-		public FabricTagBuilder<T> addTag(TagKey<T> tag) {
+		public FabricTagBuilder addTag(TagKey<T> tag) {
 			builder.addTag(tag.id());
 			return this;
 		}
@@ -302,7 +349,7 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 * @return the {@link FabricTagBuilder} instance
 		 */
 		@Override
-		public FabricTagBuilder<T> addOptionalTag(Identifier id) {
+		public FabricTagBuilder addOptionalTag(Identifier id) {
 			parent.addOptionalTag(id);
 			return this;
 		}
@@ -312,7 +359,7 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 *
 		 * @return the {@link FabricTagBuilder} instance
 		 */
-		public FabricTagBuilder<T> addOptionalTag(TagKey<T> tag) {
+		public FabricTagBuilder addOptionalTag(TagKey<T> tag) {
 			return addOptionalTag(tag.id());
 		}
 
@@ -324,7 +371,7 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 *
 		 * @return the {@link FabricTagBuilder} instance
 		 */
-		public FabricTagBuilder<T> forceAddTag(TagKey<T> tag) {
+		public FabricTagBuilder forceAddTag(TagKey<T> tag) {
 			builder.add(new ForcedTagEntry(TagEntry.create(tag.id())));
 			return this;
 		}
@@ -333,26 +380,8 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 * Add multiple elements to this tag.
 		 *
 		 * @return the {@link FabricTagBuilder} instance
-		 * @throws UnsupportedOperationException if the provider is an instance of {@link DynamicRegistryTagProvider}
 		 */
-		@SafeVarargs
-		@Override
-		public final FabricTagBuilder<T> add(T... elements) {
-			assertStaticRegistry();
-
-			for (T element : elements) {
-				add(element);
-			}
-
-			return this;
-		}
-
-		/**
-		 * Add multiple elements to this tag.
-		 *
-		 * @return the {@link FabricTagBuilder} instance
-		 */
-		public FabricTagBuilder<T> add(Identifier... ids) {
+		public FabricTagBuilder add(Identifier... ids) {
 			for (Identifier id : ids) {
 				add(id);
 			}
@@ -366,22 +395,13 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 		 * @return the {@link FabricTagBuilder} instance
 		 */
 		@SafeVarargs
-		public final FabricTagBuilder<T> add(RegistryKey<T>... registryKeys) {
-			for (RegistryKey<? extends T> registryKey : registryKeys) {
+		@Override
+		public final FabricTagBuilder add(RegistryKey<T>... registryKeys) {
+			for (RegistryKey<T> registryKey : registryKeys) {
 				add(registryKey);
 			}
 
 			return this;
 		}
-
-		private void assertStaticRegistry() {
-			if (FabricTagProvider.this instanceof DynamicRegistryTagProvider) {
-				throw new UnsupportedOperationException("Adding object instances is not supported for DynamicRegistryTagProvider.");
-			}
-		}
-	}
-
-	public FabricDataGenerator getFabricDataGenerator() {
-		return fabricDataGenerator;
 	}
 }

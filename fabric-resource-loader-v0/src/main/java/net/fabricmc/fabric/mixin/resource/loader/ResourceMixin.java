@@ -17,9 +17,7 @@
 
 package net.fabricmc.fabric.mixin.resource.loader;
 
-import java.util.Objects;
-
-import org.jetbrains.annotations.Nullable;
+import org.quiltmc.quilted_fabric_api.fabric.resource.loader.v0.impl.QuiltedFabricResource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -27,6 +25,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourcePackSource;
 
 import net.fabricmc.fabric.impl.resource.loader.FabricResource;
+import net.fabricmc.fabric.impl.resource.loader.ResourcePackSourceTracker;
 
 /**
  * Implements {@link FabricResource} (resource source getter/setter)
@@ -35,17 +34,19 @@ import net.fabricmc.fabric.impl.resource.loader.FabricResource;
  * @see NamespaceResourceManagerMixin the usage site for this mixin
  */
 @Mixin(Resource.class)
-class ResourceMixin implements FabricResource {
+class ResourceMixin implements QuiltedFabricResource {
 	@Unique
-	private @Nullable ResourcePackSource fabric_packSource;
+	private ResourcePackSource source = null;
 
+	@SuppressWarnings("ConstantConditions")
 	@Override
 	public ResourcePackSource getFabricPackSource() {
-		return Objects.requireNonNullElse(fabric_packSource, ResourcePackSource.PACK_SOURCE_NONE);
+		Resource self = (Resource) (Object) this;
+		return this.source == null ? ResourcePackSourceTracker.getSource(self.getPack()) : this.source;
 	}
 
 	@Override
-	public void setFabricPackSource(ResourcePackSource packSource) {
-		this.fabric_packSource = packSource;
+	public void setFabricIndividualSource(ResourcePackSource source) {
+		this.source = source;
 	}
 }

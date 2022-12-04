@@ -17,8 +17,8 @@
 
 package net.fabricmc.fabric.api.biome.v1;
 
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.biome.Biome;
 
 /**

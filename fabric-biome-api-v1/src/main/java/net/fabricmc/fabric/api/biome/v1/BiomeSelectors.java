@@ -23,8 +23,8 @@ import java.util.function.Predicate;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
 /**
@@ -44,13 +44,6 @@ public final class BiomeSelectors {
 	 */
 	public static Predicate<BiomeSelectionContext> all() {
 		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.all().test(context);
-	}
-
-	/**
-	 * Matches Biomes that have not been originally defined in a data pack, but that are defined in code.
-	 */
-	public static Predicate<BiomeSelectionContext> builtIn() {
-		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.builtIn().test(context);
 	}
 
 	/**
@@ -89,7 +82,7 @@ public final class BiomeSelectors {
 	/**
 	 * Returns a biome selector that will match all biomes in the given tag.
 	 *
-	 * @see net.minecraft.tag.BiomeTags
+	 * @see net.minecraft.registry.tag.BiomeTags
 	 */
 	public static Predicate<BiomeSelectionContext> tag(TagKey<Biome> tag) {
 		return context -> org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors.isIn(tag).test(context);

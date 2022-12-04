@@ -39,14 +39,11 @@ public class ModResourcePackProviderMixin {
 	@Final
 	private ResourceType type;
 
-	@Inject(
-			method = "register(Ljava/util/function/Consumer;Lnet/minecraft/resource/ResourcePackProfile$Factory;)V",
-			at = @At("RETURN")
-	)
-	private void onRegister(Consumer<ResourcePackProfile> profileAdder, ResourcePackProfile.Factory factory, CallbackInfo ci) {
+	@Inject(method = "register(Ljava/util/function/Consumer;)V", at = @At("RETURN"))
+	private void onRegister(Consumer<ResourcePackProfile> profileAdder, CallbackInfo ci) {
 		switch (this.type) {
-		case CLIENT_RESOURCES -> ModResourcePackCreator.CLIENT_RESOURCE_PACK_PROVIDER.register(profileAdder, factory);
-		case SERVER_DATA -> ModResourcePackCreator.SERVER_RESOURCE_PACK_PROVIDER.register(profileAdder, factory);
+		case CLIENT_RESOURCES -> ModResourcePackCreator.CLIENT_RESOURCE_PACK_PROVIDER.register(profileAdder);
+		case SERVER_DATA -> new ModResourcePackCreator(ResourceType.SERVER_DATA).register(profileAdder);
 		}
 	}
 }

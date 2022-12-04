@@ -46,7 +46,6 @@ public abstract class KeyedResourceReloadListenerClientMixin implements Identifi
 	private Collection<Identifier> fabric$dependencies;
 
 	@Override
-	@SuppressWarnings({"ConstantConditions", "RedundantCast"})
 	public Identifier getFabricId() {
 		if (this.fabric$id == null) {
 			Object self = this;
@@ -68,7 +67,7 @@ public abstract class KeyedResourceReloadListenerClientMixin implements Identifi
 	}
 
 	@Override
-	@SuppressWarnings({"ConstantConditions", "RedundantCast"})
+	@SuppressWarnings({"ConstantConditions"})
 	public Collection<Identifier> getFabricDependencies() {
 		if (this.fabric$dependencies == null) {
 			Object self = this;

@@ -29,16 +29,23 @@ import net.minecraft.text.Text;
  * Represents a resource pack provider for mods and built-in mods resource packs.
  */
 public class ModResourcePackCreator implements ResourcePackProvider {
-	public static final ResourcePackSource RESOURCE_PACK_SOURCE = text -> Text.translatable("pack.nameAndSource", text, Text.translatable("pack.source.fabricmod"));
+	public static final ResourcePackSource RESOURCE_PACK_SOURCE = new ResourcePackSource() {
+		@Override
+		public Text decorate(Text packName) {
+			return Text.translatable("pack.nameAndSource", packName, Text.translatable("pack.source.fabricmod"));
+		}
+
+		@Override
+		public boolean canBeEnabledLater() {
+			return true;
+		}
+	};
 	public static final ModResourcePackCreator CLIENT_RESOURCE_PACK_PROVIDER = new ModResourcePackCreator(ResourceType.CLIENT_RESOURCES);
 	public static final ModResourcePackCreator SERVER_RESOURCE_PACK_PROVIDER = new ModResourcePackCreator(ResourceType.SERVER_DATA);
-	private final ResourcePackProfile.Factory factory;
 	private final ResourceType type;
 
 	public ModResourcePackCreator(ResourceType type) {
 		this.type = type;
-		this.factory = (name, text, bl, supplier, metadata, initialPosition, source) ->
-				new ResourcePackProfile(name, text, bl, supplier, metadata, type, initialPosition, source);
 	}
 
 	/**
@@ -47,11 +54,6 @@ public class ModResourcePackCreator implements ResourcePackProvider {
 	 * @param consumer The resource pack profile consumer.
 	 */
 	public void register(Consumer<ResourcePackProfile> consumer) {
-		this.register(consumer, this.factory);
-	}
-
-	@Override
-	public void register(Consumer<ResourcePackProfile> consumer, ResourcePackProfile.Factory factory) {
 		// This should stay as it's been used in *some* mods, it's bad I know, but it's an easy way to inject resource
 		// packs, it highlights the need for an API.
 	}

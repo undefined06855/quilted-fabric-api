@@ -22,11 +22,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.Bootstrap;
+import net.minecraft.registry.Registries;
 
 @Mixin(Bootstrap.class)
 public class BootstrapMixin {
-	@Redirect(method = "initialize", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/Registry;freezeRegistries()V"))
-	private static void skipFreeze() {
-		// Don't freeze
+	@Redirect(method = "initialize", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/Registries;bootstrap()V"))
+	private static void initialize() {
+		Registries.init();
 	}
 }

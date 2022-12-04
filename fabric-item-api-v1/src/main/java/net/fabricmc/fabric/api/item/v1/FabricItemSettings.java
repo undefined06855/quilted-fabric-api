@@ -21,7 +21,6 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Rarity;
 
@@ -87,12 +86,6 @@ public class FabricItemSettings extends QuiltItemSettings {
 	@Override
 	public FabricItemSettings recipeRemainder(Item recipeRemainder) {
 		super.recipeRemainder(recipeRemainder);
-		return this;
-	}
-
-	@Override
-	public FabricItemSettings group(ItemGroup group) {
-		super.group(group);
 		return this;
 	}
 

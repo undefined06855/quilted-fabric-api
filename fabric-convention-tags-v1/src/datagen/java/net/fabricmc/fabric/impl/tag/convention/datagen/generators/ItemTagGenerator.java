@@ -17,12 +17,15 @@
 
 package net.fabricmc.fabric.impl.tag.convention.datagen.generators;
 
-import net.minecraft.item.Items;
-import net.minecraft.tag.ItemTags;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import java.util.concurrent.CompletableFuture;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.item.Items;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.util.Identifier;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryWrapper;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 
@@ -58,12 +61,12 @@ public class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 	@Deprecated
 	private static final Identifier FABRIC_SWORDS = createFabricId("swords");
 
-	public ItemTagGenerator(FabricDataGenerator dataGenerator) {
-		super(dataGenerator);
+	public ItemTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+		super(output, completableFuture);
 	}
 
 	@Override
-	protected void generateTags() {
+	protected void configure(RegistryWrapper.WrapperLookup arg) {
 		generateToolTags();
 		generateBucketTags();
 		generateOreAndRelatedTags();
@@ -187,7 +190,7 @@ public class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 	}
 
 	private void generateConsumableTags() {
-		Registry.ITEM.forEach(item -> {
+		Registries.ITEM.forEach(item -> {
 			if (item.getFoodComponent() != null) {
 				getOrCreateTagBuilder(ConventionalItemTags.FOODS).add(item);
 			}

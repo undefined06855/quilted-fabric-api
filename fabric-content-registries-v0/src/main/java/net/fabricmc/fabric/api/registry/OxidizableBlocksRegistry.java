@@ -28,8 +28,9 @@ import net.minecraft.block.Block;
 /**
  * Provides methods for registering oxidizable and waxable blocks.
  *
- * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#OXIDIZABLE_BLOCK} registry attachment instead.
+ * @deprecated Use Quilt Block Content Registry API's {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#OXIDIZABLE} and {@link org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries#WAXABLE} registry attachments instead.
  */
+@Deprecated
 public final class OxidizableBlocksRegistry {
 	private OxidizableBlocksRegistry() {
 	}
@@ -43,7 +44,7 @@ public final class OxidizableBlocksRegistry {
 	public static void registerOxidizableBlockPair(Block less, Block more) {
 		Objects.requireNonNull(less, "Oxidizable block cannot be null!");
 		Objects.requireNonNull(more, "Oxidizable block cannot be null!");
-		QuiltDeferringQueues.addEntry(BlockContentRegistries.OXIDIZABLE_BLOCK, less, new ReversibleBlockEntry(more, true));
+		QuiltDeferringQueues.addEntry(BlockContentRegistries.OXIDIZABLE, less, new ReversibleBlockEntry(more, true));
 	}
 
 	/**
@@ -55,6 +56,6 @@ public final class OxidizableBlocksRegistry {
 	public static void registerWaxableBlockPair(Block unwaxed, Block waxed) {
 		Objects.requireNonNull(unwaxed, "Unwaxed block cannot be null!");
 		Objects.requireNonNull(waxed, "Waxed block cannot be null!");
-		QuiltDeferringQueues.addEntry(BlockContentRegistries.WAXABLE_BLOCK, unwaxed, new ReversibleBlockEntry(waxed, true));
+		QuiltDeferringQueues.addEntry(BlockContentRegistries.WAXABLE, unwaxed, new ReversibleBlockEntry(waxed, true));
 	}
 }

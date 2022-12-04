@@ -28,7 +28,6 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
@@ -43,7 +42,7 @@ public class UpdatingItem extends Item implements FabricItem {
 	private final boolean allowUpdateAnimation;
 
 	public UpdatingItem(boolean allowUpdateAnimation) {
-		super(new Settings().group(ItemGroup.MISC));
+		super(new Settings());
 		this.allowUpdateAnimation = allowUpdateAnimation;
 	}
 
@@ -51,7 +50,7 @@ public class UpdatingItem extends Item implements FabricItem {
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (!world.isClient) {
 			NbtCompound tag = stack.getOrCreateNbt();
-			tag.putLong("ticks", tag.getLong("ticks")+1);
+			tag.putLong("ticks", tag.getLong("ticks") + 1);
 		}
 	}
 

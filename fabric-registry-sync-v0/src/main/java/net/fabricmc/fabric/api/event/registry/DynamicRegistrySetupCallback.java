@@ -17,37 +17,53 @@
 
 package net.fabricmc.fabric.api.event.registry;
 
-import net.minecraft.util.registry.DynamicRegistryManager;
+import org.jetbrains.annotations.NotNull;
+import org.quiltmc.qsl.registry.api.event.DynamicRegistryManagerSetupContext;
+import org.quiltmc.qsl.registry.api.event.RegistryEvents;
+
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.resource.ResourceManager;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 /**
- * This event gets triggered when a new {@link DynamicRegistryManager} gets created, but before it gets filled.
+ * This event gets triggered before a dynamic registry is being loaded.
  * Therefore, this is the ideal place to register callbacks to dynamic registries.
- * For example, the following code is used to register a callback that gets triggered for any registered Biome, both JSON and code defined.
+ * For example, the following code is used to register a callback that gets triggered for any registered Biome:
  *
  * <pre>
  * {@code
- * DynamicRegistrySetupCallback.EVENT.register(registryManager -> {
- *     Registry<Biome> biomes = registryManager.get(Registry.BIOME_KEY);
- *     RegistryEntryAddedCallback.event(biomes).register((rawId, id, object) -> {
+ * DynamicRegistrySetupCallback.EVENT.register(registryView -> {
+ *     registryView.registerEntryAdded(RegistryKeys.BIOME, (rawId, id, object) -> {
  *         // Do something
  *     });
  * });
  * }
  * </pre>
+ *
+ * @see DynamicRegistryView
+ * @see net.minecraft.registry.ServerDynamicRegistryType
  */
 @FunctionalInterface
 public interface DynamicRegistrySetupCallback {
-	void onRegistrySetup(DynamicRegistryManager registryManager);
+	void onRegistrySetup(DynamicRegistryView registryView);
 
-	Event<DynamicRegistrySetupCallback> EVENT = EventFactory.createArrayBacked(
-			DynamicRegistrySetupCallback.class,
-			callbacks -> registryManager -> {
-				for (DynamicRegistrySetupCallback callback : callbacks) {
-					callback.onRegistrySetup(registryManager);
+	Event<DynamicRegistrySetupCallback> EVENT = QuiltCompatEvent.fromQuilt(
+			RegistryEvents.DYNAMIC_REGISTRY_SETUP,
+			onDynamicRegistrySetupCallback -> context -> onDynamicRegistrySetupCallback.onRegistrySetup((DynamicRegistryView) (Object) context),
+			invokerGetter -> view -> invokerGetter.get().onDynamicRegistrySetup(new DynamicRegistryManagerSetupContext() {
+				@Override
+				public @NotNull DynamicRegistryManager registryManager() {
+					return view.asDynamicRegistryManager();
 				}
-			}
+
+				// In theory? This lossy conversion should be fine since only Fabric API invokes this event.
+				// A fix should be investigated though if shenanigans happen.
+				@Override
+				public @NotNull ResourceManager resourceManager() {
+					return null;
+				}
+			})
 	);
 }

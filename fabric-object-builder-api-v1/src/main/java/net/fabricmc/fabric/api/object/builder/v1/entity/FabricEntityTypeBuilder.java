@@ -19,14 +19,15 @@ package net.fabricmc.fabric.api.object.builder.v1.entity;
 
 import java.util.function.Supplier;
 
+import com.google.common.collect.ImmutableSet;
 import org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
-import net.minecraft.block.Block;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.mob.MobEntity;
@@ -285,6 +286,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Living<T> fireImmune() {
 			this.quiltBuilder.makeFireImmune();
 			return this;
@@ -296,6 +298,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Living<T> dimensions(EntityDimensions dimensions) {
 			this.quiltBuilder.setDimensions(dimensions);
 			return this;
@@ -304,6 +307,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 		/**
 		 * @deprecated use {@link FabricEntityTypeBuilder.Living#trackRangeBlocks(int)}, {@link FabricEntityTypeBuilder.Living#trackedUpdateRate(int)} and {@link FabricEntityTypeBuilder.Living#forceTrackedVelocityUpdates(boolean)}
 		 */
+		@Override
 		@Deprecated
 		public FabricEntityTypeBuilder.Living<T> trackable(int trackRangeBlocks, int trackedUpdateRate) {
 			this.quiltBuilder.maxBlockTrackingRange(trackRangeBlocks);
@@ -315,6 +319,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 		/**
 		 * @deprecated use {@link FabricEntityTypeBuilder.Living#trackRangeBlocks(int)}, {@link FabricEntityTypeBuilder.Living#trackedUpdateRate(int)} and {@link FabricEntityTypeBuilder.Living#forceTrackedVelocityUpdates(boolean)}
 		 */
+		@Override
 		@Deprecated
 		public FabricEntityTypeBuilder.Living<T> trackable(int trackRangeBlocks, int trackedUpdateRate, boolean forceTrackedVelocityUpdates) {
 			this.quiltBuilder.maxBlockTrackingRange(trackRangeBlocks);
@@ -323,26 +328,31 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Living<T> trackRangeChunks(int range) {
 			this.quiltBuilder.maxChunkTrackingRange(range);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Living<T> trackRangeBlocks(int range) {
 			this.quiltBuilder.maxBlockTrackingRange(range);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Living<T> trackedUpdateRate(int rate) {
 			this.quiltBuilder.trackingTickInterval(rate);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Living<T> forceTrackedVelocityUpdates(boolean forceTrackedVelocityUpdates) {
 			this.quiltBuilder.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Living<T> specificSpawnBlocks(Block... blocks) {
 			this.quiltBuilder.allowSpawningInside(blocks);
 			return this;
@@ -414,6 +424,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Mob<T> fireImmune() {
 			this.quiltBuilder.makeFireImmune();
 			return this;
@@ -425,6 +436,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Mob<T> dimensions(EntityDimensions dimensions) {
 			this.quiltBuilder.setDimensions(dimensions);
 			return this;
@@ -433,6 +445,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 		/**
 		 * @deprecated use {@link FabricEntityTypeBuilder.Mob#trackRangeBlocks(int)}, {@link FabricEntityTypeBuilder.Mob#trackedUpdateRate(int)} and {@link FabricEntityTypeBuilder.Mob#forceTrackedVelocityUpdates(boolean)}
 		 */
+		@Override
 		@Deprecated
 		public FabricEntityTypeBuilder.Mob<T> trackable(int trackRangeBlocks, int trackedUpdateRate) {
 			this.quiltBuilder.maxBlockTrackingRange(trackRangeBlocks);
@@ -444,6 +457,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 		/**
 		 * @deprecated use {@link FabricEntityTypeBuilder.Mob#trackRangeBlocks(int)}, {@link FabricEntityTypeBuilder.Mob#trackedUpdateRate(int)} and {@link FabricEntityTypeBuilder.Mob#forceTrackedVelocityUpdates(boolean)}
 		 */
+		@Override
 		@Deprecated
 		public FabricEntityTypeBuilder.Mob<T> trackable(int trackRangeBlocks, int trackedUpdateRate, boolean forceTrackedVelocityUpdates) {
 			this.quiltBuilder.maxBlockTrackingRange(trackRangeBlocks);
@@ -452,31 +466,37 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Mob<T> trackRangeChunks(int range) {
 			this.quiltBuilder.maxChunkTrackingRange(range);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Mob<T> trackRangeBlocks(int range) {
 			this.quiltBuilder.maxBlockTrackingRange(range);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Mob<T> trackedUpdateRate(int rate) {
 			this.quiltBuilder.trackingTickInterval(rate);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Mob<T> forceTrackedVelocityUpdates(boolean forceTrackedVelocityUpdates) {
 			this.quiltBuilder.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Mob<T> specificSpawnBlocks(Block... blocks) {
 			this.quiltBuilder.allowSpawningInside(blocks);
 			return this;
 		}
 
+		@Override
 		public FabricEntityTypeBuilder.Mob<T> defaultAttributes(Supplier<DefaultAttributeContainer.Builder> defaultAttributeBuilder) {
 			this.quiltBuilder.defaultAttributes(defaultAttributeBuilder.get());
 			return this;

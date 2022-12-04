@@ -33,16 +33,18 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.event.GameEvent;
 
 public class QuiltDeferringQueues<T> {
 	private static final TriState CRASH_ON_DEFERRING_ENTRY = TriState.fromProperty("quilted_fabric_api.quilted_fabric_content_registries_v0.crash_on_deferring_entry");
 	private static final Logger LOGGER = LoggerFactory.getLogger("Quilted Fabric Content Registries");
 
-	public static final DeferringQueue<Block> BLOCK = new DeferringQueue<>(Registry.BLOCK);
-	public static final DeferringQueue<Item> ITEM = new DeferringQueue<>(Registry.ITEM);
-	public static final DeferringQueue<GameEvent> GAME_EVENT = new DeferringQueue<>(Registry.GAME_EVENT);
+	public static final DeferringQueue<Block> BLOCK = new DeferringQueue<>(Registries.BLOCK);
+	public static final DeferringQueue<Item> ITEM = new DeferringQueue<>(Registries.ITEM);
+	public static final DeferringQueue<GameEvent> GAME_EVENT = new DeferringQueue<>(Registries.GAME_EVENT);
 
 	public static final Map<RegistryEntryAttachment<Object, Object>, List<RegistryEntryAttachment.Entry<Object, Object>>> OMNIQUEUE = new HashMap<>();
 
@@ -130,7 +132,7 @@ public class QuiltDeferringQueues<T> {
 			for (var listEntry : entry.getValue()) {
 				if (!isEntryDeferred(listEntry.entry()) && !isEntryDeferred(listEntry.value())) {
 					// Part of a dirty hack to make ItemConvertibles work fine on item REAs
-					if (entry.getKey().registry().getKey().equals(Registry.ITEM_KEY)) {
+					if (entry.getKey().registry().getKey().equals(RegistryKeys.ITEM)) {
 						if (listEntry.entry() instanceof Block block) {
 							if (Item.BLOCK_ITEMS.containsKey(block)) {
 								entry.getKey().put(block.asItem(), listEntry.value());

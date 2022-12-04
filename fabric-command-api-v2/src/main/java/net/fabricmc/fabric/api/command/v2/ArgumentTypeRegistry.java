@@ -21,8 +21,8 @@ import org.quiltmc.qsl.command.mixin.ArgumentTypeInfosAccessor;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 /**
  * @deprecated If possible, use Quilt Command API's {@link org.quiltmc.qsl.command.api.ServerArgumentType}'s registry instead.
@@ -40,7 +40,7 @@ public final class ArgumentTypeRegistry {
 	 */
 	public static <A extends ArgumentType<?>, T extends ArgumentSerializer.ArgumentTypeProperties<A>> void registerArgumentType(
 			Identifier id, Class<? extends A> clazz, ArgumentSerializer<A, T> serializer) {
-		ArgumentTypeInfosAccessor.callRegister(Registry.COMMAND_ARGUMENT_TYPE, id.toString(), clazz, serializer);
+		ArgumentTypeInfosAccessor.callRegister(Registries.COMMAND_ARGUMENT_TYPE, id.toString(), clazz, serializer);
 	}
 
 	private ArgumentTypeRegistry() {

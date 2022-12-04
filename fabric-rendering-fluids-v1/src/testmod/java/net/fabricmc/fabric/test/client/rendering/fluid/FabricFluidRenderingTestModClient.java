@@ -18,13 +18,11 @@
 package net.fabricmc.fabric.test.client.rendering.fluid;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 
 public class FabricFluidRenderingTestModClient implements ClientModInitializer {
 	@Override
@@ -59,11 +57,5 @@ public class FabricFluidRenderingTestModClient implements ClientModInitializer {
 		FluidRenderHandlerRegistry.INSTANCE.register(TestFluids.CUSTOM, TestFluids.CUSTOM_FLOWING, new CustomizedFluidRenderer(
 				new Identifier("fabric-rendering-fluids-v1-testmod:block/test_fluid_overlay")
 		));
-
-		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) -> {
-			registry.register(new Identifier("fabric-rendering-fluids-v1-testmod:block/test_fluid_still"));
-			registry.register(new Identifier("fabric-rendering-fluids-v1-testmod:block/test_fluid_flowing"));
-			registry.register(new Identifier("fabric-rendering-fluids-v1-testmod:block/test_fluid_overlay"));
-		});
 	}
 }

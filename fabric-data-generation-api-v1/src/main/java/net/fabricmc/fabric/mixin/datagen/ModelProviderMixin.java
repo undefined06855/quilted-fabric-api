@@ -19,6 +19,7 @@ package net.fabricmc.fabric.mixin.datagen;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import com.google.gson.JsonElement;
@@ -32,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import net.minecraft.block.Block;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataOutput;
 import net.minecraft.data.DataWriter;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.BlockStateSupplier;
@@ -40,22 +41,24 @@ import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.ModelProvider;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 
 @Mixin(ModelProvider.class)
 public class ModelProviderMixin {
 	@Unique
-	private DataGenerator generator;
+	private FabricDataOutput fabricDataOutput;
 
 	@Unique
-	private static final ThreadLocal<DataGenerator> dataGeneratorThreadLocal = new ThreadLocal<>();
+	private static final ThreadLocal<FabricDataOutput> fabricDataOutputThreadLocal = new ThreadLocal<>();
 
 	@Inject(method = "<init>", at = @At("RETURN"))
-	public void init(DataGenerator generator, CallbackInfo ci) {
-		this.generator = generator;
+	public void init(DataOutput output, CallbackInfo ci) {
+		if (output instanceof FabricDataOutput fabricDataOutput) {
+			this.fabricDataOutput = fabricDataOutput;
+		}
 	}
 
 	@Unique
@@ -82,26 +85,28 @@ public class ModelProviderMixin {
 	}
 
 	@Inject(method = "run", at = @At(value = "INVOKE_ASSIGN", target = "com/google/common/collect/Maps.newHashMap()Ljava/util/HashMap;", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void runHead(DataWriter writer, CallbackInfo ci, Map<Block, BlockStateSupplier> map) {
-		dataGeneratorThreadLocal.set(generator);
+	private void runHead(DataWriter writer, CallbackInfoReturnable<CompletableFuture<?>> cir, Map<Block, BlockStateSupplier> map) {
+		fabricDataOutputThreadLocal.set(fabricDataOutput);
 		blockStateMapThreadLocal.set(map);
 	}
 
 	@Inject(method = "run", at = @At("TAIL"))
-	private void runTail(DataWriter writer, CallbackInfo ci) {
-		dataGeneratorThreadLocal.remove();
+	private void runTail(DataWriter writer, CallbackInfoReturnable<CompletableFuture<?>> cir) {
+		fabricDataOutputThreadLocal.remove();
 		blockStateMapThreadLocal.remove();
 	}
 
 	@Inject(method = "method_25738", at = @At("HEAD"), cancellable = true)
 	private static void filterBlocksForProcessingMod(Map<Block, BlockStateSupplier> map, Block block, CallbackInfoReturnable<Boolean> cir) {
-		if (dataGeneratorThreadLocal.get() instanceof FabricDataGenerator dataGenerator) {
-			if (!dataGenerator.isStrictValidationEnabled()) {
+		FabricDataOutput dataOutput = fabricDataOutputThreadLocal.get();
+
+		if (dataOutput != null) {
+			if (!dataOutput.isStrictValidationEnabled()) {
 				cir.setReturnValue(false);
 				return;
 			}
 
-			if (!Registry.BLOCK.getId(block).getNamespace().equals(dataGenerator.getModId())) {
+			if (!Registries.BLOCK.getId(block).getNamespace().equals(dataOutput.getModId())) {
 				// Skip over blocks that are not from the mod we are processing.
 				cir.setReturnValue(false);
 			}
@@ -110,14 +115,16 @@ public class ModelProviderMixin {
 
 	@Inject(method = "method_25741", at = @At(value = "INVOKE", target = "Lnet/minecraft/data/client/ModelIds;getItemModelId(Lnet/minecraft/item/Item;)Lnet/minecraft/util/Identifier;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
 	private static void filterItemsForProcessingMod(Set<Item> set, Map<Identifier, Supplier<JsonElement>> map, Block block, CallbackInfo ci, Item item) {
-		if (dataGeneratorThreadLocal.get() instanceof FabricDataGenerator dataGenerator) {
+		FabricDataOutput dataOutput = fabricDataOutputThreadLocal.get();
+
+		if (dataOutput != null) {
 			// Only generate the item model if the block state json was registered
 			if (!blockStateMapThreadLocal.get().containsKey(block)) {
 				ci.cancel();
 				return;
 			}
 
-			if (!Registry.ITEM.getId(item).getNamespace().equals(dataGenerator.getModId())) {
+			if (!Registries.ITEM.getId(item).getNamespace().equals(dataOutput.getModId())) {
 				// Skip over any items from other mods.
 				ci.cancel();
 			}

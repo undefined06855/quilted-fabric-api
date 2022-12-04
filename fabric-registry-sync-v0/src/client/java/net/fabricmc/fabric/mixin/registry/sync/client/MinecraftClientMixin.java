@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 import net.fabricmc.fabric.impl.registry.sync.trackers.vanilla.BlockInitTracker;
 
@@ -39,7 +39,7 @@ public class MinecraftClientMixin {
 	private void onStart(CallbackInfo ci) {
 		// Freeze the registries on the client
 		FABRIC_LOGGER.debug("Freezing registries");
-		Registry.freezeRegistries();
+		Registries.bootstrap();
 		BlockInitTracker.postFreeze();
 	}
 }

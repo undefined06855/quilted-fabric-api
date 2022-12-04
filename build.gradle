@@ -41,7 +41,7 @@ def getSubprojectUpstreamVersion(project) {
 		throw new NullPointerException("Could not find upstream version for " + project.name)
 	}
 
-	return version;
+	return version
 }
 
 def getBranch() {
@@ -138,7 +138,6 @@ allprojects {
 
 	apply plugin: "java-library"
 	apply plugin: "checkstyle"
-	apply plugin: "maven-publish"
 	apply plugin: "org.quiltmc.loom"
 	apply plugin: "org.quiltmc.gradle.licenser"
 
@@ -209,8 +208,8 @@ allprojects {
 	repositories {
 		mavenLocal()
 		maven {
-			name = "Quilt"
-			url = "https://maven.quiltmc.org/repository/snapshot"
+			name = 'Quilt'
+			url = 'https://maven.quiltmc.org/repository/snapshot'
 		}
 	}
 
@@ -307,6 +306,11 @@ remapTestmodJar {
 // This must be done after all plugins are applied to subprojects
 apply from: "gradle/module-validation.gradle"
 
+loom {
+	// Required as the item-group API uses access widened classes in its API, without this the javadoc generation fails.
+	accessWidenerPath = file("fabric-item-group-api-v1/src/main/resources/quilted_fabric_item_group_api_v1.accesswidener")
+}
+
 javadoc {
 	options {
 		source = "17"
@@ -322,8 +326,10 @@ javadoc {
 				"https://www.slf4j.org/apidocs/",
 				"https://netty.io/4.1/api/",
 				"https://javadoc.lwjgl.org/",
-				"https://www.javadoc.io/doc/com.google.code.gson/gson/2.9.1/",
-				"https://fastutil.di.unimi.it/docs/",
+				"https://www.javadoc.io/doc/com.google.code.gson/gson/2.10/",
+				"https://javadoc.io/doc/org.jetbrains/annotations/latest/",
+				"https://javadoc.io/doc/it.unimi.dsi/fastutil/",
+				"https://javadoc.scijava.org/JOML/",
 				"https://maven.fabricmc.net/docs/yarn-${rootProject.minecraft_version}${project.yarn_version}/"
 		)
 		// Disable the crazy super-strict doclint tool in Java 8
@@ -339,7 +345,7 @@ javadoc {
 
 	classpath = files(sourceSets.main.compileClasspath, sourceSets.client.compileClasspath)
 	include("**/api/**")
-	failOnError false
+	failOnError true
 }
 
 task javadocJar(type: Jar) {
@@ -365,14 +371,67 @@ loom {
 		}
 		autoTestServer {
 			inherit testmodServer
-
 			name "Auto Test Server"
-
+			vmArg "-Dfabric.autoTest"
+		}
+		autoTestClient {
+			inherit testmodClient
+			name "Auto Test Client"
 			vmArg "-Dfabric.autoTest"
 		}
 	}
 }
 // test.dependsOn runGametest
+
+configurations {
+	productionRuntime {
+		extendsFrom configurations.minecraftLibraries
+		extendsFrom configurations.loaderLibraries
+		extendsFrom configurations.minecraftRuntimeOnlyLibraries
+	}
+}
+
+dependencies {
+	productionRuntime "net.fabricmc:fabric-loader:${project.loader_version}"
+	productionRuntime "net.fabricmc:intermediary:${project.minecraft_version}"
+}
+
+import net.fabricmc.loom.util.OperatingSystem
+
+// This is very far beyond loom's API if you copy this, you're on your own.
+/*
+task runProductionAutoTestClient(type: JavaExec, dependsOn: [remapJar, remapTestmodJar]) {
+	classpath.from configurations.productionRuntime
+	mainClass = "net.fabricmc.loader.impl.launch.knot.KnotClient"
+	workingDir = file("run")
+
+	afterEvaluate {
+		dependsOn downloadAssets
+	}
+
+	doFirst {
+		classpath.from loom.minecraftProvider.minecraftClientJar
+		workingDir.mkdirs()
+
+		args(
+			"--assetIndex", loom.minecraftProvider.versionInfo.assetIndex().fabricId(loom.minecraftProvider.minecraftVersion()),
+			"--assetsDir", new File(loom.files.userCache, "assets").absolutePath,
+			"--gameDir", workingDir.absolutePath
+		)
+
+		if (OperatingSystem.CURRENT_OS == OperatingSystem.MAC_OS) {
+			jvmArgs(
+				"-XstartOnFirstThread"
+			)
+		}
+
+		jvmArgs(
+			"-Dfabric.addMods=${remapJar.archiveFile.get().asFile.absolutePath}${File.pathSeparator}${remapTestmodJar.archiveFile.get().asFile.absolutePath}",
+			"-Dfabric.autoTest"
+		)
+	}
+}
+*/
 
 subprojects {
 	if (it.name == "deprecated") return
@@ -478,7 +537,6 @@ void setupRepositories(RepositoryHandler repositories) {
 			}
 		}
 	} else if (ENV.SNAPSHOTS_URL) {
-
 		repositories.maven {
 			url ENV.SNAPSHOTS_URL
 			credentials {
@@ -581,7 +639,7 @@ curseforge {
 		id = "634179"
 		changelog = ENV.CHANGELOG ?: "No changelog provided"
 		releaseType = project.prerelease == "true" ? "beta" : "release"
-		addGameVersion "1.19.2"
+		addGameVersion "1.19.3"
 		addGameVersion "Quilt"
 
 		mainArtifact(renameJar) {
@@ -607,7 +665,6 @@ if (signingEnabled) {
 
 import org.kohsuke.github.GHReleaseBuilder
 import org.kohsuke.github.GitHub
-
 
 task github(dependsOn: renameJar) {
 	onlyIf {

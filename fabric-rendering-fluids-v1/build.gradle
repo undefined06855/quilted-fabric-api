@@ -3,10 +3,5 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 moduleDependencies(project, [
-		'fabric-api-base',
-		'fabric-textures-v0'
-])
-
-testDependencies(project, [
-	':fabric-textures-v0'
+		'fabric-api-base'
 ])

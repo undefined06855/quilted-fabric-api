@@ -17,20 +17,25 @@
 
 package net.fabricmc.fabric.impl.tag.convention.datagen.generators;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.tag.BlockTags;
+import java.util.concurrent.CompletableFuture;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.RegistryKey;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 
 public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
-	public BlockTagGenerator(FabricDataGenerator dataGenerator) {
-		super(dataGenerator);
+	public BlockTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+		super(output, registriesFuture);
 	}
 
 	@Override
-	protected void generateTags() {
+	protected void configure(RegistryWrapper.WrapperLookup registries) {
 		getOrCreateTagBuilder(ConventionalBlockTags.QUARTZ_ORES)
 				.add(Blocks.NETHER_QUARTZ_ORE);
 		getOrCreateTagBuilder(ConventionalBlockTags.ORES)
@@ -51,6 +56,11 @@ public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 				.add(Blocks.BOOKSHELF);
 		generateGlassTags();
 		generateShulkerTag();
+	}
+
+	@Override
+	protected RegistryKey<Block> reverseLookup(Block block) {
+		return block.getRegistryEntry().registryKey();
 	}
 
 	private void generateShulkerTag() {

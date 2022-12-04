@@ -5,9 +5,7 @@
   "mixins": [
     "KeyedResourceReloadListenerMixin",
     "ModResourcePackProviderMixin",
-    "NamespaceResourceManagerEntryMixin",
     "NamespaceResourceManagerMixin",
-    "ResourceLoaderImplMixin",
     "ResourceMixin",
     "ResourcePackProfileMixin"
   ],

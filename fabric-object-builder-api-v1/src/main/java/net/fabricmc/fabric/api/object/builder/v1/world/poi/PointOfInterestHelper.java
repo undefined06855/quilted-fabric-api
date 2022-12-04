@@ -19,8 +19,8 @@ package net.fabricmc.fabric.api.object.builder.v1.world.poi;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestType;
 
@@ -34,6 +34,9 @@ import net.minecraft.world.poi.PointOfInterestType;
  */
 @Deprecated
 public final class PointOfInterestHelper {
+	private PointOfInterestHelper() {
+	}
+
 	/**
 	 * Creates and registers a {@link PointOfInterestType}.
 	 *
@@ -46,7 +49,7 @@ public final class PointOfInterestHelper {
 	public static PointOfInterestType register(Identifier id, int ticketCount, int searchDistance, Block... blocks) {
 		var key = org.quiltmc.qsl.points_of_interest.api.PointOfInterestHelper.register(id, ticketCount, searchDistance, blocks);
 
-		return Registry.POINT_OF_INTEREST_TYPE.get(key);
+		return Registries.POINT_OF_INTEREST_TYPE.get(key);
 	}
 
 	/**
@@ -61,6 +64,6 @@ public final class PointOfInterestHelper {
 	public static PointOfInterestType register(Identifier id, int ticketCount, int searchDistance, Iterable<BlockState> blocks) {
 		var key = org.quiltmc.qsl.points_of_interest.api.PointOfInterestHelper.register(id, ticketCount, searchDistance, blocks);
 
-		return Registry.POINT_OF_INTEREST_TYPE.get(key);
+		return Registries.POINT_OF_INTEREST_TYPE.get(key);
 	}
 }

@@ -17,10 +17,12 @@
 
 package net.fabricmc.fabric.api.datagen.v1.provider;
 
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -29,6 +31,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.ApiStatus;
 
+import net.minecraft.data.DataOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
 import net.minecraft.loot.LootManager;
@@ -36,7 +39,7 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContextType;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
 
@@ -51,7 +54,7 @@ import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
 public interface FabricLootTableProvider extends Consumer<BiConsumer<Identifier, LootTable.Builder>>, DataProvider {
 	LootContextType getLootContextType();
 
-	FabricDataGenerator getFabricDataGenerator();
+	FabricDataOutput getFabricDataOutput();
 
 	/**
 	 * Return a new exporter that applies the specified conditions to any loot table it receives.
@@ -66,7 +69,7 @@ public interface FabricLootTableProvider extends Consumer<BiConsumer<Identifier,
 
 	@ApiStatus.Internal
 	@Override
-	default void run(DataWriter writer) throws IOException {
+	default CompletableFuture<?> run(DataWriter writer) {
 		HashMap<Identifier, LootTable> builders = Maps.newHashMap();
 		HashMap<Identifier, ConditionJsonProvider[]> conditionMap = new HashMap<>();
 
@@ -79,15 +82,19 @@ public interface FabricLootTableProvider extends Consumer<BiConsumer<Identifier,
 			}
 		});
 
+		final List<CompletableFuture<?>> futures = new ArrayList<>();
+
 		for (Map.Entry<Identifier, LootTable> entry : builders.entrySet()) {
 			JsonObject tableJson = (JsonObject) LootManager.toJson(entry.getValue());
 			ConditionJsonProvider.write(tableJson, conditionMap.remove(entry.getKey()));
 
-			DataProvider.writeToPath(writer, tableJson, getOutputPath(entry.getKey()));
+			futures.add(DataProvider.writeToPath(writer, tableJson, getOutputPath(entry.getKey())));
 		}
+
+		return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
 	}
 
 	private Path getOutputPath(Identifier lootTableId) {
-		return getFabricDataGenerator().getOutput().resolve("data/%s/loot_tables/%s.json".formatted(lootTableId.getNamespace(), lootTableId.getPath()));
+		return getFabricDataOutput().getResolver(DataOutput.OutputType.DATA_PACK, "loot_tables").resolveJson(lootTableId);
 	}
 }

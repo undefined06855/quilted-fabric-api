@@ -17,6 +17,8 @@
 
 package net.fabricmc.fabric.api.client.render.fluid.v1;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.texture.Sprite;
@@ -83,8 +85,8 @@ public class SimpleFluidRenderHandler implements FluidRenderHandler {
 	 * @param tint The fluid color RGB. Alpha is ignored.
 	 */
 	public SimpleFluidRenderHandler(Identifier stillTexture, Identifier flowingTexture, @Nullable Identifier overlayTexture, int tint) {
-		this.stillTexture = stillTexture;
-		this.flowingTexture = flowingTexture;
+		this.stillTexture = Objects.requireNonNull(stillTexture, "stillTexture");
+		this.flowingTexture = Objects.requireNonNull(flowingTexture, "flowingTexture");;
 		this.overlayTexture = overlayTexture;
 		this.sprites = new Sprite[overlayTexture == null ? 2 : 3];
 		this.tint = tint;

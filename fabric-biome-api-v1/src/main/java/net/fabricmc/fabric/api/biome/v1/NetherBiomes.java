@@ -17,7 +17,7 @@
 
 package net.fabricmc.fabric.api.biome.v1;
 
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 
@@ -30,7 +30,8 @@ import net.minecraft.world.biome.source.util.MultiNoiseUtil;
  */
 @Deprecated
 public final class NetherBiomes {
-	private NetherBiomes() { }
+	private NetherBiomes() {
+	}
 
 	/**
 	 * Adds a biome to the Nether generator.

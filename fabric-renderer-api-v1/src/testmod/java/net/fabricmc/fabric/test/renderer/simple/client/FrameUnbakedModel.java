@@ -19,15 +19,13 @@ package net.fabricmc.fabric.test.renderer.simple.client;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 import java.util.function.Function;
 
-import com.mojang.datafixers.util.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
-import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
@@ -51,8 +49,7 @@ final class FrameUnbakedModel implements UnbakedModel {
 	}
 
 	@Override
-	public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences) {
-		return Collections.emptySet(); // TODO: Also set the return value when we set a proper texture.
+	public void setParents(Function<Identifier, UnbakedModel> function) {
 	}
 
 	/*
@@ -61,7 +58,7 @@ final class FrameUnbakedModel implements UnbakedModel {
 	 */
 	@Nullable
 	@Override
-	public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		// The renderer api may not have an implementation.
 		// For this reason we will just null check the renderer impl
 		if (RendererAccess.INSTANCE.hasRenderer()) {

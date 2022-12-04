@@ -31,7 +31,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.world.BlockRenderView;
 
 import net.fabricmc.api.EnvType;
@@ -87,7 +87,7 @@ public final class FluidVariantRendering {
 	 * <p>Compared to {@linkplain #getTooltip(FluidVariant, TooltipContext) the other overload}, the current tooltip context is automatically used.
 	 */
 	public static List<Text> getTooltip(FluidVariant fluidVariant) {
-		return getTooltip(fluidVariant, MinecraftClient.getInstance().options.advancedItemTooltips ? TooltipContext.Default.ADVANCED : TooltipContext.Default.NORMAL);
+		return getTooltip(fluidVariant, MinecraftClient.getInstance().options.advancedItemTooltips ? TooltipContext.Default.ADVANCED : TooltipContext.Default.BASIC);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public final class FluidVariantRendering {
 
 		// If advanced tooltips are enabled, render the fluid id
 		if (context.isAdvanced()) {
-			tooltip.add(Text.literal(Registry.FLUID.getId(fluidVariant.getFluid()).toString()).formatted(Formatting.DARK_GRAY));
+			tooltip.add(Text.literal(Registries.FLUID.getId(fluidVariant.getFluid()).toString()).formatted(Formatting.DARK_GRAY));
 		}
 
 		// TODO: consider adding an event to append to tooltips?

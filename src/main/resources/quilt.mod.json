@@ -31,7 +31,10 @@
 			},
 			{
 					"id": "minecraft",
-					"versions": "~1.19.1-beta.2"
+					"versions": [
+						">=1.19.3-",
+						"<1.19.4-"
+					]
 			},
 			"quilted_fabric_api_base",
 			"quilted_fabric_api_lookup_api_v1",
@@ -49,7 +52,7 @@
 			"quilted_fabric_events_interaction_v0",
 			"quilted_fabric_game_rule_api_v1",
 			"quilted_fabric_item_api_v1",
-			"quilted_fabric_item_groups_v0",
+			"quilted_fabric_item_group_api_v1",
 			"quilted_fabric_key_binding_api_v1",
 			"quilted_fabric_lifecycle_events_v1",
 			"quilted_fabric_loot_api_v2",
@@ -70,7 +73,6 @@
 			"quilted_fabric_screen_api_v1",
 			"quilted_fabric_screen_handler_api_v1",
 			"quilted_fabric_sound_api_v1",
-			"quilted_fabric_textures_v0",
 			"quilted_fabric_transfer_api_v1",
 			"quilted_fabric_transitive_access_wideners_v1",
 			{
@@ -118,7 +120,6 @@
 			"quilt_client_command",
 			"quilt_command",
 			"quilt_crash_info",
-			"quilt_datafixerupper",
 			"quilt_dimension",
 			"quilt_entity",
 			"quilt_entity_events",
@@ -126,7 +127,6 @@
 			"quilt_entity_networking",
 			"quilt_item_content_registry",
 			"quilt_item_extension",
-			"quilt_item_group",
 			"quilt_item_setting",
 			"quilt_lifecycle_events",
 			"quilt_networking",

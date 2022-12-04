@@ -18,7 +18,6 @@
 package net.fabricmc.fabric.test.dimension;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -26,10 +25,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.structure.StructureSet;
-import net.minecraft.util.dynamic.RegistryOps;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryOps;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
@@ -47,14 +46,11 @@ import net.minecraft.world.gen.noise.NoiseConfig;
 
 public class VoidChunkGenerator extends ChunkGenerator {
 	public static final Codec<VoidChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
-			createStructureSetRegistryGetter(instance).and(RegistryOps.createRegistryCodec(Registry.BIOME_KEY).forGetter((generator) -> generator.biomeRegistry))
+			instance.group(RegistryOps.getEntryLookupCodec(RegistryKeys.BIOME))
 					.apply(instance, instance.stable(VoidChunkGenerator::new)));
 
-	private final Registry<Biome> biomeRegistry;
-
-	public VoidChunkGenerator(Registry<StructureSet> registry, Registry<Biome> biomeRegistry) {
-		super(registry, Optional.empty(), new FixedBiomeSource(biomeRegistry.getOrCreateEntry(BiomeKeys.PLAINS)));
-		this.biomeRegistry = biomeRegistry;
+	public VoidChunkGenerator(RegistryEntryLookup<Biome> biomeRegistry) {
+		super(new FixedBiomeSource(biomeRegistry.getOrThrow(BiomeKeys.PLAINS)));
 	}
 
 	@Override
