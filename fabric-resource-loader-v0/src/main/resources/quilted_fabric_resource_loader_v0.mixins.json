@@ -11,9 +11,6 @@
     "ResourceMixin",
     "ResourcePackProfileMixin"
   ],
-  "server": [
-    "server.LanguageMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   }
