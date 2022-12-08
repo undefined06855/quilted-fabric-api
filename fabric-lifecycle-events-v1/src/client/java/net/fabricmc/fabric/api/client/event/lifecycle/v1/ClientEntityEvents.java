@@ -26,7 +26,7 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 /**
- * @deprecated Use Quilt Entity Events' {@link org.quiltmc.qsl.entity_events.api.client.ClientEntityLoadEvents} instead.
+ * @deprecated Use Quilt Entity Events' {@link org.quiltmc.qsl.entity.event.api.client.ClientEntityLoadEvents} instead.
  */
 @Deprecated
 @Environment(EnvType.CLIENT)
@@ -40,7 +40,7 @@ public final class ClientEntityEvents {
 	 * <p>When this event is called, the chunk is already in the world.
 	 */
 	public static final Event<ClientEntityEvents.Load> ENTITY_LOAD = QuiltCompatEvent.fromQuilt(
-			org.quiltmc.qsl.entity_events.api.client.ClientEntityLoadEvents.AFTER_LOAD,
+			org.quiltmc.qsl.entity.event.api.client.ClientEntityLoadEvents.AFTER_LOAD,
 			load -> load::onLoad,
 			invokerGetter -> (entity, world) -> invokerGetter.get().onLoadClient(entity, world)
 	);
@@ -51,7 +51,7 @@ public final class ClientEntityEvents {
 	 * <p>This event is called before the entity is unloaded from the world.
 	 */
 	public static final Event<ClientEntityEvents.Unload> ENTITY_UNLOAD = QuiltCompatEvent.fromQuilt(
-			org.quiltmc.qsl.entity_events.api.client.ClientEntityLoadEvents.AFTER_UNLOAD,
+			org.quiltmc.qsl.entity.event.api.client.ClientEntityLoadEvents.AFTER_UNLOAD,
 			unload -> unload::onUnload,
 			invokerGetter -> (entity, world) -> invokerGetter.get().onUnloadClient(entity, world)
 	);

@@ -26,7 +26,7 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 import net.fabricmc.fabric.mixin.entity.event.quilt.LivingEntityAccessor;
 
 /**
- * @deprecated Use Quilt Entity Events' {@link org.quiltmc.qsl.entity_events.api.ServerPlayerEntityCopyCallback} and {@link org.quiltmc.qsl.entity_events.api.EntityReviveEvents} instead.
+ * @deprecated Use Quilt Entity Events' {@link org.quiltmc.qsl.entity.event.api.ServerPlayerEntityCopyCallback} and {@link org.quiltmc.qsl.entity.event.api.EntityReviveEvents} instead.
  */
 @Deprecated
 public final class ServerPlayerEvents {
@@ -37,7 +37,7 @@ public final class ServerPlayerEvents {
 	 * Mods may use this event to copy old player data to a new player.
 	 */
 	public static final Event<ServerPlayerEvents.CopyFrom> COPY_FROM = QuiltCompatEvent.fromQuilt(
-			org.quiltmc.qsl.entity_events.api.ServerPlayerEntityCopyCallback.EVENT,
+			org.quiltmc.qsl.entity.event.api.ServerPlayerEntityCopyCallback.EVENT,
 			playerCopyCallback -> (copy, original, wasDeath) -> playerCopyCallback.copyFromPlayer(original, copy, wasDeath),
 			invokerGetter -> (oldPlayer, newPlayer, alive) -> invokerGetter.get().onPlayerCopy(newPlayer, oldPlayer, alive)
 	);
@@ -60,7 +60,7 @@ public final class ServerPlayerEvents {
 	 */
 	@Deprecated
 	public static final Event<AllowDeath> ALLOW_DEATH = QuiltCompatEvent.fromQuilt(
-			org.quiltmc.qsl.entity_events.api.EntityReviveEvents.BEFORE_TOTEM,
+			org.quiltmc.qsl.entity.event.api.EntityReviveEvents.BEFORE_TOTEM,
 			beforeTotemCallback -> (entity, damageSource) -> {
 				if (entity instanceof ServerPlayerEntity player) {
 					return !beforeTotemCallback.allowDeath(player, damageSource, ((LivingEntityAccessor) entity).getLastDamageTaken());

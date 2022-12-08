@@ -57,8 +57,9 @@ public final class ServerLivingEntityEvents {
 	 *     <li>a mod that changes death mechanics switching the player over to the mod's play-mode, where death doesn't apply</li>
 	 * </ul>
 	 */
+	@Deprecated
 	public static final Event<AllowDeath> ALLOW_DEATH = QuiltCompatEvent.fromQuilt(
-			org.quiltmc.qsl.entity_events.api.EntityReviveEvents.BEFORE_TOTEM,
+			org.quiltmc.qsl.entity.event.api.EntityReviveEvents.BEFORE_TOTEM,
 			beforeTotemCallback -> (entity, damageSource) -> !beforeTotemCallback.allowDeath(entity, damageSource, ((LivingEntityAccessor) entity).getLastDamageTaken()),
 			invokerGetter -> (entity, damageSource, damageAmount) -> invokerGetter.get().tryReviveBeforeTotem(entity, damageSource)
 	);
@@ -66,8 +67,9 @@ public final class ServerLivingEntityEvents {
 	/**
 	 * An event that is called when a living entity dies.
 	 */
+	@Deprecated
 	public static final Event<AfterDeath> AFTER_DEATH = QuiltCompatEvent.fromQuilt(
-			org.quiltmc.qsl.entity_events.api.LivingEntityDeathCallback.EVENT,
+			org.quiltmc.qsl.entity.event.api.LivingEntityDeathCallback.EVENT,
 			afterDeathCallback -> afterDeathCallback::afterDeath,
 			invokerGetter -> invokerGetter.get()::onDeath
 	);

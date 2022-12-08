@@ -28,7 +28,7 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  * Events related to an entity being moved to another world.
  *
  * @apiNote For a {@link ServerPlayerEntity}, please use {@link ServerEntityWorldChangeEvents#AFTER_PLAYER_CHANGE_WORLD}.
- * @deprecated Use Quilt Entity Events' {@link org.quiltmc.qsl.entity_events.api.EntityWorldChangeEvents} instead.
+ * @deprecated Use Quilt Entity Events' {@link org.quiltmc.qsl.entity.event.api.EntityWorldChangeEvents} instead.
  */
 @Deprecated
 public final class ServerEntityWorldChangeEvents {
@@ -43,7 +43,7 @@ public final class ServerEntityWorldChangeEvents {
 	 * @see ServerEntityWorldChangeEvents#AFTER_PLAYER_CHANGE_WORLD
 	 */
 	public static final Event<AfterEntityChange> AFTER_ENTITY_CHANGE_WORLD = QuiltCompatEvent.fromQuilt(
-			org.quiltmc.qsl.entity_events.api.EntityWorldChangeEvents.AFTER_ENTITY_WORLD_CHANGE,
+			org.quiltmc.qsl.entity.event.api.EntityWorldChangeEvents.AFTER_ENTITY_WORLD_CHANGE,
 			afterWorldChangeCallback -> afterWorldChangeCallback::afterChangeWorld,
 			invokerGetter -> invokerGetter.get()::afterWorldChange
 	);
@@ -57,7 +57,7 @@ public final class ServerEntityWorldChangeEvents {
 	 * @see ServerEntityWorldChangeEvents#AFTER_ENTITY_CHANGE_WORLD
 	 */
 	public static final Event<AfterPlayerChange> AFTER_PLAYER_CHANGE_WORLD = QuiltCompatEvent.fromQuilt(
-			org.quiltmc.qsl.entity_events.api.EntityWorldChangeEvents.AFTER_PLAYER_WORLD_CHANGE,
+			org.quiltmc.qsl.entity.event.api.EntityWorldChangeEvents.AFTER_PLAYER_WORLD_CHANGE,
 			afterWorldChangeCallback -> afterWorldChangeCallback::afterChangeWorld,
 			invokerGetter -> invokerGetter.get()::afterWorldChange
 	);
