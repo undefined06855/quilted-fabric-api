@@ -19,9 +19,11 @@ package net.fabricmc.fabric.mixin.registry.sync;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
 import net.minecraft.registry.MutableRegistry;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 @Mixin(Registries.class)
 public interface RegistriesAccessor<T> {
@@ -29,4 +31,10 @@ public interface RegistriesAccessor<T> {
 	static MutableRegistry<MutableRegistry<?>> getROOT() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Invoker
+	static void invokeFreezeRegistries() { }
+
+	@Invoker
+	static <T extends Registry<?>> void invokeValidate(Registry<T> registries) { }
 }

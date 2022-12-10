@@ -17,6 +17,9 @@
 
 package net.fabricmc.fabric.mixin.registry.sync;
 
+import org.quiltmc.loader.api.QuiltLoader;
+import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+import org.quiltmc.qsl.base.mixin.BootstrapAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -29,5 +32,12 @@ public class BootstrapMixin {
 	@Redirect(method = "initialize", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/Registries;bootstrap()V"))
 	private static void initialize() {
 		Registries.init();
+
+		// Quilt code for initializing its main entrypoint
+		BootstrapAccessor.invokeSetOutputStreams(); // We need to make this a bit early in case a mod uses System.out to print stuff.
+
+		for (var initializer : QuiltLoader.getEntrypointContainers(ModInitializer.ENTRYPOINT_KEY, ModInitializer.class)) {
+			initializer.getEntrypoint().onInitialize(initializer.getProvider());
+		}
 	}
 }

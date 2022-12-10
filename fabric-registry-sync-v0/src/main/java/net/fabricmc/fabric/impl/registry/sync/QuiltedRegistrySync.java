@@ -37,6 +37,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.mixin.registry.sync.RegistriesAccessor;
 
 @SuppressWarnings("UnstableApiUsage")
 public class QuiltedRegistrySync implements ServerLifecycleEvents.Starting, ServerLifecycleEvents.Stopped {
@@ -104,7 +105,11 @@ public class QuiltedRegistrySync implements ServerLifecycleEvents.Starting, Serv
 			// Freeze the registries on the server
 			// FIXME - This port was powered by midnight Ennui, double-check this later!
 			LOGGER.debug("Freezing registries");
-			Registries.bootstrap();
+			// Registries.bootstrap();
+			// Quilt injects its init point at that method; We avoid its usage by doing this:
+			Registries.init();
+			RegistriesAccessor.invokeFreezeRegistries();
+			RegistriesAccessor.invokeValidate(Registries.REGISTRIES);
 		}
 	}
 

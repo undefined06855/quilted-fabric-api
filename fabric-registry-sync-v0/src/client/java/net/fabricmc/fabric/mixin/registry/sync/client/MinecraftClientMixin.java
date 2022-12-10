@@ -29,6 +29,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.registry.Registries;
 
 import net.fabricmc.fabric.impl.registry.sync.trackers.vanilla.BlockInitTracker;
+import net.fabricmc.fabric.mixin.registry.sync.RegistriesAccessor;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
@@ -39,7 +40,11 @@ public class MinecraftClientMixin {
 	private void onStart(CallbackInfo ci) {
 		// Freeze the registries on the client
 		FABRIC_LOGGER.debug("Freezing registries");
-		Registries.bootstrap();
+		// Registries.bootstrap();
+		// Quilt injects its init point at that method; We avoid its usage by doing this:
+		Registries.init();
+		RegistriesAccessor.invokeFreezeRegistries();
+		RegistriesAccessor.invokeValidate(Registries.REGISTRIES);
 		BlockInitTracker.postFreeze();
 	}
 }
