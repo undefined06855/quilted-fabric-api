@@ -17,6 +17,7 @@
 
 package net.fabricmc.fabric.api.object.builder.v1.block;
 
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
@@ -27,6 +28,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
 import net.minecraft.entity.EntityType;
+import net.minecraft.resource.featuretoggle.FeatureFlag;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
@@ -154,6 +156,12 @@ public class FabricBlockSettings extends QuiltBlockSettings {
 	}
 
 	@Override
+	public FabricBlockSettings dropsNothing() {
+		super.dropsNothing();
+		return this;
+	}
+
+	@Override
 	public FabricBlockSettings dropsLike(Block block) {
 		super.dropsLike(block);
 		return this;
@@ -201,6 +209,57 @@ public class FabricBlockSettings extends QuiltBlockSettings {
 		return this;
 	}
 
+	/**
+	 * Make the block require tool to drop and slows down mining speed if the incorrect tool is used.
+	 */
+	@Override
+	public FabricBlockSettings requiresTool() {
+		super.requiresTool();
+		return this;
+	}
+
+	@Override
+	public FabricBlockSettings mapColor(MapColor color) {
+		super.mapColor(color);
+		return this;
+	}
+
+	@Override
+	public FabricBlockSettings hardness(float hardness) {
+		super.hardness(hardness);
+		return this;
+	}
+
+	@Override
+	public FabricBlockSettings resistance(float resistance) {
+		super.resistance(resistance);
+		return this;
+	}
+
+	@Override
+	public FabricBlockSettings offsetType(AbstractBlock.OffsetType offsetType) {
+		super.offsetType(offsetType);
+		return this;
+	}
+
+	@Override
+	public FabricBlockSettings offsetType(Function<BlockState, AbstractBlock.OffsetType> offsetType) {
+		super.offsetType(offsetType);
+		return this;
+	}
+
+	@Override
+	public FabricBlockSettings noBlockBreakParticles() {
+		super.noBlockBreakParticles();
+		return this;
+	}
+
+	@Override
+	public FabricBlockSettings requires(FeatureFlag... features) {
+		super.requires(features);
+		return this;
+	}
+
 	/* FABRIC ADDITIONS*/
 
 	/**
@@ -217,27 +276,8 @@ public class FabricBlockSettings extends QuiltBlockSettings {
 		return this;
 	}
 
-	public FabricBlockSettings hardness(float hardness) {
-		super.hardness(hardness);
-		return this;
-	}
-
-	public FabricBlockSettings resistance(float resistance) {
-		super.resistance(resistance);
-		return this;
-	}
-
 	public FabricBlockSettings drops(Identifier dropTableId) {
 		super.drops(dropTableId);
-		return this;
-	}
-
-	/**
-	 * Make the block require tool to drop and slows down mining speed if the incorrect tool is used.
-	 */
-	@Override
-	public FabricBlockSettings requiresTool() {
-		super.requiresTool();
 		return this;
 	}
 
@@ -257,11 +297,6 @@ public class FabricBlockSettings extends QuiltBlockSettings {
 	@Deprecated
 	public FabricBlockSettings materialColor(DyeColor color) {
 		return this.mapColor(color);
-	}
-
-	public FabricBlockSettings mapColor(MapColor color) {
-		super.mapColor(color);
-		return this;
 	}
 
 	public FabricBlockSettings mapColor(DyeColor color) {

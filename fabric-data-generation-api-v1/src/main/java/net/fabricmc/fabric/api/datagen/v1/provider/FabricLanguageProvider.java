@@ -103,7 +103,7 @@ public abstract class FabricLanguageProvider implements DataProvider {
 	}
 
 	@Override
-	public final String getName() {
+	public String getName() {
 		return "Language (%s)".formatted(languageCode);
 	}
 

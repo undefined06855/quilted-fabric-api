@@ -22,6 +22,7 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resource.featuretoggle.FeatureFlag;
 import net.minecraft.util.Rarity;
 
 /**
@@ -98,6 +99,12 @@ public class FabricItemSettings extends QuiltItemSettings {
 	@Override
 	public FabricItemSettings fireproof() {
 		super.fireproof();
+		return this;
+	}
+
+	@Override
+	public FabricItemSettings requires(FeatureFlag... features) {
+		super.requires(features);
 		return this;
 	}
 }
