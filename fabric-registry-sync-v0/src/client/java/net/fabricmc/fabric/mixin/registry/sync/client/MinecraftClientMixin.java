@@ -42,7 +42,7 @@ public class MinecraftClientMixin {
 		FABRIC_LOGGER.debug("Freezing registries");
 		// Registries.bootstrap();
 		// Quilt injects its init point at that method; We avoid its usage by doing this:
-		Registries.init();
+		// Registries.init();
 		RegistriesAccessor.invokeFreezeRegistries();
 		RegistriesAccessor.invokeValidate(Registries.REGISTRIES);
 		BlockInitTracker.postFreeze();
