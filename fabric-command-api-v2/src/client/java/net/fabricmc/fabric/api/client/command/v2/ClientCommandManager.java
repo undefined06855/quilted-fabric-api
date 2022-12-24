@@ -23,9 +23,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 /**
  * Manages client-sided commands and provides some related helper methods.
  *
@@ -66,7 +63,6 @@ import net.fabricmc.api.Environment;
  */
 @Deprecated
 @SuppressWarnings("unchecked")
-@Environment(EnvType.CLIENT)
 public final class ClientCommandManager {
 	private ClientCommandManager() {
 	}

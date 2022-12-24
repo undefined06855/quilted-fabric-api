@@ -24,8 +24,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
@@ -33,7 +31,6 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  * @deprecated Use Quilt Tooltip API's {@link org.quiltmc.qsl.tooltip.api.client.ItemTooltipCallback} instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public interface ItemTooltipCallback {
 	/**
 	 * Fired after the game has appended all base tooltip lines to the list.

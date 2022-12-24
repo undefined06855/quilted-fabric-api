@@ -21,8 +21,6 @@ import java.util.Objects;
 
 import net.minecraft.client.gui.screen.Screen;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
 
@@ -41,7 +39,6 @@ import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
  * @deprecated Use Quilt Screen API's {@link org.quiltmc.qsl.screen.api.client.ScreenKeyboardEvents} instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public final class ScreenKeyboardEvents {
 	/**
 	 * An event that checks if a key press should be allowed.
@@ -112,7 +109,6 @@ public final class ScreenKeyboardEvents {
 	private ScreenKeyboardEvents() {
 	}
 
-	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
 	public interface AllowKeyPress {
 		/**
@@ -128,7 +124,6 @@ public final class ScreenKeyboardEvents {
 		boolean allowKeyPress(Screen screen, int key, int scancode, int modifiers);
 	}
 
-	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
 	public interface BeforeKeyPress {
 		/**
@@ -143,7 +138,6 @@ public final class ScreenKeyboardEvents {
 		void beforeKeyPress(Screen screen, int key, int scancode, int modifiers);
 	}
 
-	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
 	public interface AfterKeyPress {
 		/**
@@ -158,7 +152,6 @@ public final class ScreenKeyboardEvents {
 		void afterKeyPress(Screen screen, int key, int scancode, int modifiers);
 	}
 
-	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
 	public interface AllowKeyRelease {
 		/**
@@ -174,7 +167,6 @@ public final class ScreenKeyboardEvents {
 		boolean allowKeyRelease(Screen screen, int key, int scancode, int modifiers);
 	}
 
-	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
 	public interface BeforeKeyRelease {
 		/**
@@ -189,7 +181,6 @@ public final class ScreenKeyboardEvents {
 		void beforeKeyRelease(Screen screen, int key, int scancode, int modifiers);
 	}
 
-	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
 	public interface AfterKeyRelease {
 		/**

@@ -21,16 +21,12 @@ import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
 import net.minecraft.command.CommandSource;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 /**
  * Extensions to {@link CommandSource} for client-sided commands.
  *
  * @deprecated Use Quilt Command API's {@link org.quiltmc.qsl.command.api.client.QuiltClientCommandSource} instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public interface FabricClientCommandSource extends QuiltClientCommandSource {
 	/**
 	 * Gets the meta property under {@code key} that was assigned to this source.

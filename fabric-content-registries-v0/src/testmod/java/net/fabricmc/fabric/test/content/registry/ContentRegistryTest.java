@@ -20,6 +20,12 @@ package net.fabricmc.fabric.test.content.registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
+import net.minecraft.potion.Potions;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.text.Text;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -43,6 +49,7 @@ import net.minecraft.world.event.GameEvent;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
+import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FlattenableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
@@ -53,6 +60,7 @@ import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.api.registry.TillableBlockRegistry;
 import net.fabricmc.fabric.api.registry.VillagerInteractionRegistries;
 import net.fabricmc.fabric.api.registry.VillagerPlantableRegistry;
+import net.fabricmc.fabric.test.mixin.content.registry.BrewingRecipeRegistryAccessor;
 
 public final class ContentRegistryTest implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ContentRegistryTest.class);
@@ -78,6 +86,8 @@ public final class ContentRegistryTest implements ModInitializer {
 		//  - villagers can now collect and plant oak saplings
 		//  - assign a loot table to the nitwit villager type
 		//  - right-clicking a 'test_event' block will emit a 'test_event' game event, which will have a sculk sensor frequency of 2
+		//  - instant health potions can be brewed from awkward potions with any item in the 'minecraft:small_flowers' tag
+		//  - dirty potions can be brewed by adding any item in the 'minecraft:dirt' tag to any standard potion
 
 		CompostingChanceRegistry.INSTANCE.add(Items.OBSIDIAN, 0.5F);
 		FlammableBlockRegistry.getDefaultInstance().add(Blocks.DIAMOND_BLOCK, 4, 4);
@@ -158,6 +168,15 @@ public final class ContentRegistryTest implements ModInitializer {
 
 		// This test were added by us (Quilt) in order to aid with REA testing
 		CompostingChanceRegistry.INSTANCE.add(ItemTags.ARROWS, 0.5F);
+
+		FabricBrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, Ingredient.fromTag(ItemTags.SMALL_FLOWERS), Potions.HEALING);
+		var dirtyPotion = new DirtyPotionItem(new Item.Settings().maxCount(1));
+		Registry.register(Registries.ITEM, new Identifier("fabric-content-registries-v0-testmod", "dirty_potion"),
+				dirtyPotion);
+		/* Mods should use BrewingRecipeRegistry.registerPotionType(Item), which is access widened by fabric-transitive-access-wideners-v1
+		 * This testmod uses an accessor due to Loom limitations that prevent TAWs from applying across Gradle subproject boundaries */
+		BrewingRecipeRegistryAccessor.callRegisterPotionType(dirtyPotion);
+		FabricBrewingRecipeRegistry.registerItemRecipe((PotionItem) Items.POTION, Ingredient.fromTag(ItemTags.DIRT), dirtyPotion);
 	}
 
 	public static class TestEventBlock extends Block {
@@ -170,6 +189,17 @@ public final class ContentRegistryTest implements ModInitializer {
 			// Emit the test event
 			world.emitGameEvent(player, TEST_EVENT, pos);
 			return ActionResult.SUCCESS;
+		}
+	}
+
+	public static class DirtyPotionItem extends PotionItem {
+		public DirtyPotionItem(Settings settings) {
+			super(settings);
+		}
+
+		@Override
+		public Text getName(ItemStack stack) {
+			return Text.literal("Dirty ").append(Items.POTION.getName(stack));
 		}
 	}
 }

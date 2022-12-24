@@ -19,14 +19,11 @@ package net.fabricmc.fabric.impl.client.screen;
 
 import net.minecraft.client.gui.screen.Screen;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.fabricmc.fabric.api.event.Event;
 
-@Environment(EnvType.CLIENT)
 public interface ScreenExtensions {
 	static ScreenExtensions getExtensions(Screen screen) {
 		return (ScreenExtensions) screen;

@@ -23,8 +23,6 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.item.Item;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
@@ -37,7 +35,6 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  * so make sure that any data you return in {@link Item#getTooltipData} will be handled by one of the callbacks.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public interface TooltipComponentCallback {
 	Event<TooltipComponentCallback> EVENT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.tooltip.api.client.TooltipComponentCallback.EVENT,
 			tooltipComponentCallback -> tooltipComponentCallback::getComponent,

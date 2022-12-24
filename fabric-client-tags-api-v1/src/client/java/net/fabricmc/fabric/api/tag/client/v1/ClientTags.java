@@ -31,8 +31,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.RegistryKey;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.impl.tag.client.ClientTagsLoader;
 
 /**
@@ -50,7 +48,6 @@ import net.fabricmc.fabric.impl.tag.client.ClientTagsLoader;
  * @deprecated Use Quilt Tags API's {@link org.quiltmc.qsl.tag.api.TagType.CLIENT_FALLBACK} tag type instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public final class ClientTags {
 	private static final Map<TagKey<?>, Set<Identifier>> LOCAL_TAG_CACHE = new ConcurrentHashMap<>();
 

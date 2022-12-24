@@ -22,9 +22,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 /**
  * Builtin item renderers render items with custom code.
  * They allow using non-model rendering, such as BERs, for items.
@@ -35,7 +32,6 @@ import net.fabricmc.api.Environment;
  * @deprecated Please use {@link BuiltinItemRendererRegistry.DynamicItemRenderer} instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 @FunctionalInterface
 public interface BuiltinItemRenderer {
 	/**

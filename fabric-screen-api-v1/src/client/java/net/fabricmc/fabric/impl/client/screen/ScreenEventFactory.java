@@ -24,8 +24,6 @@ import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 
 import net.minecraft.client.gui.screen.Screen;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
@@ -35,7 +33,6 @@ import net.fabricmc.fabric.api.event.EventFactory;
 /**
  * Factory methods for creating event instances used in {@link ScreenExtensions}.
  */
-@Environment(EnvType.CLIENT)
 public final class ScreenEventFactory {
 	private static final Set<Screen> ACTIVE_SCREENS = new ReferenceArraySet<>(2);
 

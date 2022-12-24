@@ -22,8 +22,6 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientWorldTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
@@ -31,7 +29,6 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  * @deprecated Use Quilt Lifecycle Events' {@link org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents} instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public final class ClientTickEvents {
 	private ClientTickEvents() {
 	}

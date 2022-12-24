@@ -32,8 +32,6 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.impl.client.rendering.ArmorRendererRegistryImpl;
 
 /**
@@ -42,7 +40,6 @@ import net.fabricmc.fabric.impl.client.rendering.ArmorRendererRegistryImpl;
  *
  * <p>The renderers are registered with {@link net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer#register(ArmorRenderer, ItemConvertible...)}.
  */
-@Environment(EnvType.CLIENT)
 @FunctionalInterface
 public interface ArmorRenderer {
 	/**

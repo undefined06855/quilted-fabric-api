@@ -28,8 +28,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ServerPlayPacketListener;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
@@ -47,7 +45,6 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
  * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientPlayNetworking} instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public final class ClientPlayNetworking {
 	/**
 	 * Registers a handler to a channel.
@@ -207,7 +204,6 @@ public final class ClientPlayNetworking {
 	}
 
 	@Deprecated
-	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
 	public interface PlayChannelHandler extends org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.ChannelReceiver {
 		@Override

@@ -112,7 +112,7 @@ abstract class ScreenMixin implements ScreenExtensions {
 	}
 
 	@Unique
-	private <T> Event<T> ensureEventsAreInitialised(Event<T> event) {
+	private <T> Event<T> ensureEventsAreInitialized(Event<T> event) {
 		if (event == null) {
 			throw new IllegalStateException(String.format("[quilted-fabric-screen-api-v1] The current screen (%s) has not been correctly initialised, please send this crash log to the mod author. This is usually caused by calling setScreen on the wrong thread.", this.getClass().getName()));
 		}
@@ -122,105 +122,105 @@ abstract class ScreenMixin implements ScreenExtensions {
 
 	@Override
 	public Event<ScreenEvents.Remove> fabric_getRemoveEvent() {
-		return ensureEventsAreInitialised(this.qfapi$removeEvent);
+		return ensureEventsAreInitialized(this.qfapi$removeEvent);
 	}
 
 	@Override
 	public Event<ScreenEvents.BeforeTick> fabric_getBeforeTickEvent() {
-		return ensureEventsAreInitialised(this.qfapi$beforeTickEvent);
+		return ensureEventsAreInitialized(this.qfapi$beforeTickEvent);
 	}
 
 	@Override
 	public Event<ScreenEvents.AfterTick> fabric_getAfterTickEvent() {
-		return ensureEventsAreInitialised(this.qfapi$afterTickEvent);
+		return ensureEventsAreInitialized(this.qfapi$afterTickEvent);
 	}
 
 	@Override
 	public Event<ScreenEvents.BeforeRender> fabric_getBeforeRenderEvent() {
-		return ensureEventsAreInitialised(this.qfapi$beforeRenderEvent);
+		return ensureEventsAreInitialized(this.qfapi$beforeRenderEvent);
 	}
 
 	@Override
 	public Event<ScreenEvents.AfterRender> fabric_getAfterRenderEvent() {
-		return ensureEventsAreInitialised(this.qfapi$afterRenderEvent);
+		return ensureEventsAreInitialized(this.qfapi$afterRenderEvent);
 	}
 
 	// Keyboard
 
 	@Override
 	public Event<ScreenKeyboardEvents.AllowKeyPress> fabric_getAllowKeyPressEvent() {
-		return ensureEventsAreInitialised(this.qfapi$allowKeyPressEvent);
+		return ensureEventsAreInitialized(this.qfapi$allowKeyPressEvent);
 	}
 
 	@Override
 	public Event<ScreenKeyboardEvents.BeforeKeyPress> fabric_getBeforeKeyPressEvent() {
-		return ensureEventsAreInitialised(this.qfapi$beforeKeyPressEvent);
+		return ensureEventsAreInitialized(this.qfapi$beforeKeyPressEvent);
 	}
 
 	@Override
 	public Event<ScreenKeyboardEvents.AfterKeyPress> fabric_getAfterKeyPressEvent() {
-		return ensureEventsAreInitialised(this.qfapi$afterKeyPressEvent);
+		return ensureEventsAreInitialized(this.qfapi$afterKeyPressEvent);
 	}
 
 	@Override
 	public Event<ScreenKeyboardEvents.AllowKeyRelease> fabric_getAllowKeyReleaseEvent() {
-		return ensureEventsAreInitialised(this.qfapi$allowKeyReleaseEvent);
+		return ensureEventsAreInitialized(this.qfapi$allowKeyReleaseEvent);
 	}
 
 	@Override
 	public Event<ScreenKeyboardEvents.BeforeKeyRelease> fabric_getBeforeKeyReleaseEvent() {
-		return ensureEventsAreInitialised(this.qfapi$beforeKeyReleaseEvent);
+		return ensureEventsAreInitialized(this.qfapi$beforeKeyReleaseEvent);
 	}
 
 	@Override
 	public Event<ScreenKeyboardEvents.AfterKeyRelease> fabric_getAfterKeyReleaseEvent() {
-		return ensureEventsAreInitialised(this.qfapi$afterKeyReleaseEvent);
+		return ensureEventsAreInitialized(this.qfapi$afterKeyReleaseEvent);
 	}
 
 	// Mouse
 
 	@Override
 	public Event<ScreenMouseEvents.AllowMouseClick> fabric_getAllowMouseClickEvent() {
-		return ensureEventsAreInitialised(this.qfapi$allowMouseClickEvent);
+		return ensureEventsAreInitialized(this.qfapi$allowMouseClickEvent);
 	}
 
 	@Override
 	public Event<ScreenMouseEvents.BeforeMouseClick> fabric_getBeforeMouseClickEvent() {
-		return ensureEventsAreInitialised(this.qfapi$beforeMouseClickEvent);
+		return ensureEventsAreInitialized(this.qfapi$beforeMouseClickEvent);
 	}
 
 	@Override
 	public Event<ScreenMouseEvents.AfterMouseClick> fabric_getAfterMouseClickEvent() {
-		return ensureEventsAreInitialised(this.qfapi$afterMouseClickEvent);
+		return ensureEventsAreInitialized(this.qfapi$afterMouseClickEvent);
 	}
 
 	@Override
 	public Event<ScreenMouseEvents.AllowMouseRelease> fabric_getAllowMouseReleaseEvent() {
-		return ensureEventsAreInitialised(this.qfapi$allowMouseReleaseEvent);
+		return ensureEventsAreInitialized(this.qfapi$allowMouseReleaseEvent);
 	}
 
 	@Override
 	public Event<ScreenMouseEvents.BeforeMouseRelease> fabric_getBeforeMouseReleaseEvent() {
-		return ensureEventsAreInitialised(this.qfapi$beforeMouseReleaseEvent);
+		return ensureEventsAreInitialized(this.qfapi$beforeMouseReleaseEvent);
 	}
 
 	@Override
 	public Event<ScreenMouseEvents.AfterMouseRelease> fabric_getAfterMouseReleaseEvent() {
-		return ensureEventsAreInitialised(this.qfapi$afterMouseReleaseEvent);
+		return ensureEventsAreInitialized(this.qfapi$afterMouseReleaseEvent);
 	}
 
 	@Override
 	public Event<ScreenMouseEvents.AllowMouseScroll> fabric_getAllowMouseScrollEvent() {
-		return ensureEventsAreInitialised(this.qfapi$allowMouseScrollEvent);
+		return ensureEventsAreInitialized(this.qfapi$allowMouseScrollEvent);
 	}
 
 	@Override
 	public Event<ScreenMouseEvents.BeforeMouseScroll> fabric_getBeforeMouseScrollEvent() {
-		return ensureEventsAreInitialised(this.qfapi$beforeMouseScrollEvent);
+		return ensureEventsAreInitialized(this.qfapi$beforeMouseScrollEvent);
 	}
 
 	@Override
 	public Event<ScreenMouseEvents.AfterMouseScroll> fabric_getAfterMouseScrollEvent() {
-		return ensureEventsAreInitialised(this.qfapi$afterMouseScrollEvent);
+		return ensureEventsAreInitialized(this.qfapi$afterMouseScrollEvent);
 	}
 }

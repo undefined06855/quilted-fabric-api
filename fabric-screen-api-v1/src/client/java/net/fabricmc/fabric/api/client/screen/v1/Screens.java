@@ -28,9 +28,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.item.ItemRenderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 /**
  * Utility methods related to screens.
  *
@@ -38,7 +35,6 @@ import net.fabricmc.api.Environment;
  * @deprecated Use Quilt Screen API's {@link org.quiltmc.qsl.screen.api.client.QuiltScreen} instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public final class Screens {
 	/**
 	 * Gets all of a screen's button widgets.

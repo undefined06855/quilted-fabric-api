@@ -30,8 +30,6 @@ import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.impl.networking.GenericFutureListenerHolder;
 
@@ -45,7 +43,6 @@ import net.fabricmc.fabric.impl.networking.GenericFutureListenerHolder;
  * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientLoginNetworking} instead.
  */
 @Deprecated
-@Environment(EnvType.CLIENT)
 public final class ClientLoginNetworking {
 	/**
 	 * Registers a handler to a query request channel.
@@ -143,7 +140,6 @@ public final class ClientLoginNetworking {
 	}
 
 	@Deprecated
-	@Environment(EnvType.CLIENT)
 	@FunctionalInterface
 	public interface LoginQueryRequestHandler {
 		/**
