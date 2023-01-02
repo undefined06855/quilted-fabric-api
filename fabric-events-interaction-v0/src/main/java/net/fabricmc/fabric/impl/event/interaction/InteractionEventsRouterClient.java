@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
@@ -34,7 +35,7 @@ public class InteractionEventsRouterClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ClientPickBlockGatherCallback.EVENT.register(((player, result) -> {
-			if (result instanceof BlockHitResult) {
+			if (result instanceof BlockHitResult && result.getType() != HitResult.Type.MISS) {
 				BlockView view = player.getEntityWorld();
 				BlockPos pos = ((BlockHitResult) result).getBlockPos();
 				BlockState state = view.getBlockState(pos);

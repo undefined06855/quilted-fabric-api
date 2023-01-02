@@ -31,6 +31,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.resource.featuretoggle.FeatureFlag;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 
@@ -235,6 +236,17 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 */
 	public FabricEntityTypeBuilder<T> specificSpawnBlocks(Block... blocks) {
 		this.quiltBuilder.allowSpawningInside(blocks);
+		return this;
+	}
+
+	/**
+	 * Sets the features this entity requires. If a feature is not enabled,
+	 * the entity cannot be spawned, and existing ones will despawn immediately.
+	 * @param requiredFeatures the features
+	 * @return this builder for chaining
+	 */
+	public FabricEntityTypeBuilder<T> requires(FeatureFlag... requiredFeatures) {
+		this.quiltBuilder.requiredFlags(requiredFeatures);
 		return this;
 	}
 

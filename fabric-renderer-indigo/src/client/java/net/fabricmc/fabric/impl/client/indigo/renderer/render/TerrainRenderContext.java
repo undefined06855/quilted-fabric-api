@@ -123,7 +123,7 @@ public class TerrainRenderContext extends AbstractRenderContext {
 	}
 
 	@Override
-	public Consumer<BakedModel> fallbackConsumer() {
+	public BakedModelConsumer bakedModelConsumer() {
 		return fallbackConsumer;
 	}
 

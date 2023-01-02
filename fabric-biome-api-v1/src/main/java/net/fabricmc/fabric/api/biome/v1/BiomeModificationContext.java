@@ -17,7 +17,10 @@
 
 package net.fabricmc.fabric.api.biome.v1;
 
+import java.util.OptionalInt;
+
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeEffects;
 
 /**
  * Allows {@link Biome} properties to be modified.
@@ -58,7 +61,23 @@ public interface BiomeModificationContext extends org.quiltmc.qsl.worldgen.biome
 
 	interface WeatherContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.WeatherContext { }
 
-	interface EffectsContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.EffectsContext { }
+	interface EffectsContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.EffectsContext {
+		/**
+		 * @see BiomeEffects#getFoliageColor()
+		 * @see BiomeEffects.Builder#foliageColor(int)
+		 */
+		default void setFoliageColor(OptionalInt color) {
+			color.ifPresentOrElse(this::setFoliageColor, this::clearFoliageColor);
+		}
+
+		/**
+		 * @see BiomeEffects#getGrassColor()
+		 * @see BiomeEffects.Builder#grassColor(int)
+		 */
+		default void setGrassColor(OptionalInt color) {
+			color.ifPresentOrElse(this::setGrassColor, this::clearGrassColor);
+		}
+	}
 
 	interface GenerationSettingsContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.GenerationSettingsContext { }
 

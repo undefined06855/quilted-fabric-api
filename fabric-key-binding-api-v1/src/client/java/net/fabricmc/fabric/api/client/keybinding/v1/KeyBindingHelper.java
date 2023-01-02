@@ -17,6 +17,8 @@
 
 package net.fabricmc.fabric.api.client.keybinding.v1;
 
+import java.util.Objects;
+
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 
@@ -24,14 +26,15 @@ import net.fabricmc.fabric.impl.client.keybinding.KeyBindingRegistryImpl;
 import net.fabricmc.fabric.mixin.client.keybinding.KeyBindingAccessor;
 
 /**
- * Helper for registering key bindings.
- *
- * <p>Helper class for {@link KeyBinding} for use by Fabric mods.</p>
+ * Helper for registering {@link KeyBinding}s.
  *
  * <pre>{@code
  * KeyBinding left = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.example.left", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_P, "key.category.example"));
  * KeyBinding right = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.example.right", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "key.category.example"));
  * }</pre>
+ *
+ * @see KeyBinding
+ * @see net.minecraft.client.option.StickyKeyBinding
  */
 public final class KeyBindingHelper {
 	private KeyBindingHelper() {
@@ -42,8 +45,10 @@ public final class KeyBindingHelper {
 	 *
 	 * @param keyBinding the keybinding
 	 * @return the keybinding itself
+	 * @throws IllegalArgumentException when a key binding with the same ID is already registered
 	 */
 	public static KeyBinding registerKeyBinding(KeyBinding keyBinding) {
+		Objects.requireNonNull(keyBinding, "key binding cannot be null");
 		return KeyBindingRegistryImpl.registerKeyBinding(keyBinding);
 	}
 

@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2023 QuiltMC
+ * Copyright 2022 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,25 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.impl.networking.v0;
+package net.fabricmc.fabric.test.event.interaction;
+
+import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.village.VillagerProfession;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.network.C2SPacketTypeCallback;
-import net.fabricmc.fabric.api.networking.v1.S2CPlayChannelEvents;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 
-public final class OldNetworkingHooks implements ModInitializer {
+public class UseEntityTests implements ModInitializer {
 	@Override
 	public void onInitialize() {
-		// Must be lambdas below
-		S2CPlayChannelEvents.REGISTER.register((handler, server, sender, channels) -> {
-			C2SPacketTypeCallback.REGISTERED.invoker().accept(handler.player, channels);
-		});
-		S2CPlayChannelEvents.UNREGISTER.register((handler, server, sender, channels) -> {
-			C2SPacketTypeCallback.UNREGISTERED.invoker().accept(handler.player, channels);
+		// Disallow interactions with toolsmiths
+		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+			if (entity instanceof VillagerEntity villager && villager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH) {
+				return ActionResult.FAIL;
+			}
+
+			return ActionResult.PASS;
 		});
 	}
 }

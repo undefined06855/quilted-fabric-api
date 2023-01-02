@@ -53,6 +53,10 @@ public class FabricBlockSettings extends QuiltBlockSettings {
 		super(material, color);
 	}
 
+	protected FabricBlockSettings(Material material, Function<BlockState, MapColor> mapColorProvider) {
+		super(material, mapColorProvider);
+	}
+
 	protected FabricBlockSettings(AbstractBlock.Settings settings) {
 		super(settings);
 	}
@@ -67,6 +71,10 @@ public class FabricBlockSettings extends QuiltBlockSettings {
 
 	public static FabricBlockSettings of(Material material, DyeColor color) {
 		return new FabricBlockSettings(material, color.getMapColor());
+	}
+
+	public static FabricBlockSettings of(Material material, Function<BlockState, MapColor> mapColor) {
+		return new FabricBlockSettings(material, mapColor);
 	}
 
 	public static FabricBlockSettings copyOf(AbstractBlock block) {
