@@ -639,8 +639,6 @@ remapJar {
 }
 
 machete {
-	keepOriginal = true
-
 	// JSON minification isn't effective on this scale and sacrifices readability
 	json.enabled = false
 }
