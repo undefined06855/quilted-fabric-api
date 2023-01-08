@@ -30,7 +30,6 @@ import net.minecraft.item.Item;
 
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 
-@ApiStatus.Internal
 public class BlockRenderLayerMapImpl implements BlockRenderLayerMap {
 	public BlockRenderLayerMapImpl() {
 	}

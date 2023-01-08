@@ -29,7 +29,6 @@ import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
-@ApiStatus.Internal
 public final class QuiltPacketSender implements PacketSender {
 	private final org.quiltmc.qsl.networking.api.PacketSender sender;
 
