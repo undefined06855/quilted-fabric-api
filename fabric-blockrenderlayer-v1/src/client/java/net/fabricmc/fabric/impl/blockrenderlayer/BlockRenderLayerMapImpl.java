@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.fluid.Fluid;
