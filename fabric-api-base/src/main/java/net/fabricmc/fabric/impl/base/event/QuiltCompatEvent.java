@@ -26,7 +26,6 @@ import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
 
-@ApiStatus.Internal
 public final class QuiltCompatEvent {
 	private QuiltCompatEvent() {
 	}

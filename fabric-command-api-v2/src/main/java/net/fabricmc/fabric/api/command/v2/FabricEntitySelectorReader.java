@@ -26,7 +26,10 @@ import net.minecraft.util.Identifier;
  * using interface injection. This allows custom entity selectors to
  * set a custom flag to a reader. This can be used to implement mutually-exclusive
  * or non-repeatable entity selector option.
+ *
+ * @deprecated Use Quilt Command API's {@link org.quiltmc.qsl.command.api.QuiltEntitySelectorReader} instead.
  */
+@Deprecated
 public interface FabricEntitySelectorReader extends QuiltEntitySelectorReader {
 	/**
 	 * Sets a flag.

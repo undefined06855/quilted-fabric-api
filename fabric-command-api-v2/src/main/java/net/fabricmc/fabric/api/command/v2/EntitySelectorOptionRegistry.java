@@ -26,7 +26,10 @@ import net.minecraft.util.Identifier;
 
 /**
  * Contains a function to register an entity selector option.
+ *
+ * @deprecated Use Quilt Command API's {@link org.quiltmc.qsl.command.api.EntitySelectorOptionRegistry} instead.
  */
+@Deprecated
 public final class EntitySelectorOptionRegistry {
 	private EntitySelectorOptionRegistry() {
 	}
