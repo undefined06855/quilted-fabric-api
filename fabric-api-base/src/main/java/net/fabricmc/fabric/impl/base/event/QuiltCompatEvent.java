@@ -20,8 +20,6 @@ package net.fabricmc.fabric.impl.base.event;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
