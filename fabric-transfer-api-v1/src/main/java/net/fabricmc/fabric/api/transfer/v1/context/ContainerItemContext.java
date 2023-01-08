@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsage;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Hand;
 
@@ -36,6 +37,8 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.impl.transfer.context.ConstantContainerItemContext;
+import net.fabricmc.fabric.impl.transfer.context.CreativeInteractionContainerItemContext;
 import net.fabricmc.fabric.impl.transfer.context.InitialContentsContainerItemContext;
 import net.fabricmc.fabric.impl.transfer.context.PlayerContainerItemContext;
 import net.fabricmc.fabric.impl.transfer.context.SingleSlotContainerItemContext;
@@ -91,15 +94,27 @@ public interface ContainerItemContext {
 	/**
 	 * Returns a context for interaction with a player's hand. This is recommended for item use interactions.
 	 *
-	 * <p>In creative mode, {@link #withInitial(ItemStack)} is used to avoid modifying the item in hand.
+	 * <p>In creative mode, {@link #forCreativeInteraction} is used with the hand stack.
 	 * Otherwise, {@link #ofPlayerHand} is used.
+	 * This matches the behavior of {@link ItemUsage#exchangeStack}.
 	 */
 	static ContainerItemContext forPlayerInteraction(PlayerEntity player, Hand hand) {
 		if (player.getAbilities().creativeMode) {
-			return withInitial(player.getStackInHand(hand));
+			return forCreativeInteraction(player, player.getStackInHand(hand));
 		} else {
 			return ofPlayerHand(player, hand);
 		}
+	}
+
+	/**
+	 * Returns a context for creative interaction.
+	 *
+	 * <p>The stack will never be modified, and any updated stack will only be added to the player's inventory
+	 * if the player's inventory doesn't already contain it.
+	 * This matches the creative behavior of {@link ItemUsage#exchangeStack}.
+	 */
+	static ContainerItemContext forCreativeInteraction(PlayerEntity player, ItemStack interactingStack) {
+		return new CreativeInteractionContainerItemContext(ItemVariant.of(interactingStack), interactingStack.getCount(), player);
 	}
 
 	/**
@@ -133,12 +148,36 @@ public interface ContainerItemContext {
 	}
 
 	/**
-	 * Return a context that can accept anything, and will accept (and destroy) any overflow items, with some initial content.
+	 * Return a context that always has some content, and will accept (and destroy) any overflow items.
 	 * This can typically be used to check if a stack provides an API, or simulate operations on the returned API,
 	 * for example to simulate how much fluid could be extracted from the stack.
 	 *
 	 * <p>Note that the stack can never be mutated by this function: its contents are copied directly.
 	 */
+	static ContainerItemContext withConstant(ItemStack constantContent) {
+		return withConstant(ItemVariant.of(constantContent), constantContent.getCount());
+	}
+
+	/**
+	 * Return a context that always has some content, and will accept (and destroy) any overflow items.
+	 * This can typically be used to check if a stack provides an API, or simulate operations on the returned API,
+	 * for example to simulate how much fluid could be extracted from the variant and amount.
+	 */
+	static ContainerItemContext withConstant(ItemVariant constantVariant, long constantAmount) {
+		StoragePreconditions.notNegative(constantAmount);
+		return new ConstantContainerItemContext(constantVariant, constantAmount);
+	}
+
+	/**
+	 * Return a context that can accept anything, and will accept (and destroy) any overflow items, with some initial content.
+	 * This can typically be used to check if a stack provides an API, or simulate operations on the returned API,
+	 * for example to simulate how much fluid could be extracted from the stack.
+	 *
+	 * <p>Note that the stack can never be mutated by this function: its contents are copied directly.
+	 *
+	 * @deprecated Use {@link #withConstant(ItemStack)} instead.
+	 */
+	@Deprecated(forRemoval = true)
 	static ContainerItemContext withInitial(ItemStack initialContent) {
 		return withInitial(ItemVariant.of(initialContent), initialContent.getCount());
 	}
@@ -147,7 +186,10 @@ public interface ContainerItemContext {
 	 * Return a context that can accept anything, and will accept (and destroy) any overflow items, with some initial variant and amount.
 	 * This can typically be used to check if a variant provides an API, or simulate operations on the returned API,
 	 * for example to simulate how much fluid could be extracted from the variant and amount.
+	 *
+	 * @deprecated Use {@link #withConstant(ItemVariant, long)} instead.
 	 */
+	@Deprecated(forRemoval = true)
 	static ContainerItemContext withInitial(ItemVariant initialVariant, long initialAmount) {
 		StoragePreconditions.notNegative(initialAmount);
 		return new InitialContentsContainerItemContext(initialVariant, initialAmount);

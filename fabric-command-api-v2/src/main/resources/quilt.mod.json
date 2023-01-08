@@ -35,7 +35,10 @@
 			}
 		]
 	},
-	"mixin": "quilted_fabric_command_api_v2.client.mixins.json",
+	"mixin": [
+		"quilted_fabric_command_api_v2.mixins.json",
+		"quilted_fabric_command_api_v2.client.mixins.json"
+	],
 	"access_widener": "quilted_fabric_command_api_v2.accesswidener",
 	"fabric-api:module-lifecycle": "deprecated",
 	"modmenu": {
@@ -43,5 +46,10 @@
 			"library"
 		],
 		"parent": "quilted_fabric_api"
+	},
+	"quilt_loom": {
+		"injected_interfaces": {
+			"net/minecraft/class_2303": ["net/fabricmc/fabric/api/command/v2/FabricEntitySelectorReader"]
+		}
 	}
 }

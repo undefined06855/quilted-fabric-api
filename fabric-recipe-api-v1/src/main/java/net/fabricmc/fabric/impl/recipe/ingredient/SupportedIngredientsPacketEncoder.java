@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,16 @@
  * limitations under the License.
  */
 
-/**
- * Contains the Registry Sync implementation.
- */
-@ApiStatus.Internal
-package net.fabricmc.fabric.impl.registry.sync;
+package net.fabricmc.fabric.impl.recipe.ingredient;
 
-import org.jetbrains.annotations.ApiStatus;
+import java.util.Set;
+
+import net.minecraft.network.PacketEncoder;
+import net.minecraft.util.Identifier;
+
+/**
+ * Implemented on {@link PacketEncoder} to store which custom ingredients the client supports.
+ */
+public interface SupportedIngredientsPacketEncoder {
+	void fabric_setSupportedCustomIngredients(Set<Identifier> supportedCustomIngredients);
+}

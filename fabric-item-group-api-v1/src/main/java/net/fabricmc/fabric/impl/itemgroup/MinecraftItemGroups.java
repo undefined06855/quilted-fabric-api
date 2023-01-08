@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,11 @@ package net.fabricmc.fabric.impl.itemgroup;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.util.Identifier;
 
-@ApiStatus.Internal
 public final class MinecraftItemGroups {
 	public static final Identifier BUILDING_BLOCKS_ID = new Identifier("minecraft:building_blocks");
 	public static final Identifier COLOURED_BLOCKS_ID = new Identifier("minecraft:colored_blocks");

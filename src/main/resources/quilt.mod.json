@@ -62,6 +62,7 @@
 			"quilted_fabric_networking_api_v1",
 			"quilted_fabric_object_builder_api_v1",
 			"quilted_fabric_particles_v1",
+			"quilted_fabric_recipe_api_v1",
 			"quilted_fabric_registry_sync_v0",
 			"quilted_fabric_renderer_api_v1",
 			"quilted_fabric_renderer_indigo",

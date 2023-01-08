@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.impl.util.FileSystemUtil;
 import org.slf4j.Logger;
@@ -48,7 +47,6 @@ import net.fabricmc.fabric.api.tag.client.v1.ClientTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 
-@ApiStatus.Internal
 public class ClientTagsLoader {
 	private static final Logger LOGGER = LoggerFactory.getLogger("fabric-client-tags-api-v1");
 	/**

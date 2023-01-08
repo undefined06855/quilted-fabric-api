@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ package net.fabricmc.fabric.impl.itemgroup;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.util.Identifier;
@@ -29,7 +28,6 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
-@ApiStatus.Internal
 public class ItemGroupEventsImpl {
 	private static final Map<Identifier, Event<ItemGroupEvents.ModifyEntries>> IDENTIFIER_EVENT_MAP = new HashMap<>();
 

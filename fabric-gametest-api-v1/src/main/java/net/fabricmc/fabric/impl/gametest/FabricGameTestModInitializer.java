@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.test.TestFunctions;
 
@@ -31,7 +30,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 
-@ApiStatus.Internal
 public final class FabricGameTestModInitializer implements ModInitializer {
 	private static final String ENTRYPOINT_KEY = "fabric-gametest";
 	private static final Map<Class<?>, String> GAME_TEST_IDS = new HashMap<>();

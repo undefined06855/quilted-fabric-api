@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,8 @@ public final class FluidStorageUtil {
 	 * Then, it tries to fill that item from the storage. If that fails, it tries to fill the storage from that item.
 	 *
 	 * <p>Only up to one fluid variant will be moved, and the corresponding emptying/filling sound will be played.
-	 * In creative mode, the player's inventory will not be modified.
+	 * In creative mode, the original container item is not modified,
+	 * and the player's inventory will additionally receive a copy of the modified container, if it doesn't have it yet.
 	 *
 	 * @param storage The storage that the player is interacting with.
 	 * @param player The player.

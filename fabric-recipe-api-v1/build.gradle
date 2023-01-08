@@ -1,0 +1,10 @@
+archivesBaseName = "quilted_fabric_recipe_api_v1"
+version = getSubprojectVersion(project)
+
+loom {
+	accessWidenerPath = file('src/main/resources/quilted_fabric_recipe_api_v1.accesswidener')
+}
+
+moduleDependencies(project, [
+		"fabric-networking-api-v1",
+])

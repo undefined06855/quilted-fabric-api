@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -31,7 +30,6 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-@ApiStatus.Internal
 public class FabricCreativeGuiComponents {
 	private static final Identifier BUTTON_TEX = new Identifier("fabric", "textures/gui/creative_buttons.png");
 	public static final Set<ItemGroup> COMMON_GROUPS = Set.of(ItemGroups.SEARCH, ItemGroups.INVENTORY, ItemGroups.HOTBAR);

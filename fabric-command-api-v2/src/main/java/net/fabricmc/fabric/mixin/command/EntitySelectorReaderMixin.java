@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,14 @@
  * limitations under the License.
  */
 
-/**
- * Contains remap state trackers.
- */
-@ApiStatus.Internal
-package net.fabricmc.fabric.impl.registry.sync.trackers;
+package net.fabricmc.fabric.mixin.command;
 
-import org.jetbrains.annotations.ApiStatus;
+import org.spongepowered.asm.mixin.Mixin;
+
+import net.minecraft.command.EntitySelectorReader;
+
+import net.fabricmc.fabric.api.command.v2.FabricEntitySelectorReader;
+
+@Mixin(EntitySelectorReader.class)
+public abstract class EntitySelectorReaderMixin implements FabricEntitySelectorReader {
+}
