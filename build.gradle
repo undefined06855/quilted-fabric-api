@@ -205,14 +205,6 @@ allprojects {
 		testmodImplementation sourceSets.client.output
 	}
 
-	repositories {
-		mavenLocal()
-		maven {
-			name = 'Quilt'
-			url = 'https://maven.quiltmc.org/repository/snapshot'
-		}
-	}
-
 	tasks.withType(ProcessResources).configureEach {
 		inputs.property "version", project.version
 		inputs.property "upstream_version", project.upstream_version
