@@ -643,6 +643,8 @@ machete {
 	// JSON minification isn't effective on this scale and sacrifices readability
 	json.enabled = false
 }
+// This prevents issues with execution optimizations and therefore, Gradle deprecation warnings
+tasks.prepareRemapJar.dependsOn("optimizeOutputsOfJar")
 
 task renameJar(type: Jar, dependsOn: (signingEnabled ? signRemapJar : remapJar)) {
 	with remapJar
