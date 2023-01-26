@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import net.minecraft.loot.context.LootContextType;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.loot.FabricBlockLootTableGenerator;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
 
@@ -58,6 +59,8 @@ public interface FabricLootTableProvider extends Consumer<BiConsumer<Identifier,
 
 	/**
 	 * Return a new exporter that applies the specified conditions to any loot table it receives.
+	 *
+	 * <p>For block loot tables, use {@link FabricBlockLootTableGenerator#withConditions} instead.
 	 */
 	default BiConsumer<Identifier, LootTable.Builder> withConditions(BiConsumer<Identifier, LootTable.Builder> exporter, ConditionJsonProvider... conditions) {
 		Preconditions.checkArgument(conditions.length > 0, "Must add at least one condition.");
