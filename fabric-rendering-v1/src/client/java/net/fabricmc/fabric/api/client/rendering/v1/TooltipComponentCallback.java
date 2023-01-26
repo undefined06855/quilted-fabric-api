@@ -33,6 +33,8 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  *
  * <p>Note that failure to map some data to a component will throw an exception,
  * so make sure that any data you return in {@link Item#getTooltipData} will be handled by one of the callbacks.
+ *
+ * @deprecated Use Quilt Tooltip API's {@link org.quiltmc.qsl.tooltip.api.client.TooltipComponentCallback} instead.
  */
 @Deprecated
 public interface TooltipComponentCallback {
