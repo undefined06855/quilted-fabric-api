@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,8 @@ public abstract class DynamicRegistryManagerSetupContextImplMixin implements Dyn
 	public Stream<Registry<?>> stream() {
 		return this.registries.values().stream().map(registry -> (Registry<?>) registry);
 	}
+
+	// getOptional is implemented at workaround.DynamicRegistryManagerSetupContextImplMixin
 
 	@Override
 	public <T> void registerEntryAdded(RegistryKey<? extends Registry<? extends T>> registryRef, RegistryEntryAddedCallback<T> callback) {

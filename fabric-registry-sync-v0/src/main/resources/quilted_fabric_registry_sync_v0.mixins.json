@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "quilt.DynamicRegistryManagerSetupContextImplMixin",
+    "quilt.workaround.DynamicRegistryManagerSetupContextImplMixin",
     "BootstrapMixin",
     "ChunkSerializerMixin",
     "DebugChunkGeneratorAccessor",
