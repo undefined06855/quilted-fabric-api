@@ -39,7 +39,6 @@ public abstract class DynamicRegistryManagerSetupContextImplMixin implements Dyn
 
 	// We duplicate the logic here in order to have it be the implementation of Fabric's version of getOptional
 	@Override
-	@Shadow
 	public <E> Optional<Registry<E>> getOptional(RegistryKey<? extends Registry<? extends E>> key) {
 		return Optional.ofNullable((Registry) this.registries.get(key)).map(registry -> registry);
 	}
