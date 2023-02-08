@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,16 +24,19 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Function;
+
+import com.google.common.collect.MapMaker;
 
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
 
 public final class EventFactoryImpl {
-	private static final List<ArrayBackedEvent<?>> ARRAY_BACKED_EVENTS = new ArrayList<>();
+	private static final Set<ArrayBackedEvent<?>> ARRAY_BACKED_EVENTS
+			= Collections.newSetFromMap(new MapMaker().weakKeys().makeMap());
 
 	private EventFactoryImpl() { }
 

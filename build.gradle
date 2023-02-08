@@ -9,7 +9,7 @@ plugins {
 	id "eclipse"
 	id "idea"
 	id "maven-publish"
-	id "org.quiltmc.loom" version "1.0.+" apply false
+	id "org.quiltmc.loom" version "1.1.+" apply false
 	id "org.quiltmc.gradle.licenser" version "1.+"
 	id "net.kyori.indra.git" version "3.0.1"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
@@ -485,18 +485,6 @@ subprojects {
 	loom.disableDeprecatedPomGeneration(publishing.publications.mavenJava)
 
 	javadoc.enabled = false
-
-	afterEvaluate {
-		// Disable the gen sources task on sub projects
-		genClientOnlySourcesWithQuiltflower.enabled = false
-		genClientOnlySourcesWithFernFlower.enabled = false
-		genClientOnlySourcesWithCfr.enabled = false
-		genCommonSourcesWithQuiltflower.enabled = false
-		genCommonSourcesWithFernFlower.enabled = false
-		genCommonSourcesWithCfr.enabled = false
-		unpickClientOnlyJar.enabled = false
-		unpickCommonJar.enabled = false
-	}
 }
 
 publishing {
