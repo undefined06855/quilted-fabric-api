@@ -219,6 +219,7 @@ allprojects {
 		rule rootProject.file("codeformat/HEADER")
 
 		include "**/*.java"
+		exclude "**/package-info.java"
 	}
 
 	checkstyle {
