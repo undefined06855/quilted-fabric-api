@@ -218,8 +218,9 @@ allprojects {
 		rule rootProject.file("codeformat/FABRIC_MODIFIED_HEADER")
 		rule rootProject.file("codeformat/HEADER")
 
-		exclude "**/package-info.java"
 		include "**/*.java"
+		// TODO - Fix the package-info licenses!
+		exclude "**/package-info.java"
 	}
 
 	checkstyle {
