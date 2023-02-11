@@ -9,7 +9,7 @@ plugins {
 	id "eclipse"
 	id "idea"
 	id "maven-publish"
-	id "org.quiltmc.loom" version "1.1.+" apply false
+	id "org.quiltmc.loom" version "1.1.local" apply false
 	id "org.quiltmc.gradle.licenser" version "1.+"
 	id "net.kyori.indra.git" version "3.0.1"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
@@ -348,9 +348,9 @@ loom {
 			name "Game Test"
 
 			// Enable the gametest runner
-			vmArg "-Dfabric-api.gametest"
-			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
-			runDir "build/gametest"
+			property "-Dquilt.game_test", "true"
+			property "-Dquilt.game_test.report-file", "${project.buildDir}/report.xml"
+			runDir "build/game_test"
 		}
 		autoTestServer {
 			inherit testmodServer
@@ -454,14 +454,24 @@ task runProductionAutoTestServer(type: JavaExec, dependsOn: [remapJar, remapTest
 subprojects {
 	if (it.name == "deprecated") return
 
+	// Quilt: We need those in order to add Quilt Testing API
+	loom.createRemapConfigurations(sourceSets.testmod)
+
 	dependencies {
 		testmodImplementation sourceSets.main.output
 
 		// Make all modules depend on the gametest api (and thus res loader) to try and promote its usage.
+		/*
 		if (project.name != "fabric-gametest-api-v1") {
 			testmodImplementation project(path: ':fabric-gametest-api-v1', configuration: 'namedElements')
 			testmodImplementation project(path: ':fabric-resource-loader-v0', configuration: 'namedElements')
 		}
+		*/
+		// Quilt: This is our way of doing things!
+		modTestmodImplementation getQslModule("core", "testing")
+		modTestmodImplementation getQslModule("core", "lifecycle_events")
+		modTestmodImplementation getQslModule("core", "resource_loader")
+		modTestmodImplementation getQslModule("core", "qsl_base")
 
 		// Make all testmods run with registry-sync-v0 as it is required to register new objects.
 		if (project.name != "fabric-registry-sync-v0") {
@@ -568,7 +578,7 @@ sourceSets {
 
 // These modules are not included in the fat jar, maven will resolve them via the pom.
 def devOnlyModules = [
-		"fabric-gametest-api-v1",
+		// "fabric-gametest-api-v1",
 ]
 
 configurations {
