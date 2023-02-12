@@ -25,7 +25,6 @@ import org.quiltmc.qsl.testing.api.game.QuiltTestContext;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;
-import net.minecraft.test.TestContext;
 
 public class SerializationTests {
 	/**

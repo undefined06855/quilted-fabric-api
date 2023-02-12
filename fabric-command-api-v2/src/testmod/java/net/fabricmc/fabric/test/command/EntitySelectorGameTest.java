@@ -28,7 +28,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.test.GameTest;
 import net.minecraft.util.math.BlockPos;
 
-
 public class EntitySelectorGameTest {
 	private void spawn(QuiltTestContext context, float health) {
 		MobEntity entity = context.spawnMob(EntityType.CREEPER, BlockPos.ORIGIN);

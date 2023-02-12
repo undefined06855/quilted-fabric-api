@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.test.GameTest;
-import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 
 import net.fabricmc.fabric.test.item.CustomDamageTest;
@@ -117,7 +116,7 @@ public class FurnaceGameTest implements QuiltGameTest {
 		}
 	}
 
-	private void cook(FurnaceBlockEntity blockEntity, TestContext context, int items) {
+	private void cook(FurnaceBlockEntity blockEntity, QuiltTestContext context, int items) {
 		for (int i = 0; i < COOK_TIME * items; i++) {
 			AbstractFurnaceBlockEntity.tick(context.getWorld(), POS, context.getBlockState(POS), blockEntity);
 		}
