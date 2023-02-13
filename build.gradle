@@ -454,8 +454,10 @@ task runProductionAutoTestServer(type: JavaExec, dependsOn: [remapJar, remapTest
 subprojects {
 	if (it.name == "deprecated") return
 
-	// Quilt: We need those in order to add Quilt Testing API
-	loom.createRemapConfigurations(sourceSets.testmod)
+	loom {
+		// Quilt: We need this in order to add Quilt Testing API to all testmods
+		createRemapConfigurations sourceSets.testmod
+	}
 
 	dependencies {
 		testmodImplementation sourceSets.main.output
