@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
@@ -100,7 +101,8 @@ public class RegistrySyncTest implements ModInitializer {
 			}
 		}
 
-		SimpleRegistry<String> fabricRegistry = FabricRegistryBuilder.createSimple(String.class, new Identifier("registry_sync", "fabric_registry"))
+		RegistryKey<Registry<String>> fabricRegistryKey = RegistryKey.ofRegistry(new Identifier("registry_sync", "fabric_registry"));
+		SimpleRegistry<String> fabricRegistry = FabricRegistryBuilder.createSimple(fabricRegistryKey)
 				.attribute(RegistryAttribute.SYNCED)
 				.buildAndRegister();
 

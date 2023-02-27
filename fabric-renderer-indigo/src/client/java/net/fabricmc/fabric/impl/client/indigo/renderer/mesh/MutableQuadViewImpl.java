@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import net.minecraft.util.math.Direction;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.impl.client.indigo.renderer.IndigoRenderer;
+import net.fabricmc.fabric.impl.client.indigo.renderer.RenderMaterialImpl;
 import net.fabricmc.fabric.impl.client.indigo.renderer.RenderMaterialImpl.Value;
 import net.fabricmc.fabric.impl.client.indigo.renderer.helper.NormalHelper;
 import net.fabricmc.fabric.impl.client.indigo.renderer.helper.TextureHelper;
@@ -117,9 +118,13 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements QuadEm
 		data[baseIndex + HEADER_BITS] = EncodingFormat.cullFace(0, cullFace);
 		nominalFace(quad.getFace());
 		colorIndex(quad.getColorIndex());
+
+		if (!quad.hasShade()) {
+			material = RenderMaterialImpl.setDisableDiffuse((Value) material, 0, true);
+		}
+
 		material(material);
 		tag(0);
-		shade(quad.hasShade());
 		isGeometryInvalid = true;
 		return this;
 	}

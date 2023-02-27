@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package net.fabricmc.fabric.impl.client.indigo.renderer.mesh;
 
 import static net.fabricmc.fabric.impl.client.indigo.renderer.mesh.EncodingFormat.HEADER_BITS;
 import static net.fabricmc.fabric.impl.client.indigo.renderer.mesh.EncodingFormat.HEADER_COLOR_INDEX;
-import static net.fabricmc.fabric.impl.client.indigo.renderer.mesh.EncodingFormat.HEADER_STRIDE;
 import static net.fabricmc.fabric.impl.client.indigo.renderer.mesh.EncodingFormat.HEADER_TAG;
 import static net.fabricmc.fabric.impl.client.indigo.renderer.mesh.EncodingFormat.QUAD_STRIDE;
 import static net.fabricmc.fabric.impl.client.indigo.renderer.mesh.EncodingFormat.VERTEX_COLOR;
@@ -53,7 +52,6 @@ public class QuadViewImpl implements QuadView {
 	/** True when geometry flags or light face may not match geometry. */
 	protected boolean isGeometryInvalid = true;
 	protected final Vector3f faceNormal = new Vector3f();
-	private boolean shade = true;
 
 	/** Size and where it comes from will vary in subtypes. But in all cases quad is fully encoded to array. */
 	protected int[] data;
@@ -269,15 +267,7 @@ public class QuadViewImpl implements QuadView {
 		return Float.intBitsToFloat(data[baseIndex + vertexIndex * VERTEX_STRIDE + VERTEX_V]);
 	}
 
-	public int vertexStart() {
-		return baseIndex + HEADER_STRIDE;
-	}
-
 	public boolean hasShade() {
-		return shade && !material().disableDiffuse(0);
-	}
-
-	public void shade(boolean shade) {
-		this.shade = shade;
+		return !material().disableDiffuse(0);
 	}
 }

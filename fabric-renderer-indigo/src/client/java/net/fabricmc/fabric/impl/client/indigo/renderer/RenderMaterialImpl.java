@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,14 @@ public abstract class RenderMaterialImpl {
 
 	public static RenderMaterialImpl.Value byIndex(int index) {
 		return VALUES[index];
+	}
+
+	public static Value setDisableDiffuse(Value material, int textureIndex, boolean disable) {
+		if (material.disableDiffuse(textureIndex) != disable) {
+			return byIndex(disable ? (material.bits | DIFFUSE_FLAG) : (material.bits & ~DIFFUSE_FLAG));
+		}
+
+		return material;
 	}
 
 	protected int bits;

@@ -6,6 +6,10 @@ moduleDependencies(project, [
 		'fabric-api-base'
 ])
 
+testDependencies(project, [
+		'fabric-command-api-v2'
+])
+
 dependencies {
 	testmodRuntimeOnly(project(path: ':fabric-resource-loader-v0', configuration: 'namedElements'))
 }
