@@ -20,6 +20,9 @@ import net.minecraft.resource.ResourcePackSource;
 
 import net.fabricmc.fabric.impl.resource.loader.FabricResource;
 
+/**
+ * Holds an individual source setter in order to properly support group resource packs.
+ */
 public interface QuiltedFabricResource extends FabricResource {
 	void setFabricIndividualSource(ResourcePackSource source);
 }
