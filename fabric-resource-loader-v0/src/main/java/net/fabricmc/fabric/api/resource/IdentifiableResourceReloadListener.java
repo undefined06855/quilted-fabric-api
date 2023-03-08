@@ -57,9 +57,4 @@ public interface IdentifiableResourceReloadListener extends ResourceReloader, Id
 	default Identifier getQuiltId() {
 		return this.getFabricId();
 	}
-
-	@Override
-	default Collection<Identifier> getQuiltDependencies() {
-		return this.getFabricDependencies();
-	}
 }

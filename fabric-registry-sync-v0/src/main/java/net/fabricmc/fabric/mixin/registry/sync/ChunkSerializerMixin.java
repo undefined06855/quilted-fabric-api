@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import net.minecraft.world.ChunkSerializer;
 
 @Mixin(ChunkSerializer.class)
 public class ChunkSerializerMixin {
-	@Redirect(method = "readStructureReferences", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"))
+	@Redirect(method = "readStructureReferences", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", remap = false))
 	private static void log(Logger logger, String msg, Object identifier, Object chunkPos) {
 		// Drop to debug log level.
 		logger.debug(msg, identifier, chunkPos);

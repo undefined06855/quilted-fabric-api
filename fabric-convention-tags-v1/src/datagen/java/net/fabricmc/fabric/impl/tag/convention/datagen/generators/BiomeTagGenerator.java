@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,8 @@ public class BiomeTagGenerator extends FabricTagProvider<Biome> {
 				.add(BiomeKeys.SNOWY_SLOPES).add(BiomeKeys.FROZEN_PEAKS).add(BiomeKeys.JAGGED_PEAKS)
 				.add(BiomeKeys.STONY_PEAKS).add(BiomeKeys.MUSHROOM_FIELDS).add(BiomeKeys.DRIPSTONE_CAVES)
 				.add(BiomeKeys.LUSH_CAVES).add(BiomeKeys.SNOWY_BEACH).add(BiomeKeys.SWAMP).add(BiomeKeys.STONY_SHORE)
-				.add(BiomeKeys.DEEP_DARK).add(BiomeKeys.MANGROVE_SWAMP);
+				.add(BiomeKeys.DEEP_DARK).add(BiomeKeys.MANGROVE_SWAMP)
+				.addOptional(BiomeKeys.CHERRY_GROVE);
 	}
 
 	private void generateCategoryTags() {

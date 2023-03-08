@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +19,24 @@ package net.fabricmc.fabric.test.rendering;
 
 import java.util.Optional;
 
-import net.minecraft.registry.Registries;
 import net.minecraft.client.item.TooltipData;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
-import net.minecraft.registry.Registry;
 
 import net.fabricmc.api.ModInitializer;
 
 public class TooltipComponentTestInit implements ModInitializer {
 	public static Item CUSTOM_TOOLTIP_ITEM = new CustomTooltipItem();
-	public static Item CUSTOM_ARMOR_ITEM = new ArmorItem(TestArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new Item.Settings());
+	public static Item CUSTOM_ARMOR_ITEM = new ArmorItem(TestArmorMaterial.INSTANCE, ArmorItem.Type.CHESTPLATE, new Item.Settings());
 
 	@Override
 	public void onInitialize() {
@@ -66,12 +65,12 @@ public class TooltipComponentTestInit implements ModInitializer {
 		}
 
 		@Override
-		public int getDurability(EquipmentSlot slot) {
+		public int getDurability(ArmorItem.Type type) {
 			return 0;
 		}
 
 		@Override
-		public int getProtectionAmount(EquipmentSlot slot) {
+		public int getProtection(ArmorItem.Type type) {
 			return 0;
 		}
 

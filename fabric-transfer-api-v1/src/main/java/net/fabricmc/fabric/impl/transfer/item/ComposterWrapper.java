@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ package net.fabricmc.fabric.impl.transfer.item;
 import static net.minecraft.util.math.Direction.UP;
 
 import java.util.Map;
-import java.util.Objects;
 
 import com.google.common.collect.MapMaker;
 import org.jetbrains.annotations.Nullable;
@@ -64,10 +63,8 @@ public class ComposterWrapper extends SnapshotParticipant<Float> {
 	private static final Map<WorldLocation, ComposterWrapper> COMPOSTERS = new MapMaker().concurrencyLevel(1).weakValues().makeMap();
 
 	@Nullable
-	public static Storage<ItemVariant> get(World world, BlockPos pos, Direction direction) {
-		Objects.requireNonNull(direction);
-
-		if (direction.getAxis().isVertical()) {
+	public static Storage<ItemVariant> get(World world, BlockPos pos, @Nullable Direction direction) {
+		if (direction != null && direction.getAxis().isVertical()) {
 			WorldLocation location = new WorldLocation(world, pos.toImmutable());
 			ComposterWrapper composterWrapper = COMPOSTERS.computeIfAbsent(location, ComposterWrapper::new);
 			return direction == UP ? composterWrapper.upStorage : composterWrapper.downStorage;

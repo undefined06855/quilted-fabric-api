@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -166,15 +166,6 @@ public interface Storage<T> extends Iterable<StorageView<T>> {
 	@Nullable
 	default StorageView<T> exactView(T resource) {
 		return null;
-	}
-
-	/**
-	 * @deprecated Use and implement the overload without the transaction parameter.
-	 */
-	@Deprecated(forRemoval = true)
-	@Nullable
-	default StorageView<T> exactView(TransactionContext transaction, T resource) {
-		return exactView(resource);
 	}
 
 	/**

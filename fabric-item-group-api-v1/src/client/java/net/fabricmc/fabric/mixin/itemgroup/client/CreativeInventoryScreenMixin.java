@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
  */
 
 package net.fabricmc.fabric.mixin.itemgroup.client;
+
+import java.util.Objects;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -75,7 +77,7 @@ public abstract class CreativeInventoryScreenMixin<T extends ScreenHandler> exte
 
 	@Override
 	public boolean fabric_isButtonVisible(FabricCreativeGuiComponents.Type type) {
-		return ItemGroups.getGroupsToDisplay().size() > (ItemGroups.operatorEnabled ? 14 : 13);
+		return ItemGroups.getGroupsToDisplay().size() > (Objects.requireNonNull(ItemGroups.displayContext).hasPermissions() ? 14 : 13);
 	}
 
 	@Override

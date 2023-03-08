@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ public class HopperBlockEntityMixin {
 		if (inputInventory != null) return;
 
 		// Otherwise inject our transfer logic.
-		BlockPos sourcePos = new BlockPos(hopper.getHopperX(), hopper.getHopperY() + 1.0D, hopper.getHopperZ());
+		BlockPos sourcePos = BlockPos.ofFloored(hopper.getHopperX(), hopper.getHopperY() + 1.0D, hopper.getHopperZ());
 		Storage<ItemVariant> source = ItemStorage.SIDED.find(world, sourcePos, Direction.DOWN);
 
 		if (source != null) {

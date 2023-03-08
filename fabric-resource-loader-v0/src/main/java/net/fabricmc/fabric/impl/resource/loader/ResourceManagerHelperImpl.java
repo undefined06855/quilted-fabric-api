@@ -42,6 +42,12 @@ public class ResourceManagerHelperImpl implements ResourceManagerHelper {
 
 	@Override
 	public void registerReloadListener(IdentifiableResourceReloadListener listener) {
-		ResourceLoader.get(this.type).registerReloader(listener);
+		var loader = ResourceLoader.get(this.type);
+		loader.registerReloader(listener);
+
+		// Reimplement getFabricDependencies' functionality with reloader reordering
+		for (var dependency : listener.getFabricDependencies()) {
+			loader.addReloaderOrdering(dependency, listener.getQuiltId());
+		}
 	}
 }

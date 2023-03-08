@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
-import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
@@ -65,7 +64,7 @@ abstract class ItemGroupMixin implements IdentifiableItemGroup, FabricItemGroup 
 
 	@SuppressWarnings("ConstantConditions")
 	@Inject(method = "updateEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemGroup;reloadSearchProvider()V"))
-	public void getStacks(FeatureSet enabledFeatures, boolean operatorEnabled, CallbackInfo ci) {
+	public void getStacks(ItemGroup.DisplayContext context, CallbackInfo ci) {
 		ItemGroup self = (ItemGroup) (Object) this;
 
 		// Do not modify special item groups (except Operator Blocks) at all.
@@ -80,7 +79,7 @@ abstract class ItemGroupMixin implements IdentifiableItemGroup, FabricItemGroup 
 		// Convert the entries to lists
 		var mutableDisplayStacks = new LinkedList<>(displayStacks);
 		var mutableSearchTabStacks = new LinkedList<>(searchTabStacks);
-		var entries = new FabricItemGroupEntries(enabledFeatures, mutableDisplayStacks, mutableSearchTabStacks, operatorEnabled);
+		var entries = new FabricItemGroupEntries(context, mutableDisplayStacks, mutableSearchTabStacks);
 
 		final Event<ItemGroupEvents.ModifyEntries> modifyEntriesEvent = ItemGroupEventsImpl.getModifyEntriesEvent(getId());
 
@@ -89,7 +88,7 @@ abstract class ItemGroupMixin implements IdentifiableItemGroup, FabricItemGroup 
 		}
 
 		// Now trigger the global event
-		if (self != ItemGroups.OPERATOR || ItemGroups.operatorEnabled) {
+		if (self != ItemGroups.OPERATOR || context.hasPermissions()) {
 			ItemGroupEvents.MODIFY_ENTRIES_ALL.invoker().modifyEntries(self, entries);
 		}
 

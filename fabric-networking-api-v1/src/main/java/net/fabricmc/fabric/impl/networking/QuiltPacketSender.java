@@ -21,9 +21,9 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.PacketCallbacks;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

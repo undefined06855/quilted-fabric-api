@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.data.server.tag.AbstractTagProvider;
+import net.minecraft.data.server.tag.TagProvider;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
@@ -71,7 +71,7 @@ import net.fabricmc.fabric.impl.datagen.ForcedTagEntry;
  * @see EntityTypeTagProvider
  * @see GameEventTagProvider
  */
-public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
+public abstract class FabricTagProvider<T> extends TagProvider<T> {
 	/**
 	 * Constructs a new {@link FabricTagProvider} with the default computed path.
 	 *
@@ -240,7 +240,7 @@ public abstract class FabricTagProvider<T> extends AbstractTagProvider<T> {
 	 * An extension to {@link ProvidedTagBuilder} that provides additional functionality.
 	 */
 	public final class FabricTagBuilder extends ProvidedTagBuilder<T> {
-		private final AbstractTagProvider.ProvidedTagBuilder<T> parent;
+		private final TagProvider.ProvidedTagBuilder<T> parent;
 
 		private FabricTagBuilder(ProvidedTagBuilder<T> parent) {
 			super(parent.builder);

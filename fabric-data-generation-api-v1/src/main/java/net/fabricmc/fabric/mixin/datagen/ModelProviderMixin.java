@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,7 +84,7 @@ public class ModelProviderMixin {
 		}
 	}
 
-	@Inject(method = "run", at = @At(value = "INVOKE_ASSIGN", target = "com/google/common/collect/Maps.newHashMap()Ljava/util/HashMap;", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "run", at = @At(value = "INVOKE_ASSIGN", target = "com/google/common/collect/Maps.newHashMap()Ljava/util/HashMap;", ordinal = 0, remap = false), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void runHead(DataWriter writer, CallbackInfoReturnable<CompletableFuture<?>> cir, Map<Block, BlockStateSupplier> map) {
 		fabricDataOutputThreadLocal.set(fabricDataOutput);
 		blockStateMapThreadLocal.set(map);

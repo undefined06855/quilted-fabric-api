@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.Optional;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 
 import net.fabricmc.fabric.mixin.client.keybinding.KeyBindingAccessor;
@@ -52,6 +53,10 @@ public final class KeyBindingRegistryImpl {
 	}
 
 	public static KeyBinding registerKeyBinding(KeyBinding binding) {
+		if (MinecraftClient.getInstance().options != null) {
+			throw new IllegalStateException("GameOptions has already been initialised");
+		}
+
 		for (KeyBinding existingKeyBindings : MODDED_KEY_BINDINGS) {
 			if (existingKeyBindings == binding) {
 				throw new IllegalArgumentException("Attempted to register a key binding twice: " + binding.getTranslationKey());

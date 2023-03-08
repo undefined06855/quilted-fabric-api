@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,32 +35,33 @@ import net.minecraft.resource.featuretoggle.FeatureSet;
  */
 @ApiStatus.Experimental
 public class FabricItemGroupEntries implements ItemGroup.Entries {
-	private final FeatureSet enabledFeatures;
+	private final ItemGroup.DisplayContext context;
 	private final List<ItemStack> displayStacks;
 	private final List<ItemStack> searchTabStacks;
 
-	private final boolean showOpRestrictedItems;
-
 	@ApiStatus.Internal
-	public FabricItemGroupEntries(FeatureSet enabledFeatures, List<ItemStack> displayStacks, List<ItemStack> searchTabStacks, boolean showOpRestrictedItems) {
-		this.enabledFeatures = enabledFeatures;
+	public FabricItemGroupEntries(ItemGroup.DisplayContext context, List<ItemStack> displayStacks, List<ItemStack> searchTabStacks) {
+		this.context = context;
 		this.displayStacks = displayStacks;
 		this.searchTabStacks = searchTabStacks;
-		this.showOpRestrictedItems = showOpRestrictedItems;
+	}
+
+	public ItemGroup.DisplayContext getContext() {
+		return context;
 	}
 
 	/**
 	 * @return the currently enabled feature set
 	 */
 	public FeatureSet getEnabledFeatures() {
-		return enabledFeatures;
+		return context.enabledFeatures();
 	}
 
 	/**
 	 * @return whether to show items restricted to operators, such as command blocks
 	 */
 	public boolean shouldShowOpRestrictedItems() {
-		return showOpRestrictedItems;
+		return context.hasPermissions();
 	}
 
 	/**
@@ -384,7 +385,7 @@ public class FabricItemGroupEntries implements ItemGroup.Entries {
 	 * @see Item#isEnabled
 	 */
 	private boolean isEnabled(ItemStack stack) {
-		return stack.getItem().isEnabled(enabledFeatures);
+		return stack.getItem().isEnabled(getEnabledFeatures());
 	}
 
 	private Collection<ItemStack> getEnabledStacks(Collection<ItemStack> newStacks) {

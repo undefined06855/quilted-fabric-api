@@ -23,18 +23,18 @@
 		"depends": [
 			{
 				"id": "quilt_loader",
-				"versions": ">=0.17.6"
+				"versions": ">=0.18.3"
 			},
 			{
 				"id": "java",
 				"versions": ">=17"
 			},
 			{
-					"id": "minecraft",
-					"versions": [
-						">=1.19.3-",
-						"<1.19.4-"
-					]
+				"id": "minecraft",
+				"versions": [
+					">=1.19.4-",
+					"<1.19.5-"
+				]
 			},
 			"quilted_fabric_api_base",
 			"quilted_fabric_api_lookup_api_v1",

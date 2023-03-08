@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class ItemGroupTest implements ModInitializer {
 	private static final ItemGroup ITEM_GROUP = FabricItemGroup.builder(new Identifier(MOD_ID, "test_group"))
 			.displayName(Text.literal("Test Item Group"))
 			.icon(() -> new ItemStack(Items.DIAMOND))
-			.entries((enabledFeatures, entries, operatorEnabled) -> {
+			.entries((context, entries) -> {
 				entries.addAll(Registries.ITEM.stream()
 						.map(ItemStack::new)
 						.filter(input -> !input.isEmpty())
@@ -83,7 +83,7 @@ public class ItemGroupTest implements ModInitializer {
 			FabricItemGroup.builder(new Identifier(MOD_ID, "test_group_" + i))
 					.displayName(Text.literal("Test Item Group: " + i))
 					.icon((Supplier<ItemStack>) () -> new ItemStack(Registries.BLOCK.get(index)))
-					.entries((enabledFeatures, entries, operatorEnabled) -> {
+					.entries((context, entries) -> {
 						var itemStack = new ItemStack(Registries.ITEM.get(index));
 
 						if (!itemStack.isEmpty()) {

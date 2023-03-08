@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import net.fabricmc.fabric.api.client.networking.v1.C2SPlayChannelEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 
 public final class NetworkingChannelClientTest implements ClientModInitializer {
-	public static final KeyBinding OPEN = KeyBindingHelper.registerKeyBinding(new KeyBinding("networking-v1-test", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MENU, "fabric-networking-api-v1-testmod\""));
+	public static final KeyBinding OPEN = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.fabric-networking-api-v1-testmod.open", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MENU, "key.category.fabric-networking-api-v1-testmod"));
 	static final Set<Identifier> SUPPORTED_C2S_CHANNELS = new HashSet<>();
 
 	@Override

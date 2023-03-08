@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
-	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;getBackendDescription()Ljava/lang/String;"))
+	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;getBackendDescription()Ljava/lang/String;", remap = false))
 	private void main(CallbackInfo info) {
 		if (FabricDataGenHelper.ENABLED) {
 			FabricDataGenHelper.run();

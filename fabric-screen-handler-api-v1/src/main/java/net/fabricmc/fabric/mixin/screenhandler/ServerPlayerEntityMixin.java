@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
@@ -66,11 +66,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 			this.closeHandledScreen();
 		} else {
 			// Called by closeHandledScreen in vanilla
-			this.closeScreenHandler();
+			this.onHandledScreenClosed();
 		}
 	}
 
-	@Inject(method = "openHandledScreen(Lnet/minecraft/screen/NamedScreenHandlerFactory;)Ljava/util/OptionalInt;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "openHandledScreen(Lnet/minecraft/screen/NamedScreenHandlerFactory;)Ljava/util/OptionalInt;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void fabric_storeOpenedScreenHandler(NamedScreenHandlerFactory factory, CallbackInfoReturnable<OptionalInt> info, ScreenHandler handler) {
 		if (factory instanceof ExtendedScreenHandlerFactory || (factory instanceof SimpleNamedScreenHandlerFactory simpleFactory && simpleFactory.baseFactory instanceof ExtendedScreenHandlerFactory)) {
 			fabric_openedScreenHandler.set(handler);
@@ -80,7 +80,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 		}
 	}
 
-	@Redirect(method = "openHandledScreen(Lnet/minecraft/screen/NamedScreenHandlerFactory;)Ljava/util/OptionalInt;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;)V"))
+	@Redirect(method = "openHandledScreen(Lnet/minecraft/screen/NamedScreenHandlerFactory;)Ljava/util/OptionalInt;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V"))
 	private void fabric_replaceVanillaScreenPacket(ServerPlayNetworkHandler networkHandler, Packet<?> packet, NamedScreenHandlerFactory factory) {
 		if (factory instanceof SimpleNamedScreenHandlerFactory simpleFactory && simpleFactory.baseFactory instanceof ExtendedScreenHandlerFactory extendedFactory) {
 			factory = extendedFactory;

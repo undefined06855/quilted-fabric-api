@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import static net.fabricmc.fabric.test.base.FabricClientTestHelper.enableDebugHu
 import static net.fabricmc.fabric.test.base.FabricClientTestHelper.openGameMenu;
 import static net.fabricmc.fabric.test.base.FabricClientTestHelper.openInventory;
 import static net.fabricmc.fabric.test.base.FabricClientTestHelper.setPerspective;
+import static net.fabricmc.fabric.test.base.FabricClientTestHelper.submitAndWait;
 import static net.fabricmc.fabric.test.base.FabricClientTestHelper.takeScreenshot;
 import static net.fabricmc.fabric.test.base.FabricClientTestHelper.waitForLoadingComplete;
 import static net.fabricmc.fabric.test.base.FabricClientTestHelper.waitForScreen;
@@ -36,6 +37,7 @@ import java.nio.file.Path;
 
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
+import net.minecraft.client.gui.screen.AccessibilityOnboardingScreen;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
@@ -66,6 +68,14 @@ public class FabricApiAutoTestClient implements ClientModInitializer {
 
 	private void runTest() {
 		waitForLoadingComplete();
+
+		final boolean onboardAccessibility = submitAndWait(client -> client.options.onboardAccessibility);
+
+		if (onboardAccessibility) {
+			waitForScreen(AccessibilityOnboardingScreen.class);
+			takeScreenshot("onboarding_screen");
+			clickScreenButton("gui.continue");
+		}
 
 		{
 			waitForScreen(TitleScreen.class);

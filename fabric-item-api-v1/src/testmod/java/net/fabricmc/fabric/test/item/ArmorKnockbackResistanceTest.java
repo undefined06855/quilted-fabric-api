@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,28 @@
 
 package net.fabricmc.fabric.test.item;
 
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 
 import net.fabricmc.api.ModInitializer;
 
 public class ArmorKnockbackResistanceTest implements ModInitializer {
 	private static final ArmorMaterial WOOD_ARMOR = new ArmorMaterial() {
 		@Override
-		public int getDurability(EquipmentSlot slot) {
+		public int getDurability(ArmorItem.Type arg) {
 			return 50;
 		}
 
 		@Override
-		public int getProtectionAmount(EquipmentSlot slot) {
+		public int getProtection(ArmorItem.Type arg) {
 			return 5;
 		}
 
@@ -77,6 +76,6 @@ public class ArmorKnockbackResistanceTest implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		Registry.register(Registries.ITEM, new Identifier("fabric-item-api-v1-testmod",
-				"wooden_boots"), new ArmorItem(WOOD_ARMOR, EquipmentSlot.FEET, new Item.Settings()));
+				"wooden_boots"), new ArmorItem(WOOD_ARMOR, ArmorItem.Type.BOOTS, new Item.Settings()));
 	}
 }

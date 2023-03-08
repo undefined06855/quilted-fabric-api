@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public final class ModResourcePackUtil {
 		switch (filename) {
 		case "pack.mcmeta":
 			String description = Objects.requireNonNullElse(info.getName(), "");
-			String metadata = serializeMetadata(type.getPackVersion(SharedConstants.getGameVersion()), description);
+			String metadata = serializeMetadata(SharedConstants.getGameVersion().getResourceVersion(type), description);
 			return IOUtils.toInputStream(metadata, Charsets.UTF_8);
 		default:
 			return null;

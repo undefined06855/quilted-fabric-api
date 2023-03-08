@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 // The server in response will send a chat message to the client.
 @Environment(EnvType.CLIENT)
 public class NetworkingKeybindClientPacketTest implements ClientModInitializer {
-	public static final KeyBinding TEST_BINDING = KeyBindingHelper.registerKeyBinding(new KeyBinding("fabric-networking-api-v1-testmod-keybind", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_BRACKET, "fabric-networking-api-v1-testmod"));
+	public static final KeyBinding TEST_BINDING = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.fabric-networking-api-v1-testmod.test", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_BRACKET, "key.category.fabric-networking-api-v1-testmod"));
 
 	@Override
 	public void onInitializeClient() {

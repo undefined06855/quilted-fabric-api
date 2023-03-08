@@ -9,11 +9,11 @@ mutable field net/minecraft/data/DataGenerator output Lnet/minecraft/data/DataOu
 accessible  field  net/minecraft/data/server/recipe/RecipeProvider  recipesPathResolver  Lnet/minecraft/data/DataOutput$PathResolver;
 accessible  field  net/minecraft/data/server/recipe/RecipeProvider  advancementsPathResolver  Lnet/minecraft/data/DataOutput$PathResolver;
 
-accessible  field   net/minecraft/data/server/tag/AbstractTagProvider$ProvidedTagBuilder builder Lnet/minecraft/registry/tag/TagBuilder;
-extendable  method  net/minecraft/data/server/tag/AbstractTagProvider$ProvidedTagBuilder add  (Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/data/server/tag/AbstractTagProvider$ProvidedTagBuilder;
-extendable  method  net/minecraft/data/server/tag/AbstractTagProvider$ProvidedTagBuilder add    ([Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/data/server/tag/AbstractTagProvider$ProvidedTagBuilder;
+accessible  field   net/minecraft/data/server/tag/TagProvider$ProvidedTagBuilder builder Lnet/minecraft/registry/tag/TagBuilder;
+extendable  method  net/minecraft/data/server/tag/TagProvider$ProvidedTagBuilder add  (Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/data/server/tag/TagProvider$ProvidedTagBuilder;
+extendable  method  net/minecraft/data/server/tag/TagProvider$ProvidedTagBuilder add    ([Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/data/server/tag/TagProvider$ProvidedTagBuilder;
 
-accessible  field   net/minecraft/data/server/tag/AbstractTagProvider   tagBuilders Ljava/util/Map;
+accessible  field   net/minecraft/data/server/tag/TagProvider   tagBuilders Ljava/util/Map;
 
 accessible  field   net/minecraft/data/server/loottable/BlockLootTableGenerator   lootTables  Ljava/util/Map;
 
@@ -43,7 +43,7 @@ transitive-accessible   field   net/minecraft/data/client/ItemModelGenerator    
 transitive-accessible   method  net/minecraft/data/client/TextureKey	of  (Ljava/lang/String;)Lnet/minecraft/data/client/TextureKey;
 transitive-accessible   method  net/minecraft/data/client/TextureKey	of  (Ljava/lang/String;Lnet/minecraft/data/client/TextureKey;)Lnet/minecraft/data/client/TextureKey;
 
-transitive-extendable   method  net/minecraft/data/server/tag/AbstractTagProvider$ProvidedTagBuilder add ([Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/data/server/tag/AbstractTagProvider$ProvidedTagBuilder;
+transitive-extendable   method  net/minecraft/data/server/tag/TagProvider$ProvidedTagBuilder add ([Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/data/server/tag/TagProvider$ProvidedTagBuilder;
 
 transitive-accessible   method  net/minecraft/data/client/TexturedModel makeFactory (Ljava/util/function/Function;Lnet/minecraft/data/client/Model;)Lnet/minecraft/data/client/TexturedModel$Factory;
 
@@ -60,7 +60,9 @@ transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	off
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerSmelting	(Ljava/util/function/Consumer;Ljava/util/List;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;FILjava/lang/String;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerBlasting	(Ljava/util/function/Consumer;Ljava/util/List;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;FILjava/lang/String;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerMultipleOptions	(Ljava/util/function/Consumer;Lnet/minecraft/recipe/RecipeSerializer;Ljava/util/List;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;FILjava/lang/String;Ljava/lang/String;)V
+transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerLegacyNetheriteUpgradeRecipe	(Ljava/util/function/Consumer;Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/Item;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerNetheriteUpgradeRecipe	(Ljava/util/function/Consumer;Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/Item;)V
+transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerSmithingTrimRecipe	(Ljava/util/function/Consumer;Lnet/minecraft/item/Item;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offer2x2CompactingRecipe	(Ljava/util/function/Consumer;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/item/ItemConvertible;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerCompactingRecipe	(Ljava/util/function/Consumer;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/item/ItemConvertible;Ljava/lang/String;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerCompactingRecipe	(Ljava/util/function/Consumer;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/item/ItemConvertible;)V
@@ -109,6 +111,8 @@ transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	off
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerReversibleCompactingRecipesWithCompactingRecipeGroup	(Ljava/util/function/Consumer;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Ljava/lang/String;Ljava/lang/String;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerReversibleCompactingRecipesWithReverseRecipeGroup	(Ljava/util/function/Consumer;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Ljava/lang/String;Ljava/lang/String;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerReversibleCompactingRecipes	(Ljava/util/function/Consumer;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/item/ItemConvertible;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerSmithingTemplateCopyingRecipe	(Ljava/util/function/Consumer;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/registry/tag/TagKey;)V
+transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerSmithingTemplateCopyingRecipe	(Ljava/util/function/Consumer;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/item/ItemConvertible;)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	generateCookingRecipes	(Ljava/util/function/Consumer;Ljava/lang/String;Lnet/minecraft/recipe/RecipeSerializer;I)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerFoodCookingRecipe	(Ljava/util/function/Consumer;Ljava/lang/String;Lnet/minecraft/recipe/RecipeSerializer;ILnet/minecraft/item/ItemConvertible;Lnet/minecraft/item/ItemConvertible;F)V
 transitive-accessible	method	net/minecraft/data/server/recipe/RecipeProvider	offerWaxingRecipes	(Ljava/util/function/Consumer;)V
@@ -180,6 +184,7 @@ transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerTintableCross	(Lnet/minecraft/block/Block;Lnet/minecraft/data/client/BlockStateModelGenerator$TintType;Lnet/minecraft/data/client/TextureMap;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerTintableCrossBlockState	(Lnet/minecraft/block/Block;Lnet/minecraft/data/client/BlockStateModelGenerator$TintType;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerTintableCrossBlockState	(Lnet/minecraft/block/Block;Lnet/minecraft/data/client/BlockStateModelGenerator$TintType;Lnet/minecraft/data/client/TextureMap;)V
+transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerTintableCrossBlockStateWithStages	(Lnet/minecraft/block/Block;Lnet/minecraft/data/client/BlockStateModelGenerator$TintType;Lnet/minecraft/state/property/Property;[I)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerFlowerPotPlant	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;Lnet/minecraft/data/client/BlockStateModelGenerator$TintType;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerCoralFan	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerGourd	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;)V
@@ -193,6 +198,7 @@ transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerBuiltinWithParticle	(Lnet/minecraft/block/Block;Lnet/minecraft/item/Item;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerBuiltinWithParticle	(Lnet/minecraft/block/Block;Lnet/minecraft/util/Identifier;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerWoolAndCarpet	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;)V
+transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerFlowerbed	(Lnet/minecraft/block/Block;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerRandomHorizontalRotations	(Lnet/minecraft/data/client/TexturedModel$Factory;[Lnet/minecraft/block/Block;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerSouthDefaultHorizontalFacing	(Lnet/minecraft/data/client/TexturedModel$Factory;[Lnet/minecraft/block/Block;)V
 transitive-accessible	method	net/minecraft/data/client/BlockStateModelGenerator	registerGlassPane	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;)V
@@ -271,6 +277,7 @@ transitive-accessible	method	net/minecraft/data/server/loottable/BlockLootTableG
 transitive-accessible	method	net/minecraft/data/server/loottable/BlockLootTableGenerator	seagrassDrops	(Lnet/minecraft/block/Block;)Lnet/minecraft/loot/LootTable$Builder;
 transitive-accessible	method	net/minecraft/data/server/loottable/BlockLootTableGenerator	tallGrassDrops	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;)Lnet/minecraft/loot/LootTable$Builder;
 transitive-accessible	method	net/minecraft/data/server/loottable/BlockLootTableGenerator	candleDrops	(Lnet/minecraft/block/Block;)Lnet/minecraft/loot/LootTable$Builder;
+transitive-accessible	method	net/minecraft/data/server/loottable/BlockLootTableGenerator	flowerbedDrops	(Lnet/minecraft/block/Block;)Lnet/minecraft/loot/LootTable$Builder;
 transitive-accessible	method	net/minecraft/data/server/loottable/BlockLootTableGenerator	candleCakeDrops	(Lnet/minecraft/block/Block;)Lnet/minecraft/loot/LootTable$Builder;
 transitive-accessible	method	net/minecraft/data/server/loottable/BlockLootTableGenerator	generate	()V
 transitive-accessible	method	net/minecraft/data/server/loottable/BlockLootTableGenerator	addVinePlantDrop	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;)V
@@ -287,6 +294,11 @@ transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	regist
 transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	register	(Lnet/minecraft/item/Item;Lnet/minecraft/item/Item;Lnet/minecraft/data/client/Model;)V
 transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	registerCompass	(Lnet/minecraft/item/Item;)V
 transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	registerClock	(Lnet/minecraft/item/Item;)V
+transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	uploadArmor	(Lnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;)V
+transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	uploadArmor	(Lnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;)V
+transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	suffixTrim	(Lnet/minecraft/util/Identifier;Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	createArmorJson	(Lnet/minecraft/util/Identifier;Ljava/util/Map;Lnet/minecraft/item/ArmorMaterial;)Lcom/google/gson/JsonObject;
+transitive-accessible	method	net/minecraft/data/client/ItemModelGenerator	registerArmor	(Lnet/minecraft/item/ArmorItem;)V
 transitive-extendable	method	net/minecraft/data/MetadataProvider	getName	()Ljava/lang/String;
 transitive-extendable	method	net/minecraft/data/SnbtProvider	getName	()Ljava/lang/String;
 transitive-extendable	method	net/minecraft/data/client/ModelProvider	getName	()Ljava/lang/String;
@@ -299,4 +311,4 @@ transitive-extendable	method	net/minecraft/data/server/BiomeParametersProvider	g
 transitive-extendable	method	net/minecraft/data/server/advancement/AdvancementProvider	getName	()Ljava/lang/String;
 transitive-extendable	method	net/minecraft/data/server/loottable/LootTableProvider	getName	()Ljava/lang/String;
 transitive-extendable	method	net/minecraft/data/server/recipe/RecipeProvider	getName	()Ljava/lang/String;
-transitive-extendable	method	net/minecraft/data/server/tag/AbstractTagProvider	getName	()Ljava/lang/String;
+transitive-extendable	method	net/minecraft/data/server/tag/TagProvider	getName	()Ljava/lang/String;

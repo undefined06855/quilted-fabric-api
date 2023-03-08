@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 
 package net.fabricmc.fabric.mixin.object.builder;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
@@ -120,7 +121,7 @@ public interface AbstractBlockSettingsAccessor {
 
 	@Deprecated
 	@Accessor
-	Function<BlockState, AbstractBlock.OffsetType> getOffsetType();
+	Optional<AbstractBlock.Offsetter> getOffsetter();
 
 	@Accessor
 	Identifier getLootTableId();
@@ -169,4 +170,7 @@ public interface AbstractBlockSettingsAccessor {
 
 	@Accessor
 	void setRequiredFeatures(FeatureSet requiredFeatures);
+
+	@Accessor
+	void setOffsetter(Optional<AbstractBlock.Offsetter> offsetter);
 }

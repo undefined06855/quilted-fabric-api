@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
@@ -70,7 +71,7 @@ public class ExtendedScreenHandlerType<T extends ScreenHandler> extends ScreenHa
 	 * @param factory the screen handler factory used for {@link #create(int, PlayerInventory, PacketByteBuf)}
 	 */
 	public ExtendedScreenHandlerType(ExtendedFactory<T> factory) {
-		super(null);
+		super(null, FeatureFlags.VANILLA_FEATURES);
 		this.factory = Objects.requireNonNull(factory, "screen handler factory cannot be null");
 	}
 

@@ -59,7 +59,15 @@ public interface BiomeModificationContext extends org.quiltmc.qsl.worldgen.biome
 		return (SpawnSettingsContext) ((org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext) this).getSpawnSettings();
 	}
 
-	interface WeatherContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.WeatherContext { }
+	interface WeatherContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.WeatherContext {
+		/**
+		 * @see Biome#getPrecipitation()
+		 * @see Biome.Builder#precipitation(Biome.Precipitation)
+		 */
+		default void setPrecipitation(boolean hasPrecipitation) {
+			this.setHasPrecipitation(hasPrecipitation);
+		}
+	}
 
 	interface EffectsContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.EffectsContext {
 		/**

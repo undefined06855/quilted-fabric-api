@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -170,19 +170,6 @@ public abstract class FilteringStorage<T> implements Storage<T> {
 	@Nullable
 	public StorageView<T> exactView(T resource) {
 		StorageView<T> exact = backingStorage.get().exactView(resource);
-
-		if (exact != null) {
-			return new FilteringStorageView(exact);
-		} else {
-			return null;
-		}
-	}
-
-	@Deprecated(forRemoval = true)
-	@Override
-	@Nullable
-	public StorageView<T> exactView(TransactionContext transaction, T resource) {
-		StorageView<T> exact = backingStorage.get().exactView(transaction, resource);
 
 		if (exact != null) {
 			return new FilteringStorageView(exact);
