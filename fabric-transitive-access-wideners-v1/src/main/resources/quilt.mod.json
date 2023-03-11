@@ -23,7 +23,8 @@
 		"depends": [
 			"quilt_loader",
 			"quilt_block_extensions",
-			"quilt_entity"
+			"quilt_entity",
+			"quilt_villager"
 		],
 		"provides": [
 			{

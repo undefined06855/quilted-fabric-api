@@ -215,12 +215,12 @@ allprojects {
 	}
 
 	license {
-		rule rootProject.file("codeformat/FABRIC_MODIFIED_HEADER")
-		rule rootProject.file("codeformat/HEADER")
+		rule rootProject.file('codeformat/FABRIC_MODIFIED_HEADER')
+		rule rootProject.file('codeformat/HEADER')
 
-		include "**/*.java"
+		include '**/*.java'
 		// TODO - Fix the package-info licenses!
-		exclude "**/package-info.java"
+		exclude '**/package-info.java'
 	}
 
 	checkstyle {
@@ -640,6 +640,8 @@ machete {
 tasks.prepareRemapJar.dependsOn('optimizeOutputsOfJar')
 
 tasks.register('renameJar', Jar) {
+	dependsOn signingEnabled ? signRemapJar : remapJar
+
 	with remapJar
 	from zipTree(remapJar)
 	def qsl_version_normalized = project.qsl_version.substring(0, project.qsl_version.indexOf('+'))
