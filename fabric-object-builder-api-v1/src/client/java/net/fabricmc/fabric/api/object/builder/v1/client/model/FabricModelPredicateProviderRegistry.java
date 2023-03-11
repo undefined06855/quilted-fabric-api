@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,19 @@
 
 package net.fabricmc.fabric.api.object.builder.v1.client.model;
 
+import net.minecraft.client.item.ClampedModelPredicateProvider;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
-import net.minecraft.client.item.ClampedModelPredicateProvider;
-
-import net.fabricmc.fabric.mixin.object.builder.client.ModelPredicateProviderRegistryAccessor;
-import net.fabricmc.fabric.mixin.object.builder.client.ModelPredicateProviderRegistrySpecificAccessor;
 
 /**
  * Allows registering model predicate providers for item models.
  *
  * <p>A registered model predicate providers for an item can be retrieved through
- * {@link net.minecraft.client.item.ModelPredicateProviderRegistry#get(Item, Identifier)}.</p>
+ * {@link ModelPredicateProviderRegistry#get(Item, Identifier)}.</p>
  *
- * @see net.minecraft.client.item.ModelPredicateProviderRegistry
- * @deprecated Replaced by access wideners for {@link net.minecraft.client.item.ModelPredicateProviderRegistry}
+ * @see ModelPredicateProviderRegistry
+ * @deprecated Replaced by access wideners for {@link ModelPredicateProviderRegistry}
  * registration methods in Fabric Transitive Access Wideners (v1).
  */
 @Deprecated
@@ -43,7 +41,7 @@ public final class FabricModelPredicateProviderRegistry {
 	 * @param provider the provider
 	 */
 	public static void register(Identifier id, ClampedModelPredicateProvider provider) {
-		ModelPredicateProviderRegistryAccessor.callRegister(id, provider);
+		ModelPredicateProviderRegistry.register(id, provider);
 	}
 
 	/**
@@ -54,6 +52,6 @@ public final class FabricModelPredicateProviderRegistry {
 	 * @param provider the provider
 	 */
 	public static void register(Item item, Identifier id, ClampedModelPredicateProvider provider) {
-		ModelPredicateProviderRegistrySpecificAccessor.callRegister(item, id, provider);
+		ModelPredicateProviderRegistry.register(item, id, provider);
 	}
 }

@@ -33,7 +33,7 @@ import net.fabricmc.fabric.api.event.registry.DynamicRegistryView;
 
 @Mixin(DynamicRegistryManagerSetupContextImpl.class)
 public abstract class DynamicRegistryManagerSetupContextImplMixin implements DynamicRegistryView {
-	@Shadow
+	@Shadow(remap = false)
 	@Final
 	private Map<RegistryKey<?>, MutableRegistry<?>> registries;
 

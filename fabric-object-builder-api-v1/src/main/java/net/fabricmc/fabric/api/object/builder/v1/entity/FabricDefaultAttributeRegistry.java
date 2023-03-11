@@ -35,9 +35,9 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
  * FabricEntityTypeBuilder} for utility on entity type registration in general.</p>
  *
  * <p>A registered default attribute for an entity type can be retrieved through
- * {@link net.minecraft.entity.attribute.DefaultAttributeRegistry#get(EntityType)}.</p>
+ * {@link DefaultAttributeRegistry#get(EntityType)}.</p>
  *
- * @see net.minecraft.entity.attribute.DefaultAttributeRegistry
+ * @see DefaultAttributeRegistry
  */
 @Deprecated
 public final class FabricDefaultAttributeRegistry {

@@ -25,6 +25,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(org.quiltmc.qsl.item.setting.impl.CustomItemSettingImpl.class)
 public interface CustomItemSettingImplAccessor<T> {
 	@Mutable
-	@Accessor
+	@Accessor(remap = false)
 	void setDefaultValue(Supplier<T> defaultValue);
 }

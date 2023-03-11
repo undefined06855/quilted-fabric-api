@@ -1,14 +1,15 @@
-archivesBaseName = "quilted_fabric_object_builder_api_v1"
+archivesBaseName = 'quilted_fabric_object_builder_api_v1'
 version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 dependencies {
-	modApi(getQslModule("block", "block_entity"))
-	modApi(getQslModule("block", "block_extensions"))
-	modApi(getQslModule("entity", "entity"))
-	modApi(getQslModule("entity", "point_of_interest"))
-	modApi(getQslModule("entity", "vehicle"))
-	modApi(getQslModule("entity", "villager"))
+	modApi(getQslModule('block', 'block_entity'))
+	modApi(getQslModule('block', 'block_extensions'))
+	modApi(getQslModule('data', 'advancement'))
+	modApi(getQslModule('entity', 'entity'))
+	modApi(getQslModule('entity', 'point_of_interest'))
+	modApi(getQslModule('entity', 'vehicle'))
+	modApi(getQslModule('entity', 'villager'))
 }
 
 moduleDependencies(project, [
@@ -22,10 +23,5 @@ testDependencies(project, [
 ])
 
 loom {
-	accessWidenerPath = file("src/main/resources/quilted_fabric_object_builder_api_v1.accesswidener")
-}
-
-
-validateMixinNames {
-	exclude "**/ModelPredicateProviderRegistrySpecificAccessor.class"
+	accessWidenerPath = file('src/main/resources/quilted_fabric_object_builder_api_v1.accesswidener')
 }

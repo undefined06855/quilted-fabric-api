@@ -17,19 +17,18 @@
 
 package net.fabricmc.fabric.api.object.builder.v1.advancement;
 
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.advancement.criterion.Criterion;
 import net.minecraft.util.Identifier;
-
-import net.fabricmc.fabric.mixin.object.builder.CriteriaAccessor;
 
 /**
  * Allows registering advancement criteria for triggers.
  *
  * <p>A registered criterion (trigger) can be retrieved through
- * {@link net.minecraft.advancement.criterion.Criteria#getById(Identifier)}.</p>
+ * {@link Criteria#getById(Identifier)}.</p>
  *
- * @see net.minecraft.advancement.criterion.Criteria
- * @deprecated Replaced by access widener for {@link net.minecraft.advancement.criterion.Criteria#register(Criterion)}
+ * @see Criteria
+ * @deprecated Replaced by access widener for {@link Criteria#register(Criterion)}
  * in Fabric Transitive Access Wideners (v1).
  */
 @Deprecated
@@ -44,7 +43,6 @@ public final class CriterionRegistry {
 	 *                                  Criterion#getId() id} exists
 	 */
 	public static <T extends Criterion<?>> T register(T criterion) {
-		CriteriaAccessor.callRegister(criterion);
-		return criterion;
+		return Criteria.register(criterion);
 	}
 }

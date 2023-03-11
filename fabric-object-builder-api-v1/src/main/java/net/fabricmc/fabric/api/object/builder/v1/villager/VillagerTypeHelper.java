@@ -42,7 +42,7 @@ import net.minecraft.world.biome.Biome;
  *
  * <p>The texture used for the appearance of the villager is located at {@code assets/IDENTIFIER_NAMESPACE/textures/entity/villager/type/IDENTIFIER_PATH.png}.
  *
- * @deprecated Replaced by access wideners for {@link VillagerType#create} and {@link VillagerType#BIOME_TO_TYPE}
+ * @deprecated Replaced by access wideners for {@link VillagerType#VillagerType(String)} and {@link VillagerType#BIOME_TO_TYPE}
  * in Fabric Transitive Access Wideners (v1).
  */
 @Deprecated

@@ -40,14 +40,16 @@ import net.fabricmc.fabric.api.event.registry.RegistryEntryRemovedCallback;
 
 @Mixin(DynamicRegistryManagerSetupContextImpl.class)
 public abstract class DynamicRegistryManagerSetupContextImplMixin implements DynamicRegistryManagerSetupContext, DynamicRegistryManager, DynamicRegistryView {
-	@Shadow
+	@Shadow(remap = false)
 	@Final
 	private Map<RegistryKey<?>, MutableRegistry<?>> registries;
 
 	@Shadow
+	@Override
 	public abstract @NotNull DynamicRegistryManager registryManager();
 
 	@Shadow
+	@Override
 	public abstract Stream<Entry<?>> streamAllRegistries();
 
 	@Override
