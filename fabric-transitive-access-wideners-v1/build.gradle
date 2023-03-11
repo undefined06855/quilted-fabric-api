@@ -102,10 +102,10 @@ def generateItemConstructors(List<String> lines, FileSystem fs) {
 					//  - only taking into account non-abstract classes and non-public constructors
 
 					// Item constructor...
-					if (method.name == "<init>" && Type.getArgumentTypes(method.desc).any { it.internalName == 'net/minecraft/item/Item$Settings' }) {
+					if (method.name == '<init>' && Type.getArgumentTypes(method.desc).any { it.internalName == 'net/minecraft/item/Item$Settings' }) {
 						// ...and non-public
 						if ((method.access & Opcodes.ACC_PUBLIC) == 0) {
-							lines.add('transitive-accessible method $node.name <init> $method.desc')
+							lines.add("transitive-accessible method $node.name <init> $method.desc")
 						}
 					}
 				}

@@ -452,7 +452,7 @@ task runProductionAutoTestServer(type: JavaExec, dependsOn: [remapJar, remapTest
 }
 
 subprojects {
-	if (it.name == "deprecated") return
+	if (it.name == 'deprecated') return
 
 	loom {
 		// Quilt: We need this in order to add Quilt Testing API to all testmods
@@ -643,12 +643,13 @@ tasks.register('renameJar', Jar) {
 	dependsOn signingEnabled ? signRemapJar : remapJar
 
 	with remapJar
-	from zipTree(remapJar)
+	from zipTree(remapJar.archiveFile)
 	def qsl_version_normalized = project.qsl_version.substring(0, project.qsl_version.indexOf('+'))
 	def qfapi_version_normalized = project.version.substring(0, project.version.indexOf('+'))
 	def upstream_fapi_version_normalized = project.upstream_version
 	archiveFileName.set("qfapi-${qfapi_version_normalized}_qsl-${qsl_version_normalized}_fapi-${upstream_fapi_version_normalized}_mc-${project.minecraft_version}.jar")
 }
+tasks.renameJar.dependsOn('optimizeOutputsOfJar')
 
 curseforge {
 	if (ENV.CURSEFORGE_TOKEN) {

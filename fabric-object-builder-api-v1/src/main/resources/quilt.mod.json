@@ -22,14 +22,15 @@
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"depends": [
 			"quilt_loader",
+			"quilted_fabric_api_base",
+			"quilted_fabric_transitive_access_wideners_v1",
 			"quilt_advancement",
 			"quilt_block_entity",
 			"quilt_block_extensions",
 			"quilt_entity",
 			"quilt_point_of_interest",
 			"quilt_vehicle",
-			"quilt_villager",
-			"quilted_fabric_api_base"
+			"quilt_villager"
 		],
 		"provides": [
 			{
