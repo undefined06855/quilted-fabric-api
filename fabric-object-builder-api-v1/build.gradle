@@ -6,14 +6,15 @@ dependencies {
 	modApi(getQslModule("block", "block_entity"))
 	modApi(getQslModule("block", "block_extensions"))
 	modApi(getQslModule("entity", "entity"))
-	modApi(getQslModule("entity", "points_of_interest"))
+	modApi(getQslModule("entity", "point_of_interest"))
 	modApi(getQslModule("entity", "vehicle"))
 	modApi(getQslModule("entity", "villager"))
 }
 
 moduleDependencies(project, [
 	'fabric-api-base',
-	'fabric-resource-loader-v0'
+	'fabric-resource-loader-v0',
+	'fabric-transitive-access-wideners-v1'
 ])
 
 testDependencies(project, [

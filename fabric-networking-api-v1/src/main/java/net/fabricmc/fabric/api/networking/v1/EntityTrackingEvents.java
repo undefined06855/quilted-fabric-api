@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,9 @@ public final class EntityTrackingEvents {
 	 * Typically, this occurs when an entity enters a client's view distance.
 	 * This event is called before the player's client is sent the entity's {@link Entity#createSpawnPacket() spawn packet}.
 	 */
-	public static final Event<StartTracking> START_TRACKING = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.EntityTrackingEvents.START_TRACKING,
+	public static final Event<StartTracking> START_TRACKING = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.EntityTrackingEvents.BEFORE_START_TRACKING,
 			startTracking -> startTracking::onStartTracking,
-			invokerGetter -> (trackedEntity, player) -> invokerGetter.get().onStartTracking(trackedEntity, player)
+			invokerGetter -> (trackedEntity, player) -> invokerGetter.get().beforeStartTracking(trackedEntity, player)
 	);
 
 	/**

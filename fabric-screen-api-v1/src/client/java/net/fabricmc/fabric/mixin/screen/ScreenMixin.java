@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,10 +111,21 @@ abstract class ScreenMixin implements ScreenExtensions {
 		ScreenEventFactory.activateScreen((Screen) (Object) this);
 	}
 
+	// TODO - Replace this temporary patch with a proper solution on QSL's side
+	@Inject(method = "resize", at = @At("HEAD"))
+	private void beforeResizeScreen(MinecraftClient client, int width, int height, CallbackInfo ci) {
+		org.quiltmc.qsl.screen.api.client.ScreenEvents.BEFORE_INIT.invoker().beforeInit((Screen) (Object) this, client, width, height);
+	}
+
+	@Inject(method = "resize", at = @At("TAIL"))
+	private void afterResizeScreen(MinecraftClient client, int width, int height, CallbackInfo ci) {
+		org.quiltmc.qsl.screen.api.client.ScreenEvents.AFTER_INIT.invoker().afterInit((Screen) (Object) this, client, width, height);
+	}
+
 	@Unique
 	private <T> Event<T> ensureEventsAreInitialized(Event<T> event) {
 		if (event == null) {
-			throw new IllegalStateException(String.format("[quilted-fabric-screen-api-v1] The current screen (%s) has not been correctly initialised, please send this crash log to the mod author. This is usually caused by calling setScreen on the wrong thread.", this.getClass().getName()));
+			throw new IllegalStateException(String.format("[quilted_fabric_screen_api_v1] The current screen (%s) has not been correctly initialised, please send this crash log to the mod author. This is usually caused by calling setScreen on the wrong thread.", this.getClass().getName()));
 		}
 
 		return event;
