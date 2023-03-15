@@ -129,7 +129,7 @@
 			"quilt_entity_networking",
 			"quilt_entity_rendering",
 			"quilt_item_content_registry",
-			"quilt_item_extension",
+			"quilt_item_extensions",
 			"quilt_item_setting",
 			"quilt_lifecycle_events",
 			"quilt_networking",

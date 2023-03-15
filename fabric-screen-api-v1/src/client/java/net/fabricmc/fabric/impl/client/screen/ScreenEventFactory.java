@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package net.fabricmc.fabric.impl.client.screen;
 
 import java.util.Set;
 
+import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.base.api.util.TriState;
 import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 
@@ -33,7 +34,7 @@ import net.fabricmc.fabric.api.event.EventFactory;
 /**
  * Factory methods for creating event instances used in {@link ScreenExtensions}.
  */
-public final class ScreenEventFactory {
+public final class ScreenEventFactory implements ClientModInitializer {
 	private static final Set<Screen> ACTIVE_SCREENS = new ReferenceArraySet<>(2);
 
 	public static Event<ScreenEvents.Remove> createRemoveEvent() {
@@ -224,7 +225,8 @@ public final class ScreenEventFactory {
 		ACTIVE_SCREENS.add(screen);
 	}
 
-	protected static void initializeCompatEvents() {
+	@Override
+	public void onInitializeClient(ModContainer mod) {
 		org.quiltmc.qsl.screen.api.client.ScreenEvents.REMOVE.register(screen -> {
 			if (ACTIVE_SCREENS.remove(screen)) {
 				ScreenExtensions.getExtensions(screen).fabric_getRemoveEvent().invoker().onRemove(screen);
@@ -240,18 +242,6 @@ public final class ScreenEventFactory {
 		org.quiltmc.qsl.screen.api.client.ScreenEvents.AFTER_RENDER.register((screen, matrices, mouseX, mouseY, tickDelta) -> {
 			if (ACTIVE_SCREENS.contains(screen)) {
 				ScreenExtensions.getExtensions(screen).fabric_getAfterRenderEvent().invoker().afterRender(screen, matrices, mouseX, mouseY, tickDelta);
-			}
-		});
-
-		org.quiltmc.qsl.screen.api.client.ScreenEvents.BEFORE_TICK.register(screen -> {
-			if (ACTIVE_SCREENS.contains(screen)) {
-				ScreenExtensions.getExtensions(screen).fabric_getBeforeTickEvent().invoker().beforeTick(screen);
-			}
-		});
-
-		org.quiltmc.qsl.screen.api.client.ScreenEvents.AFTER_TICK.register(screen -> {
-			if (ACTIVE_SCREENS.contains(screen)) {
-				ScreenExtensions.getExtensions(screen).fabric_getAfterTickEvent().invoker().afterTick(screen);
 			}
 		});
 

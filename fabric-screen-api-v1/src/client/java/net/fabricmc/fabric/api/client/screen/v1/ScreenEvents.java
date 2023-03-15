@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,9 +71,11 @@ public final class ScreenEvents {
 	 * This event can also indicate that the previous screen has been changed.
 	 * @see ScreenEvents#AFTER_INIT
 	 */
-	public static final Event<BeforeInit> BEFORE_INIT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.screen.api.client.ScreenEvents.BEFORE_INIT,
-			beforeInitCallback -> (screen, client, scaledHeight, scaledWidth) -> beforeInitCallback.beforeInit(client, screen, scaledHeight, scaledWidth),
-			invokerGetter -> (screen, client, scaledHeight, scaledWidth) -> invokerGetter.get().beforeInit(client, screen, scaledHeight, scaledWidth));
+	public static final Event<BeforeInit> BEFORE_INIT = EventFactory.createArrayBacked(BeforeInit.class, callbacks -> (client, screen, scaledWidth, scaledHeight) -> {
+		for (BeforeInit callback : callbacks) {
+			callback.beforeInit(client, screen, scaledWidth, scaledHeight);
+		}
+	});
 
 	/**
 	 * An event that is called after {@link Screen#init(MinecraftClient, int, int) a screen is initialized} to its default state.
@@ -96,9 +98,11 @@ public final class ScreenEvents {
 	 * <p>This event can also indicate that the previous screen has been closed.
 	 * @see ScreenEvents#BEFORE_INIT
 	 */
-	public static final Event<AfterInit> AFTER_INIT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.screen.api.client.ScreenEvents.AFTER_INIT,
-			afterInitCallback -> (screen, client, scaledWidth, scaledHeight) -> afterInitCallback.afterInit(client, screen, scaledWidth, scaledHeight),
-			invokerGetter -> (screen, client, scaledWidth, scaledHeight) -> invokerGetter.get().afterInit(client, screen, scaledWidth, scaledHeight));
+	public static final Event<AfterInit> AFTER_INIT = EventFactory.createArrayBacked(AfterInit.class, callbacks -> (client, screen, scaledWidth, scaledHeight) -> {
+		for (AfterInit callback : callbacks) {
+			callback.afterInit(client, screen, scaledWidth, scaledHeight);
+		}
+	});
 
 	/**
 	 * An event that is called after {@link Screen#removed()} is called.

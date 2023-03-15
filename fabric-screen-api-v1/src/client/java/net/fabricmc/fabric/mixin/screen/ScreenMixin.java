@@ -82,6 +82,26 @@ abstract class ScreenMixin implements ScreenExtensions {
 
 	@Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("HEAD"))
 	private void beforeInitScreen(MinecraftClient client, int width, int height, CallbackInfo ci) {
+		this.beforeInit(client, width, height);
+	}
+
+	@Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("TAIL"))
+	private void afterInitScreen(MinecraftClient client, int width, int height, CallbackInfo ci) {
+		this.afterInit(client, width, height);
+	}
+
+	@Inject(method = "resize", at = @At("HEAD"))
+	private void beforeResizeScreen(MinecraftClient client, int width, int height, CallbackInfo ci) {
+		this.beforeInit(client, width, height);
+	}
+
+	@Inject(method = "resize", at = @At("TAIL"))
+	private void afterResizeScreen(MinecraftClient client, int width, int height, CallbackInfo ci) {
+		this.afterInit(client, width, height);
+	}
+
+	@Unique
+	private void beforeInit(MinecraftClient client, int width, int height) {
 		this.qfapi$removeEvent = ScreenEventFactory.createRemoveEvent();
 		this.qfapi$beforeRenderEvent = ScreenEventFactory.createBeforeRenderEvent();
 		this.qfapi$afterRenderEvent = ScreenEventFactory.createAfterRenderEvent();
@@ -109,17 +129,14 @@ abstract class ScreenMixin implements ScreenExtensions {
 
 		// Activate our Fabric events
 		ScreenEventFactory.activateScreen((Screen) (Object) this);
+
+		// Invoke Fabric's one as well since we diverged here
+		ScreenEvents.BEFORE_INIT.invoker().beforeInit(client, (Screen) (Object) this, width, height);
 	}
 
-	// TODO - Replace this temporary patch with a proper solution on QSL's side
-	@Inject(method = "resize", at = @At("HEAD"))
-	private void beforeResizeScreen(MinecraftClient client, int width, int height, CallbackInfo ci) {
-		org.quiltmc.qsl.screen.api.client.ScreenEvents.BEFORE_INIT.invoker().beforeInit((Screen) (Object) this, client, width, height);
-	}
-
-	@Inject(method = "resize", at = @At("TAIL"))
-	private void afterResizeScreen(MinecraftClient client, int width, int height, CallbackInfo ci) {
-		org.quiltmc.qsl.screen.api.client.ScreenEvents.AFTER_INIT.invoker().afterInit((Screen) (Object) this, client, width, height);
+	@Unique
+	private void afterInit(MinecraftClient client, int width, int height) {
+		ScreenEvents.AFTER_INIT.invoker().afterInit(client, (Screen) (Object) this, width, height);
 	}
 
 	@Unique

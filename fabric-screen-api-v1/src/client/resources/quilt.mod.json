@@ -35,7 +35,7 @@
 			}
 		],
 		"entrypoints": {
-			"client_init": "net.fabricmc.fabric.impl.client.screen.CompatEventInitializer"
+			"client_init": "net.fabricmc.fabric.impl.client.screen.ScreenEventFactory"
 		}
 	},
 	"minecraft": {
