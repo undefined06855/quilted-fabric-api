@@ -360,6 +360,4 @@ public final class ScreenEventFactory implements ClientModInitializer {
 			}
 		});
 	}
-
-	private ScreenEventFactory() { }
 }
