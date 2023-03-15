@@ -25,7 +25,6 @@ import net.minecraft.client.util.math.MatrixStack;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
 
 /**
