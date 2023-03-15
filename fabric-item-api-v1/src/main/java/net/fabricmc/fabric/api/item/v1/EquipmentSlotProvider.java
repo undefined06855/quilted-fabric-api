@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@ package net.fabricmc.fabric.api.item.v1;
  * A provider for the preferred equipment slot of an item.
  * This can be used to give non-armor items, such as blocks,
  * an armor slot that they can go in.
+ *
+ * <p>The preferred requipment slot of an item stack can be queried using
+ * {@link net.minecraft.entity.LivingEntity#getPreferredEquipmentSlot(ItemStack) LivingEntity.getPreferredEquipmentSlot()}.
  *
  * <p>Equipment slot providers can be set with {@link FabricItemSettings#equipmentSlot(EquipmentSlotProvider)}.
  *

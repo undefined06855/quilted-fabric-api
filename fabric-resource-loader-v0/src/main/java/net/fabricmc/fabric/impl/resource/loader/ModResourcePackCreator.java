@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 QuiltMC
+ * Copyright 2022-2023 QuiltMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,6 @@ public class ModResourcePackCreator implements ResourcePackProvider {
 		}
 	};
 	public static final ModResourcePackCreator CLIENT_RESOURCE_PACK_PROVIDER = new ModResourcePackCreator(ResourceType.CLIENT_RESOURCES);
-	public static final ModResourcePackCreator SERVER_RESOURCE_PACK_PROVIDER = new ModResourcePackCreator(ResourceType.SERVER_DATA);
 	private final ResourceType type;
 
 	public ModResourcePackCreator(ResourceType type) {

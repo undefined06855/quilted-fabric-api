@@ -15,7 +15,10 @@
     "LivingEntityRendererAccessor",
     "BlockEntityRendererFactoriesMixin",
     "EntityRenderersMixin",
-    "DimensionEffectsAccessor"
+    "DimensionEffectsAccessor",
+    "shader.GameRendererMixin",
+    "shader.ShaderProgramImportProcessorMixin",
+    "shader.ShaderProgramMixin"
   ],
   "injectors": {
     "defaultRequire": 1
