@@ -38,7 +38,6 @@ import java.nio.file.Path;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import net.minecraft.client.gui.screen.AccessibilityOnboardingScreen;
-import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
@@ -95,12 +94,6 @@ public class FabricApiAutoTestClient implements ClientModInitializer {
 			clickScreenButton("selectWorld.gameMode");
 			takeScreenshot("create_world_screen");
 			clickScreenButton("selectWorld.create");
-		}
-
-		{
-			// API test mods use experimental features
-			waitForScreen(ConfirmScreen.class);
-			clickScreenButton("gui.yes");
 		}
 
 		{
