@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -294,5 +295,6 @@ public interface ContainerItemContext {
 	 *
 	 * @return An unmodifiable list containing additional slots of this context. If no additional slot is available, the list is empty.
 	 */
+	@UnmodifiableView
 	List<SingleSlotStorage<ItemVariant>> getAdditionalSlots();
 }
