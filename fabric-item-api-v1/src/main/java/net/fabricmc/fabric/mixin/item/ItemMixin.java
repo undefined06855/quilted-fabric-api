@@ -24,5 +24,4 @@ import net.minecraft.item.Item;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 
 @Mixin(Item.class)
-abstract class ItemMixin implements FabricItem {
-}
+abstract class ItemMixin implements FabricItem { }
