@@ -333,8 +333,8 @@ public class VanillaStorageTests {
 	/**
 	 * Regression test for <a href="https://github.com/FabricMC/fabric/issues/3017">composters not always incrementing their level on the first insert</a>.
 	 */
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testComposterFirstInsert(TestContext context) {
+	@GameTest(templateName = QuiltGameTest.EMPTY_STRUCTURE)
+	public void testComposterFirstInsert(QuiltTestContext context) {
 		BlockPos pos = new BlockPos(0, 1, 0);
 
 		ItemVariant carrot = ItemVariant.of(Items.CARROT);
