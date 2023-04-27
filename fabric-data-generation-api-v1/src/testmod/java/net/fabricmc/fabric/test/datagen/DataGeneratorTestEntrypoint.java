@@ -27,7 +27,6 @@ import static net.fabricmc.fabric.test.datagen.DataGeneratorTestContent.SIMPLE_I
 
 import java.io.IOException;
 import java.nio.file.Path;
-//import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -40,11 +39,7 @@ import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementFrame;
 import net.minecraft.advancement.criterion.OnKilledCriterion;
 import net.minecraft.block.Blocks;
-//import net.minecraft.client.texture.atlas.AtlasSource;
-//import net.minecraft.client.texture.atlas.AtlasSourceManager;
-//import net.minecraft.client.texture.atlas.DirectoryAtlasSource;
 import net.minecraft.registry.RegistryKeys;
-//import net.minecraft.data.DataOutput;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
@@ -75,7 +70,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-//import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -376,5 +370,6 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 			return "Atlas Sources";
 		}
 	}
+
 	*/
 }
