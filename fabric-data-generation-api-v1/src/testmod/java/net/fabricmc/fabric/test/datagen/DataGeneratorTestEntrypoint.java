@@ -99,6 +99,8 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 		TestBlockTagProvider blockTagProvider = pack.addProvider(TestBlockTagProvider::new);
 		pack.addProvider((output, registries) -> new TestItemTagProvider(output, registries, blockTagProvider));
 		pack.addProvider(TestBiomeTagProvider::new);
+		// TODO - Restore atlas test
+		//pack.addProvider(TestAtlasSourceProvider::new);
 	}
 
 	private static class TestRecipeProvider extends FabricRecipeProvider {
@@ -351,4 +353,23 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 			);
 		}
 	}
+
+	/*
+	private static class TestAtlasSourceProvider extends FabricCodecDataProvider<List<AtlasSource>> {
+		private TestAtlasSourceProvider(FabricDataOutput dataOutput) {
+			super(dataOutput, DataOutput.OutputType.RESOURCE_PACK, "atlases", AtlasSourceManager.LIST_CODEC);
+		}
+
+		@Override
+		protected void configure(BiConsumer<Identifier, List<AtlasSource>> provider) {
+			provider.accept(new Identifier(MOD_ID, "atlas_source_test"), List.of(new DirectoryAtlasSource("example", "example/")));
+		}
+
+		@Override
+		public String getName() {
+			return "Atlas Sources";
+		}
+	}
+
+	*/
 }
