@@ -15,7 +15,7 @@ plugins {
 	id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.modrinth.minotaur" version "2.5.0"
 	id "me.modmuss50.remotesign" version "0.4.0" apply false
-	//id "io.github.p03w.machete" version "1.2.0"
+	id "io.github.p03w.machete" version "2.0.1"
 }
 
 def ENV = System.getenv()
@@ -500,11 +500,28 @@ subprojects {
 	javadoc.enabled = false
 }
 
+machete {
+	// JSON minification isn't effective on this scale and sacrifices readability
+	json.enabled = false
+	finalizeAfter = ""
+	ignoredTasks.add("jar")
+	additionalTasks.add("remapJar")
+}
+if (signingEnabled) {
+	tasks.signRemapJar.finalizedBy('optimizeOutputsOfRemapJar')
+} else {
+	tasks.remapJar.finalizedBy('optimizeOutputsOfRemapJar')
+}
+
+tasks.register('optimizedJar') {
+	dependsOn 'optimizeOutputsOfRemapJar'
+}
+
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			artifact(signingEnabled ? signRemapJar.output : remapJar) {
-				builtBy(signingEnabled ? signRemapJar : remapJar)
+				builtBy(tasks.named('optimizedJar'))
 			}
 
 			artifact(sourcesJar) {
@@ -620,7 +637,6 @@ java.util.stream.Stream<ResolvedDependency> getAllQslModules() {
 			throw RuntimeException("Unexpected dependency: $it")
 		}
 	}
-
 }
 
 remapJar {
@@ -634,17 +650,8 @@ remapJar {
 	}
 }
 
-/*
-machete {
-	// JSON minification isn't effective on this scale and sacrifices readability
-	json.enabled = false
-}
-// This prevents issues with execution optimizations and therefore, Gradle deprecation warnings
-tasks.prepareRemapJar.dependsOn('optimizeOutputsOfJar')
-*/
-
 tasks.register('renameJar', Jar) {
-	dependsOn signingEnabled ? signRemapJar : remapJar
+	dependsOn 'optimizedJar'
 
 	with remapJar
 	from zipTree(remapJar.archiveFile)
@@ -653,7 +660,6 @@ tasks.register('renameJar', Jar) {
 	def upstream_fapi_version_normalized = project.upstream_version
 	archiveFileName.set("qfapi-${qfapi_version_normalized}_qsl-${qsl_version_normalized}_fapi-${upstream_fapi_version_normalized}_mc-${project.minecraft_version}.jar")
 }
-//tasks.renameJar.dependsOn('optimizeOutputsOfJar')
 
 curseforge {
 	if (ENV.CURSEFORGE_TOKEN) {
@@ -681,12 +687,7 @@ curseforge {
 	}
 }
 tasks.curseforge.dependsOn renameJar
-
-if (signingEnabled) {
-	project.tasks.curseforge.dependsOn signRemapJar
-	project.tasks.modrinth.dependsOn signRemapJar
-	build.dependsOn signRemapJar
-}
+tasks.build.dependsOn optimizedJar
 
 import org.kohsuke.github.GHReleaseBuilder
 import org.kohsuke.github.GitHub
