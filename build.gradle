@@ -102,7 +102,7 @@ def testDependencies(project, List<String> depNames) {
 		}
 
 		clientOutputs.each {
-			testmodImplementation it
+			testmodClientImplementation it
 		}
 	}
 }
@@ -158,9 +158,16 @@ allprojects {
 		testmod {
 			compileClasspath += main.compileClasspath
 			runtimeClasspath += main.runtimeClasspath
+		}
 
+		testmodClient {
+			compileClasspath += main.compileClasspath
+			runtimeClasspath += main.runtimeClasspath
 			compileClasspath += client.compileClasspath
 			runtimeClasspath += client.runtimeClasspath
+
+			compileClasspath += testmod.compileClasspath
+			runtimeClasspath += testmod.runtimeClasspath
 		}
 	}
 
@@ -172,7 +179,7 @@ allprojects {
 				client()
 				ideConfigGenerated project.rootProject == project
 				name = "Testmod Client"
-				source sourceSets.testmod
+				source sourceSets.testmodClient
 			}
 			testmodServer {
 				server()
@@ -183,7 +190,7 @@ allprojects {
 		}
 	}
 
-	allprojects.each { p ->
+		allprojects.each { p ->
 		if (project.name == "deprecated") return
 
 		loom.mods.register(p.name) {
@@ -193,6 +200,7 @@ allprojects {
 
 		loom.mods.register(p.name + "-testmod") {
 			sourceSet p.sourceSets.testmod
+			sourceSet p.sourceSets.testmodClient
 		}
 	}
 
@@ -202,7 +210,9 @@ allprojects {
 		modApi "org.quiltmc:quilt-loader:$project.loader_version"
 
 		testmodImplementation sourceSets.main.output
-		testmodImplementation sourceSets.client.output
+		testmodClientImplementation sourceSets.main.output
+		testmodClientImplementation sourceSets.client.output
+		testmodClientImplementation sourceSets.testmod.output
 	}
 
 	tasks.withType(ProcessResources).configureEach {
@@ -246,6 +256,7 @@ allprojects {
 
 	task testmodJar(type: Jar) {
 		from sourceSets.testmod.output
+		from sourceSets.testmodClient.output
 		destinationDirectory = new File(project.buildDir, "devlibs")
 		archiveClassifier = "testmod"
 	}
@@ -270,6 +281,8 @@ allprojects {
 		input = testmodJar.archiveFile
 		archiveClassifier = "testmod"
 		addNestedDependencies = false
+		includesClientOnlyClasses = true
+		clientOnlySourceSetName = sourceSets.testmodClient.name
 	}
 	build.dependsOn remapTestmodJar
 
@@ -288,13 +301,14 @@ remapTestmodJar {
 	def testModJarTasks = []
 
 	subprojects {
-		if (it.name == "deprecated" || !it.file("src/testmod").exists()) return
+		if (it.name == "deprecated" || !(it.file("src/testmod").exists() || it.file("src/testmodClient").exists())) return
 
 		testModJarTasks += it.tasks.remapTestmodJar
 	}
 
 	nestedJars.setFrom(testModJarTasks)
 	addNestedDependencies = true
+	clientOnlySourceSetName = sourceSets.testmodClient.name
 }
 
 // Apply auxiliary buildscripts to submodules
@@ -466,7 +480,9 @@ subprojects {
 		/*
 		if (project.name != "fabric-gametest-api-v1") {
 			testmodImplementation project(path: ':fabric-gametest-api-v1', configuration: 'namedElements')
+			testmodClientImplementation project(":fabric-gametest-api-v1").sourceSets.client.output
 			testmodImplementation project(path: ':fabric-resource-loader-v0', configuration: 'namedElements')
+			testmodClientImplementation project(":fabric-resource-loader-v0").sourceSets.client.output
 		}
 		*/
 		// Quilt: This is our way of doing things!
@@ -477,6 +493,7 @@ subprojects {
 		// Make all testmods run with registry-sync-v0 as it is required to register new objects.
 		if (project.name != "fabric-registry-sync-v0") {
 			testmodRuntimeOnly project(path: ':fabric-registry-sync-v0', configuration: 'namedElements')
+			testmodClientImplementation project(":fabric-registry-sync-v0").sourceSets.client.output
 		}
 	}
 
@@ -590,10 +607,6 @@ subprojects.each {
 	remapJar.dependsOn("${it.path}:remapJar")
 }
 
-sourceSets {
-	testmod
-}
-
 // These modules are not included in the fat jar, maven will resolve them via the pom.
 def devOnlyModules = [
 	// "fabric-gametest-api-v1",
@@ -617,6 +630,7 @@ dependencies {
 			clientImplementation project("${it.path}:").sourceSets.client.output
 
 			testmodImplementation project("${it.path}:").sourceSets.testmod.output
+			testmodClientImplementation project("${it.path}:").sourceSets.testmodClient.output
 		}
 	}
 }
