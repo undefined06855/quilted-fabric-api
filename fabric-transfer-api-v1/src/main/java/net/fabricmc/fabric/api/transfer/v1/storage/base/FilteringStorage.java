@@ -183,6 +183,11 @@ public abstract class FilteringStorage<T> implements Storage<T> {
 		return backingStorage.get().getVersion();
 	}
 
+	@Override
+	public String toString() {
+		return "FilteringStorage[" + backingStorage.get() + "/" + backingStorage + "]";
+	}
+
 	/**
 	 * This is used to ensure extractions through storage views of the backing stored also get checked by {@link #canExtract}.
 	 */

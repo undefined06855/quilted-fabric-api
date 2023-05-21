@@ -133,4 +133,10 @@ public final class FullItemFluidStorage implements ExtractionOnlyStorage<FluidVa
 		// Capacity is the same as the amount.
 		return getAmount();
 	}
+
+	@Override
+	public String toString() {
+		return "FullItemFluidStorage[context=%s, fluid=%s, amount=%d]"
+				.formatted(context, containedFluid, containedAmount);
+	}
 }

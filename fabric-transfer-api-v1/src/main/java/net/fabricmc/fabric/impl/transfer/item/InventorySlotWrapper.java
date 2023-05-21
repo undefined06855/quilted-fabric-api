@@ -27,9 +27,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 
-import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.impl.transfer.DebugMessages;
 
 /**
  * A wrapper around a single slot of an inventory.
@@ -168,5 +169,10 @@ class InventorySlotWrapper extends SingleStackStorage {
 			// Otherwise assume everything was taken from original so empty it.
 			original.setCount(0);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "InventorySlotWrapper[%s#%d]".formatted(DebugMessages.forInventory(storage.inventory), slot);
 	}
 }

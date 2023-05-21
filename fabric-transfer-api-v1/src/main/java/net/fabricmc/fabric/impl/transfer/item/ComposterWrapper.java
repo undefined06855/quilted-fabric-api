@@ -42,6 +42,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.fabricmc.fabric.impl.transfer.DebugMessages;
 
 /**
  * Implementation of {@code Storage<ItemVariant>} for composters.
@@ -55,6 +56,11 @@ public class ComposterWrapper extends SnapshotParticipant<Float> {
 
 		private void setBlockState(BlockState state) {
 			world.setBlockState(pos, state);
+		}
+
+		@Override
+		public String toString() {
+			return DebugMessages.forGlobalPos(world, pos);
 		}
 	}
 
@@ -148,6 +154,11 @@ public class ComposterWrapper extends SnapshotParticipant<Float> {
 			increaseProbability = insertedIncreaseProbability;
 			return 1;
 		}
+
+		@Override
+		public String toString() {
+			return "ComposterWrapper[" + location + "/top]";
+		}
 	}
 
 	private class BottomStorage implements ExtractionOnlyStorage<ItemVariant>, SingleSlotStorage<ItemVariant> {
@@ -192,6 +203,11 @@ public class ComposterWrapper extends SnapshotParticipant<Float> {
 		@Override
 		public long getCapacity() {
 			return 1;
+		}
+
+		@Override
+		public String toString() {
+			return "ComposterWrapper[" + location + "/bottom]";
 		}
 	}
 }

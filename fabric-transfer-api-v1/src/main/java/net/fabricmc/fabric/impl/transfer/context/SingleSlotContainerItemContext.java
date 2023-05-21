@@ -47,4 +47,10 @@ public class SingleSlotContainerItemContext implements ContainerItemContext {
 	public List<SingleSlotStorage<ItemVariant>> getAdditionalSlots() {
 		return Collections.emptyList();
 	}
+
+	@Override
+	public String toString() {
+		return "SingleSlotContainerItemContext[%d %s %s]"
+				.formatted(slot.getAmount(), slot.getResource(), slot);
+	}
 }
