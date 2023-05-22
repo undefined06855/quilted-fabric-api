@@ -18,6 +18,7 @@
 package net.fabricmc.fabric.api.transfer.v1.storage.base;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.jetbrains.annotations.ApiStatus;
 
@@ -64,5 +65,16 @@ public class CombinedSlottedStorage<T, S extends SlottedStorage<T>> extends Comb
 		}
 
 		throw new IndexOutOfBoundsException("Slot " + slot + " is out of bounds. This storage has size " + getSlotCount());
+	}
+
+	@Override
+	public String toString() {
+		StringJoiner partNames = new StringJoiner(", ");
+
+		for (S part : parts) {
+			partNames.add(part.toString());
+		}
+
+		return "CombinedSlottedStorage[" + partNames + "]";
 	}
 }

@@ -49,6 +49,7 @@ public class BlockRenderInfo {
 	public BlockPos blockPos;
 	public BlockState blockState;
 	public long seed;
+	boolean useAo;
 	boolean defaultAo;
 	RenderLayer defaultLayer;
 
@@ -79,7 +80,8 @@ public class BlockRenderInfo {
 		this.blockState = blockState;
 		// in the unlikely case seed actually matches this, we'll simply retrieve it more than once
 		seed = -1L;
-		defaultAo = modelAO && MinecraftClient.isAmbientOcclusionEnabled() && blockState.getLuminance() == 0;
+		useAo = MinecraftClient.isAmbientOcclusionEnabled();
+		defaultAo = useAo && modelAO && blockState.getLuminance() == 0;
 
 		defaultLayer = RenderLayers.getBlockLayer(blockState);
 
