@@ -18,7 +18,6 @@
 package net.fabricmc.fabric.test.renderer.simple;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -46,7 +45,7 @@ public final class RendererTest implements ModInitializer {
 	public static final BlockEntityType<FrameBlockEntity> FRAME_BLOCK_ENTITY = FabricBlockEntityTypeBuilder.create(FrameBlockEntity::new, FRAMES).build(null);
 
 	public static final Identifier PILLAR_ID = id("pillar");
-	public static final Block PILLAR = new Block(FabricBlockSettings.of(Material.STONE));
+	public static final Block PILLAR = new Block(FabricBlockSettings.create());
 
 	@Override
 	public void onInitialize() {

@@ -17,6 +17,8 @@
 
 package net.fabricmc.fabric.test.item.gametest;
 
+import java.util.Objects;
+
 import org.quiltmc.qsl.testing.api.game.QuiltGameTest;
 import org.quiltmc.qsl.testing.api.game.QuiltTestContext;
 
@@ -135,7 +137,7 @@ public class RecipeGameTest implements QuiltGameTest {
 			throw new GameTestException("Size doesnt match. " + extraErrorInfo);
 		}
 
-		if (!ItemStack.areNbtEqual(currentStack, expectedStack)) {
+		if (!Objects.equals(currentStack.getNbt(), expectedStack.getNbt())) {
 			throw new GameTestException("Nbt doesnt match. " + extraErrorInfo);
 		}
 	}

@@ -26,9 +26,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
@@ -38,7 +38,6 @@ import net.minecraft.text.Text;
 import net.fabricmc.fabric.impl.client.itemgroup.CreativeGuiExtensions;
 import net.fabricmc.fabric.impl.client.itemgroup.FabricCreativeGuiComponents;
 import net.fabricmc.fabric.impl.itemgroup.FabricItemGroup;
-import net.fabricmc.fabric.impl.itemgroup.ItemGroupHelper;
 
 @Mixin(CreativeInventoryScreen.class)
 public abstract class CreativeInventoryScreenMixin<T extends ScreenHandler> extends AbstractInventoryScreen<T> implements CreativeGuiExtensions {
@@ -95,9 +94,13 @@ public abstract class CreativeInventoryScreenMixin<T extends ScreenHandler> exte
 
 	private void fabric_updateSelection() {
 		if (!fabric_isGroupVisible(selectedTab)) {
-			ItemGroupHelper.sortedGroups.stream()
+			ItemGroups.getGroups().stream()
 					.filter(this::fabric_isGroupVisible)
-					.findFirst()
+					.min((a, b) -> {
+						if (a.isSpecial() && !b.isSpecial()) return 1;
+						if (!a.isSpecial() && b.isSpecial()) return -1;
+						return 0;
+					})
 					.ifPresent(this::setSelectedTab);
 		}
 	}
@@ -121,7 +124,7 @@ public abstract class CreativeInventoryScreenMixin<T extends ScreenHandler> exte
 	}
 
 	@Inject(method = "renderTabTooltipIfHovered", at = @At("HEAD"), cancellable = true)
-	private void renderTabTooltipIfHovered(MatrixStack matrixStack, ItemGroup itemGroup, int mx, int my, CallbackInfoReturnable<Boolean> info) {
+	private void renderTabTooltipIfHovered(DrawContext drawContext, ItemGroup itemGroup, int mx, int my, CallbackInfoReturnable<Boolean> info) {
 		if (!fabric_isGroupVisible(itemGroup)) {
 			info.setReturnValue(false);
 		}
@@ -135,7 +138,7 @@ public abstract class CreativeInventoryScreenMixin<T extends ScreenHandler> exte
 	}
 
 	@Inject(method = "renderTabIcon", at = @At("HEAD"), cancellable = true)
-	private void renderTabIcon(MatrixStack matrixStack, ItemGroup itemGroup, CallbackInfo info) {
+	private void renderTabIcon(DrawContext drawContext, ItemGroup itemGroup, CallbackInfo info) {
 		if (!fabric_isGroupVisible(itemGroup)) {
 			info.cancel();
 		}

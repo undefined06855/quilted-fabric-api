@@ -3,15 +3,12 @@
   "package": "net.fabricmc.fabric.mixin.content.registry",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "FarmerVillagerTaskMixin",
     "FarmerWorkTaskAccessor",
     "GiveGiftsToHeroTaskAccessor",
     "HoeItemAccessor",
     "LandPathNodeMakerMixin",
     "FireBlockMixin",
-    "VibrationListenerMixin",
-    "VillagerEntityAccessor",
-    "VillagerEntityMixin"
+    "VillagerEntityAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

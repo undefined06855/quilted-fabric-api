@@ -20,9 +20,9 @@ package net.fabricmc.fabric.impl.gamerule.widget;
 import java.util.List;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.world.EditGameRulesScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 
@@ -58,11 +58,11 @@ public final class DoubleRuleWidget extends EditGameRulesScreen.NamedRuleWidget 
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+	public void render(DrawContext drawContext, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 		// FIXME: Param names nightmare
-		this.drawName(matrices, y, x);
+		this.drawName(drawContext, y, x);
 
 		this.textFieldWidget.setPosition(x + entryWidth - 44, y);
-		this.textFieldWidget.render(matrices, mouseX, mouseY, tickDelta);
+		this.textFieldWidget.render(drawContext, mouseX, mouseY, tickDelta);
 	}
 }

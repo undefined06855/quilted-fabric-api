@@ -26,7 +26,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.render.item.ItemRenderer;
 
 /**
  * Utility methods related to screens.
@@ -47,17 +46,6 @@ public final class Screens {
 		Objects.requireNonNull(screen, "Screen cannot be null");
 
 		return ((QuiltScreen) screen).getButtons();
-	}
-
-	/**
-	 * Gets a screen's item renderer.
-	 *
-	 * @return the screen's item renderer
-	 */
-	public static ItemRenderer getItemRenderer(Screen screen) {
-		Objects.requireNonNull(screen, "Screen cannot be null");
-
-		return ((QuiltScreen) screen).getItemRenderer();
 	}
 
 	/**

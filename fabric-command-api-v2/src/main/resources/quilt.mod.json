@@ -24,7 +24,7 @@
 			"quilt_loader",
 			{
 				"id": "minecraft",
-				"version": "~1.19-alpha.22.11.a"
+				"version": ">1.19-alpha.22.11.a"
 			},
 			"fabric-api-base"
 		],

@@ -17,18 +17,18 @@
 
 package net.fabricmc.fabric.api.object.builder.v1.block;
 
-import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
+import org.quiltmc.loader.api.ModInternal;
 import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
 import net.minecraft.entity.EntityType;
 import net.minecraft.resource.featuretoggle.FeatureFlag;
+import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
@@ -49,32 +49,24 @@ import net.fabricmc.fabric.mixin.object.builder.AbstractBlockAccessor;
  */
 @Deprecated
 public class FabricBlockSettings extends QuiltBlockSettings {
-	protected FabricBlockSettings(Material material, MapColor color) {
-		super(material, color);
-	}
-
-	protected FabricBlockSettings(Material material, Function<BlockState, MapColor> mapColorProvider) {
-		super(material, mapColorProvider);
+	protected FabricBlockSettings() {
+		super(QuiltBlockSettings.create());
 	}
 
 	protected FabricBlockSettings(AbstractBlock.Settings settings) {
 		super(settings);
 	}
 
-	public static FabricBlockSettings of(Material material) {
-		return of(material, material.getColor());
+	public static FabricBlockSettings create() {
+		return new FabricBlockSettings();
 	}
 
-	public static FabricBlockSettings of(Material material, MapColor color) {
-		return new FabricBlockSettings(material, color);
-	}
-
-	public static FabricBlockSettings of(Material material, DyeColor color) {
-		return new FabricBlockSettings(material, color.getMapColor());
-	}
-
-	public static FabricBlockSettings of(Material material, Function<BlockState, MapColor> mapColor) {
-		return new FabricBlockSettings(material, mapColor);
+	/**
+	 * @deprecated Use {@link FabricBlockSettings#create()} instead.
+	 */
+	@Deprecated
+	public static FabricBlockSettings of() {
+		return create();
 	}
 
 	public static FabricBlockSettings copyOf(AbstractBlock block) {
@@ -308,6 +300,13 @@ public class FabricBlockSettings extends QuiltBlockSettings {
 
 	public FabricBlockSettings collidable(boolean collidable) {
 		super.collidable(collidable);
+		return this;
+	}
+
+	// Satisfy Fabric's missing method checker with this
+	@ModInternal
+	public FabricBlockSettings requiredFlags(FeatureSet flags) {
+		super.requiredFlags(flags);
 		return this;
 	}
 }

@@ -43,10 +43,5 @@
 			"library"
 		],
 		"parent": "quilted_fabric_api"
-	},
-	"quilt_loom": {
-		"injected_interfaces": {
-			"net/minecraft/class_1761": ["net/fabricmc/fabric/api/itemgroup/v1/IdentifiableItemGroup"]
-		}
 	}
 }

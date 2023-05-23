@@ -7,7 +7,6 @@
     "quilt.QuiltEntityTypeBuilderMobAccessor",
     "AbstractBlockAccessor",
     "AbstractBlockSettingsAccessor",
-    "MaterialBuilderAccessor",
     "MinecartComparatorLogicMixin"
   ],
   "injectors": {

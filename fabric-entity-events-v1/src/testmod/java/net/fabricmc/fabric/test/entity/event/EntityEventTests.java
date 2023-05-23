@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -52,7 +51,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 
 public final class EntityEventTests implements ModInitializer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EntityEventTests.class);
-	public static final Block TEST_BED = new TestBedBlock(AbstractBlock.Settings.of(Material.WOOL).strength(1, 1));
+	public static final Block TEST_BED = new TestBedBlock(AbstractBlock.Settings.create().strength(1, 1));
 	public static final Item DIAMOND_ELYTRA = new DiamondElytraItem();
 
 	@Override
@@ -127,7 +126,7 @@ public final class EntityEventTests implements ModInitializer {
 
 		EntitySleepEvents.START_SLEEPING.register((entity, sleepingPos) -> {
 			LOGGER.info("Entity {} sleeping at {}", entity, sleepingPos);
-			BlockState bedState = entity.world.getBlockState(sleepingPos);
+			BlockState bedState = entity.getWorld().getBlockState(sleepingPos);
 
 			if (bedState.isOf(TEST_BED)) {
 				boolean shouldBeOccupied = !entity.getStackInHand(Hand.MAIN_HAND).isOf(Items.ORANGE_WOOL);
@@ -147,12 +146,12 @@ public final class EntityEventTests implements ModInitializer {
 		});
 
 		EntitySleepEvents.MODIFY_SLEEPING_DIRECTION.register((entity, sleepingPos, sleepingDirection) -> {
-			return entity.world.getBlockState(sleepingPos).isOf(TEST_BED) ? Direction.NORTH : sleepingDirection;
+			return entity.getWorld().getBlockState(sleepingPos).isOf(TEST_BED) ? Direction.NORTH : sleepingDirection;
 		});
 
 		EntitySleepEvents.ALLOW_SLEEP_TIME.register((player, sleepingPos, vanillaResult) -> {
 			// Yellow wool allows to sleep during the day
-			if (player.world.isDay() && player.getStackInHand(Hand.MAIN_HAND).isOf(Items.YELLOW_WOOL)) {
+			if (player.getWorld().isDay() && player.getStackInHand(Hand.MAIN_HAND).isOf(Items.YELLOW_WOOL)) {
 				return ActionResult.SUCCESS;
 			}
 

@@ -32,7 +32,7 @@ public class FabricApiBaseTestInit implements ModInitializer {
 		// Command to call audit the mixin environment
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			dispatcher.register(literal("audit_mixins").executes(context -> {
-				context.getSource().sendFeedback(Text.literal("Auditing mixin environment"), false);
+				context.getSource().sendFeedback(() -> Text.literal("Auditing mixin environment"), false);
 
 				try {
 					MixinEnvironment.getCurrentEnvironment().audit();
@@ -41,7 +41,7 @@ public class FabricApiBaseTestInit implements ModInitializer {
 					throw new AssertionError("Failed to audit mixin environment", e);
 				}
 
-				context.getSource().sendFeedback(Text.literal("Successfully audited mixin environment"), false);
+				context.getSource().sendFeedback(() -> Text.literal("Successfully audited mixin environment"), false);
 
 				return 1;
 			}));

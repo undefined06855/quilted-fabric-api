@@ -116,8 +116,8 @@ public final class CommandTest implements ModInitializer {
 
 	private int executeCommonCommand(CommandContext<ServerCommandSource> context) {
 		final ServerCommandSource source = context.getSource();
-		source.sendFeedback(Text.literal("Common test command is working."), false);
-		source.sendFeedback(Text.literal("Server Is Dedicated: " + source.getServer().isDedicated()), false);
+		source.sendFeedback(() -> Text.literal("Common test command is working."), false);
+		source.sendFeedback(() -> Text.literal("Server Is Dedicated: " + source.getServer().isDedicated()), false);
 
 		return 1;
 	}
@@ -129,8 +129,8 @@ public final class CommandTest implements ModInitializer {
 			throw WRONG_SIDE_SHOULD_BE_DEDICATED.create();
 		}
 
-		source.sendFeedback(Text.literal("Dedicated test command is working."), false);
-		source.sendFeedback(Text.literal("Server Is Dedicated: " + source.getServer().isDedicated()), false);
+		source.sendFeedback(() -> Text.literal("Dedicated test command is working."), false);
+		source.sendFeedback(() -> Text.literal("Server Is Dedicated: " + source.getServer().isDedicated()), false);
 
 		return 1;
 	}
@@ -142,8 +142,8 @@ public final class CommandTest implements ModInitializer {
 			throw WRONG_SIDE_SHOULD_BE_INTEGRATED.create();
 		}
 
-		source.sendFeedback(Text.literal("Integrated test command is working."), false);
-		source.sendFeedback(Text.literal("Server Is Integrated: " + !source.getServer().isDedicated()), false);
+		source.sendFeedback(() -> Text.literal("Integrated test command is working."), false);
+		source.sendFeedback(() -> Text.literal("Server Is Integrated: " + !source.getServer().isDedicated()), false);
 
 		return 1;
 	}

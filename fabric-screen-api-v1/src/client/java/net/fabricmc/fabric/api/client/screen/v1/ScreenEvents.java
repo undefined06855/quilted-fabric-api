@@ -20,8 +20,8 @@ package net.fabricmc.fabric.api.client.screen.v1;
 import java.util.Objects;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
@@ -93,7 +93,7 @@ public final class ScreenEvents {
 	 * }</pre>
 	 *
 	 * <p>Note that by adding an element to a screen, the element is not automatically {@link net.minecraft.client.gui.Drawable drawn}.
-	 * Unless the element is button, you need to call the specific {@link net.minecraft.client.gui.Drawable#render(MatrixStack, int, int, float) render} methods in the corresponding screen events.
+	 * Unless the element is button, you need to call the specific {@link net.minecraft.client.gui.Drawable#render(DrawContext, int, int, float) render} methods in the corresponding screen events.
 	 *
 	 * <p>This event can also indicate that the previous screen has been closed.
 	 * @see ScreenEvents#BEFORE_INIT
@@ -178,12 +178,12 @@ public final class ScreenEvents {
 
 	@FunctionalInterface
 	public interface BeforeRender {
-		void beforeRender(Screen screen, MatrixStack matrices, int mouseX, int mouseY, float tickDelta);
+		void beforeRender(Screen screen, DrawContext drawContext, int mouseX, int mouseY, float tickDelta);
 	}
 
 	@FunctionalInterface
 	public interface AfterRender {
-		void afterRender(Screen screen, MatrixStack matrices, int mouseX, int mouseY, float tickDelta);
+		void afterRender(Screen screen, DrawContext drawContext, int mouseX, int mouseY, float tickDelta);
 	}
 
 	@FunctionalInterface

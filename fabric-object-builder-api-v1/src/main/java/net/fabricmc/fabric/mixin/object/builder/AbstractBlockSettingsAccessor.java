@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
 import net.minecraft.entity.EntityType;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.sound.BlockSoundGroup;
@@ -36,10 +35,6 @@ import net.minecraft.util.Identifier;
 @Mixin(AbstractBlock.Settings.class)
 public interface AbstractBlockSettingsAccessor {
 	/* GETTERS */
-	@Deprecated
-	@Accessor
-	Material getMaterial();
-
 	@Deprecated
 	@Accessor
 	float getHardness();
@@ -123,20 +118,19 @@ public interface AbstractBlockSettingsAccessor {
 	@Accessor
 	Optional<AbstractBlock.Offsetter> getOffsetter();
 
+	@Deprecated
 	@Accessor
 	Identifier getLootTableId();
 
+	@Deprecated
 	@Accessor
 	boolean getBlockBreakParticles();
 
+	@Deprecated
 	@Accessor
 	FeatureSet getRequiredFeatures();
 
 	/* SETTERS */
-	@Deprecated
-	@Accessor
-	void setMaterial(Material material);
-
 	@Accessor
 	void setCollidable(boolean collidable);
 

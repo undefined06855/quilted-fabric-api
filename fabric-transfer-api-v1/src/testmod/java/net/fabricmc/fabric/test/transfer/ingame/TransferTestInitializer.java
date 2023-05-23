@@ -20,13 +20,12 @@ package net.fabricmc.fabric.test.transfer.ingame;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -36,8 +35,8 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 public class TransferTestInitializer implements ModInitializer {
 	public static final String MOD_ID = "fabric-transfer-api-v1-testmod";
 
-	private static final Block INFINITE_WATER_SOURCE = new Block(AbstractBlock.Settings.of(Material.METAL));
-	private static final Block INFINITE_LAVA_SOURCE = new Block(AbstractBlock.Settings.of(Material.METAL));
+	private static final Block INFINITE_WATER_SOURCE = new Block(AbstractBlock.Settings.create());
+	private static final Block INFINITE_LAVA_SOURCE = new Block(AbstractBlock.Settings.create());
 	private static final Block FLUID_CHUTE = new FluidChuteBlock();
 	private static final Item EXTRACT_STICK = new ExtractStickItem();
 	public static BlockEntityType<FluidChuteBlockEntity> FLUID_CHUTE_TYPE;

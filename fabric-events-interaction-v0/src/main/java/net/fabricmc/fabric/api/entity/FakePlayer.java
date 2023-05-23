@@ -143,7 +143,7 @@ public class FakePlayer extends ServerPlayerEntity {
 	}
 
 	@Override
-	public void openEditSignScreen(SignBlockEntity sign) { }
+	public void openEditSignScreen(SignBlockEntity sign, boolean front) { }
 
 	@Override
 	public OptionalInt openHandledScreen(@Nullable NamedScreenHandlerFactory factory) {

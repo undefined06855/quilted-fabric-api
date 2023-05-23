@@ -19,7 +19,7 @@ package net.fabricmc.fabric.api.itemgroup.v1;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.RegistryKey;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
@@ -27,8 +27,6 @@ import net.fabricmc.fabric.impl.itemgroup.ItemGroupEventsImpl;
 
 /**
  * Holds events related to {@link ItemGroups}.
- *
- * @see FabricItemGroup
  */
 public final class ItemGroupEvents {
 	private ItemGroupEvents() {
@@ -37,8 +35,7 @@ public final class ItemGroupEvents {
 	/**
 	 * This event allows the entries of any item group to be modified.
 	 * <p/>
-	 * If you know beforehand which item group you'd like to modify, use {@link #modifyEntriesEvent(ItemGroup)}
-	 * or {@link #modifyEntriesEvent(Identifier)} instead.
+	 * Use {@link #modifyEntriesEvent(RegistryKey)} to get the event for a specific item group.
 	 * <p/>
 	 * This event is invoked after those two more specific events.
 	 */
@@ -49,22 +46,13 @@ public final class ItemGroupEvents {
 	});
 
 	/**
-	 * Returns the modify entries event for a specific item group.
-	 * @param itemGroup the item group to modify
-	 * @return the event
-	 */
-	public static Event<ModifyEntries> modifyEntriesEvent(ItemGroup itemGroup) {
-		return modifyEntriesEvent(itemGroup.getId());
-	}
-
-	/**
 	 * Returns the modify entries event for a specific item group. This uses the group ID and
 	 * is suitable for modifying a modded item group that might not exist.
-	 * @param groupId the ID of the item group to modify
+	 * @param registryKey the {@link RegistryKey} of the item group to modify
 	 * @return the event
 	 */
-	public static Event<ModifyEntries> modifyEntriesEvent(Identifier groupId) {
-		return ItemGroupEventsImpl.getOrCreateModifyEntriesEvent(groupId);
+	public static Event<ModifyEntries> modifyEntriesEvent(RegistryKey<ItemGroup> registryKey) {
+		return ItemGroupEventsImpl.getOrCreateModifyEntriesEvent(registryKey);
 	}
 
 	@FunctionalInterface

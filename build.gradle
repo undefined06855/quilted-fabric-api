@@ -190,7 +190,7 @@ allprojects {
 		}
 	}
 
-		allprojects.each { p ->
+	allprojects.each { p ->
 		if (project.name == "deprecated") return
 
 		loom.mods.register(p.name) {
@@ -368,8 +368,8 @@ loom {
 			name "Game Test"
 
 			// Enable the gametest runner
-			property "-Dquilt.game_test", "true"
-			property "-Dquilt.game_test.report-file", "${project.buildDir}/report.xml"
+			property "quilt.game_test", "true"
+			property "quilt.game_test.report-file", "${project.buildDir}/report.xml"
 			runDir "build/game_test"
 		}
 		autoTestServer {
@@ -690,7 +690,7 @@ curseforge {
 		id = '634179'
 		changelog = ENV.CHANGELOG ?: 'No changelog provided'
 		releaseType = project.prerelease == 'true' ? 'beta' : 'release'
-		addGameVersion '1.19.4'
+		addGameVersion '1.20-Snapshot'
 		addGameVersion 'Quilt'
 
 		mainArtifact(renameJar) {
