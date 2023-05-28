@@ -39,16 +39,16 @@ task generateAccessWidener {
 		lines.add('')
 		lines.addAll(file('template.accesswidener').text.lines().toList())
 
+		/* QSL already does this!
 		Path commonJar = loom.namedMinecraftProvider.parentMinecraftProvider.commonJar.path
 
 		try (def fs = FileSystems.newFileSystem(URI.create("jar:${commonJar.toUri()}"), [create: false])) {
-			/* QSL already does this!
 			generateBlockConstructors(lines, fs)
 			lines.add("")
-			*/
 			generateItemConstructors(lines, fs)
 			lines.add("")
 		}
+		*/
 
 		Path clientJar = loom.namedMinecraftProvider.parentMinecraftProvider.clientOnlyJar.path
 
