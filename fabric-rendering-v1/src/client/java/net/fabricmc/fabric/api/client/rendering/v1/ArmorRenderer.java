@@ -39,7 +39,10 @@ import net.fabricmc.fabric.impl.client.rendering.ArmorRendererRegistryImpl;
  * They may be used to render armor with special models or effects.
  *
  * <p>The renderers are registered with {@link net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer#register(ArmorRenderer, ItemConvertible...)}.
+ *
+ * @deprecated Use Quilt Armor Rendering Registry API's {@link org.quiltmc.qsl.rendering.entity.api.client.ArmorRenderingRegistry} instead.
  */
+@Deprecated
 @FunctionalInterface
 public interface ArmorRenderer {
 	/**
