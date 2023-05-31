@@ -3,7 +3,7 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 dependencies {
-	modApi(getQslModule("core", "qsl_base"))
+	modApi(getQslModule('core', 'qsl_base'))
 }
 
 testDependencies(project, [

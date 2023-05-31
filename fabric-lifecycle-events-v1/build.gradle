@@ -9,7 +9,7 @@ loom {
 moduleDependencies(project, ['fabric-api-base'])
 
 dependencies {
-	modApi(getQslModule("core", "lifecycle_events"))
-	modApi(getQslModule("core", "resource_loader"))
-	modApi(getQslModule("entity", "entity_events"))
+	modApi(getQslModule('core', 'lifecycle_events'))
+	modApi(getQslModule('core', 'resource_loader'))
+	modApi(getQslModule('entity', 'entity_events'))
 }

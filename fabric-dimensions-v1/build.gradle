@@ -3,8 +3,8 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 dependencies {
-	modApi(getQslModule("core", "qsl_base"))
-	modApi(getQslModule("worldgen", "dimension"))
+	modApi(getQslModule('core', 'qsl_base'))
+	modApi(getQslModule('worldgen', 'dimension'))
 }
 
 moduleDependencies(project, ['fabric-api-base'])

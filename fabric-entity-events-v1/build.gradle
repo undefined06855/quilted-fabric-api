@@ -3,7 +3,7 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 dependencies {
-	modApi(getQslModule("entity", "entity_events"))
+	modApi(getQslModule('entity', 'entity_events'))
 }
 
 moduleDependencies(project, ['fabric-api-base'])

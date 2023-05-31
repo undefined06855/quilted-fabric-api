@@ -3,8 +3,8 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 dependencies {
-	modApi(getQslModule("core", "registry"))
-	modApi(getQslModule("core", "lifecycle_events"))
+	modApi(getQslModule('core', 'registry'))
+	modApi(getQslModule('core', 'lifecycle_events'))
 }
 
 loom {

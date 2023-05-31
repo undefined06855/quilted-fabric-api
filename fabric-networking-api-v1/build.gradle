@@ -5,7 +5,7 @@ upstream_version = getSubprojectUpstreamVersion(project)
 moduleDependencies(project, ['fabric-api-base'])
 
 dependencies {
-	modApi(getQslModule("core", "networking"))
+	modApi(getQslModule('core', 'networking'))
 }
 
 testDependencies(project, [

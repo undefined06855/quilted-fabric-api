@@ -9,8 +9,8 @@ loom {
 moduleDependencies(project, ['fabric-api-base'])
 
 dependencies {
-	modApi(getQslModule("management", "command"))
-	modApi(getQslModule("management", "client_command"))
+	modApi(getQslModule('management', 'command'))
+	modApi(getQslModule('management', 'client_command'))
 }
 
 testDependencies(project, [
