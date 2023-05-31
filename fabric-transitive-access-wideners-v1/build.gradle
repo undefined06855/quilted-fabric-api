@@ -7,6 +7,7 @@ loom {
 }
 
 dependencies {
+	modApi(getQslModule('block', 'block_entity'))
 	modApi(getQslModule('block', 'block_extensions'))
 	modApi(getQslModule('data', 'advancement'))
 	modApi(getQslModule('entity', 'entity'))
