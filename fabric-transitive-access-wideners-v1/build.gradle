@@ -14,8 +14,8 @@ dependencies {
 }
 
 testDependencies(project, [
-		':fabric-rendering-v1',
-		':fabric-object-builder-api-v1'
+	':fabric-rendering-v1',
+	':fabric-object-builder-api-v1'
 ])
 
 
@@ -42,7 +42,7 @@ task generateAccessWidener {
 		/* QSL already does this!
 		Path commonJar = loom.namedMinecraftProvider.parentMinecraftProvider.commonJar.path
 
-		try (def fs = FileSystems.newFileSystem(URI.create("jar:${commonJar.toUri()}"), [create: false])) {
+		FileSystems.newFileSystem(URI.create("jar:${commonJar.toUri()}"), [create: false]).withCloseable { fs ->
 			generateBlockConstructors(lines, fs)
 			lines.add("")
 			generateItemConstructors(lines, fs)
@@ -52,7 +52,7 @@ task generateAccessWidener {
 
 		Path clientJar = loom.namedMinecraftProvider.parentMinecraftProvider.clientOnlyJar.path
 
-		try (def fs = FileSystems.newFileSystem(URI.create("jar:${clientJar.toUri()}"), [create: false])) {
+		FileSystems.newFileSystem(URI.create("jar:${clientJar.toUri()}"), [create: false]).withCloseable { fs ->
 			generateRenderPhaseFields(lines, fs)
 		}
 
@@ -65,27 +65,27 @@ task generateAccessWidener {
 def generateBlockConstructors(List<String> lines, FileSystem fs) {
 	lines.add('# Constructors of non-abstract block classes')
 	Files.list(fs.getPath('net/minecraft/block'))
-		.filter { Files.isRegularFile(it) && it.toString().endsWith(".class") }
-		.map { loadClass(it) }
-		.sorted(Comparator.comparing { it.name })
-		.filter { (it.access & Opcodes.ACC_ABSTRACT) == 0 }
-		.forEach { node ->
-			for (def method : node.methods) {
-				// Checklist for finding block constructors as of 1.19.3:
-				//  - class directly in net.minecraft.block (excluding subpackages)
-				//  - method name == <init> (by definition)
-				//  - contains an AbstractBlock$Settings parameter
-				//  - only taking into account non-abstract classes and non-public constructors
+			.filter { Files.isRegularFile(it) && it.toString().endsWith(".class") }
+			.map { loadClass(it) }
+			.sorted(Comparator.comparing { it.name })
+			.filter { (it.access & Opcodes.ACC_ABSTRACT) == 0 }
+			.forEach { node ->
+				for (def method : node.methods) {
+					// Checklist for finding block constructors as of 1.19.3:
+					//  - class directly in net.minecraft.block (excluding subpackages)
+					//  - method name == <init> (by definition)
+					//  - contains an AbstractBlock$Settings parameter
+					//  - only taking into account non-abstract classes and non-public constructors
 
-				// Block constructor...
-				if (method.name == '<init>' && Type.getArgumentTypes(method.desc).any { it.internalName == 'net/minecraft/block/AbstractBlock$Settings' }) {
-					// ...and non-public
-					if ((method.access & Opcodes.ACC_PUBLIC) == 0) {
-						lines.add("transitive-accessible method $node.name <init> $method.desc")
+					// Block constructor...
+					if (method.name == '<init>' && Type.getArgumentTypes(method.desc).any { it.internalName == 'net/minecraft/block/AbstractBlock$Settings' }) {
+						// ...and non-public
+						if ((method.access & Opcodes.ACC_PUBLIC) == 0) {
+							lines.add("transitive-accessible method $node.name <init> $method.desc")
+						}
 					}
 				}
 			}
-		}
 }
 
 def generateItemConstructors(List<String> lines, FileSystem fs) {
@@ -128,7 +128,7 @@ def generateRenderPhaseFields(List<String> lines, FileSystem fs) {
 ClassNode loadClass(Path path) {
 	def node = new ClassNode()
 
-	try (def is = Files.newInputStream(path)) {
+	Files.newInputStream(path).withCloseable { is ->
 		new ClassReader(is).accept(node, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES)
 	}
 
@@ -141,7 +141,7 @@ def validateAccessWidener(List<String> lines) {
 	for (int i = 0; i < lines.size(); i++) {
 		String line = lines.get(i)
 		if (line.isBlank() || line.startsWith("#") || line.startsWith("transitive-") || line.startsWith("accessWidener")) continue
-		exceptions.add(String.valueOf(i + 1))
+			exceptions.add(String.valueOf(i + 1))
 	}
 
 	if (exceptions.size() > 0) {

@@ -18,7 +18,7 @@ sourceSets {
 	testmod {
 		resources {
 			srcDirs += [
-					'src/testmod/generated'
+				'src/testmod/generated'
 			]
 		}
 	}

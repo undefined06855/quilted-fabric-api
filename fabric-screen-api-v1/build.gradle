@@ -6,6 +6,4 @@ dependencies {
 	modApi(getQslModule("gui", "screen"))
 }
 
-moduleDependencies(project, [
-		'fabric-api-base'
-])
+moduleDependencies(project, ['fabric-api-base'])

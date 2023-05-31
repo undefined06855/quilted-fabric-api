@@ -17,6 +17,9 @@
     ],
     "quilt:game_test": [
       "net.fabricmc.fabric.test.event.interaction.FakePlayerTests"
+    ],
+    "client": [
+      "net.fabricmc.fabric.test.client.event.interaction.ClientPreAttackTests"
     ]
   }
 }

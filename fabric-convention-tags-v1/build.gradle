@@ -2,12 +2,10 @@ archivesBaseName = "fabric-convention-tags-v1"
 version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
-moduleDependencies(project, [
-		'fabric-api-base'
-])
+moduleDependencies(project, ['fabric-api-base'])
 
 testDependencies(project, [
-		':fabric-lifecycle-events-v1',
+	':fabric-lifecycle-events-v1',
 ])
 
 sourceSets {

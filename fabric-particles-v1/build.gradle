@@ -6,9 +6,7 @@ loom {
 	accessWidenerPath = file("src/main/resources/quilted_fabric_particles_v1.accesswidener")
 }
 
-moduleDependencies(project, [
-		'fabric-api-base'
-])
+moduleDependencies(project, ['fabric-api-base'])
 
 
 validateMixinNames {

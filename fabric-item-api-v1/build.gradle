@@ -8,10 +8,8 @@ dependencies {
 	modApi(getQslModule("item", "item_extensions"))
 }
 
-moduleDependencies(project, [
-		'fabric-api-base'
-])
+moduleDependencies(project, ['fabric-api-base'])
 
 testDependencies(project, [
-		':fabric-content-registries-v0',
+	':fabric-content-registries-v0',
 ])

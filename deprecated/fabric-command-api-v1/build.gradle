@@ -3,6 +3,6 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 moduleDependencies(project, [
-		'fabric-api-base',
-		'fabric-command-api-v2'
+	'fabric-api-base',
+	'fabric-command-api-v2'
 ])

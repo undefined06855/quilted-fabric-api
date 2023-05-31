@@ -6,9 +6,7 @@ loom {
 	accessWidenerPath = file("src/main/resources/quilted_fabric_lifecycle_events_v1.accesswidener")
 }
 
-moduleDependencies(project, [
-		'fabric-api-base'
-])
+moduleDependencies(project, ['fabric-api-base'])
 
 dependencies {
 	modApi(getQslModule("core", "lifecycle_events"))

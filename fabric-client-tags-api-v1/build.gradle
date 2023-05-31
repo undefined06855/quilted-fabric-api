@@ -2,11 +2,9 @@ archivesBaseName = "quilted_fabric_client_tags_api_v1"
 version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
-moduleDependencies(project, [
-		'fabric-api-base'
-])
+moduleDependencies(project, ['fabric-api-base'])
 
 testDependencies(project, [
-		':fabric-convention-tags-v1',
-		':fabric-lifecycle-events-v1',
+	':fabric-convention-tags-v1',
+	':fabric-lifecycle-events-v1',
 ])

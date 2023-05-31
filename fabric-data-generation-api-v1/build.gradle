@@ -3,12 +3,12 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 moduleDependencies(project, [
-		'fabric-api-base',
-		'fabric-registry-sync-v0',
-		'fabric-networking-api-v1',
-		'fabric-resource-conditions-api-v1',
-		'fabric-item-group-api-v1',
-		'fabric-recipe-api-v1',
+	'fabric-api-base',
+	'fabric-registry-sync-v0',
+	'fabric-networking-api-v1',
+	'fabric-resource-conditions-api-v1',
+	'fabric-item-group-api-v1',
+	'fabric-recipe-api-v1',
 ])
 
 dependencies {
