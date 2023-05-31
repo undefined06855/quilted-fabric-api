@@ -10,7 +10,7 @@ plugins {
 	id "idea"
 	id "maven-publish"
 	id "org.quiltmc.loom" version "1.2.+" apply false
-	id "org.quiltmc.gradle.licenser" version "1.+"
+	id "org.quiltmc.gradle.licenser" version "2.0.+"
 	id "net.kyori.indra.git" version "3.1.1"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.modrinth.minotaur" version "2.7.5"
@@ -261,8 +261,6 @@ allprojects {
 		rule rootProject.file('codeformat/HEADER')
 
 		include '**/*.java'
-		// TODO - Fix the package-info licenses!
-		exclude '**/package-info.java'
 	}
 
 	checkstyle {

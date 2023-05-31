@@ -65,6 +65,7 @@ class GenerateImplPackageInfos extends DefaultTask {
 					target.resolve('package-info.java').withWriter {
 						def packageName = relativePath.toString().replace(File.separator, '.')
 						it.write("""$headerText
+						|
 						|/**
 						| * Implementation code for ${project.name}.
 						| */
