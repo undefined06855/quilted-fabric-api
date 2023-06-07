@@ -17,7 +17,10 @@
 
 package net.fabricmc.fabric.api.event.lifecycle.v1;
 
+import java.util.Optional;
+
 import org.quiltmc.qsl.resource.loader.api.ResourceLoaderEvents;
+import org.quiltmc.qsl.resource.loader.impl.ResourceLoaderEventContextsImpl;
 
 import net.minecraft.resource.LifecycledResourceManager;
 import net.minecraft.server.MinecraftServer;
@@ -97,13 +100,15 @@ public final class ServerLifecycleEvents {
 	 */
 	public static final Event<StartDataPackReload> START_DATA_PACK_RELOAD = QuiltCompatEvent.fromQuilt(
 			ResourceLoaderEvents.START_DATA_PACK_RELOAD,
-			startDataPackReload -> (server, oldResourceManager) -> {
-				if (server != null) {
-					// Fabric only triggers it at reloads, not startup.
-					startDataPackReload.startDataPackReload(server, null);
+			startDataPackReload -> context -> {
+				// Fabric only triggers it at reloads, not startup.
+				if (!context.isFirst()) {
+					startDataPackReload.startDataPackReload(context.server(), (LifecycledResourceManager) context.resourceManager());
 				}
 			},
-			invokerGetter -> (server, resourceManager) -> invokerGetter.get().onStartDataPackReload(server, resourceManager)
+			invokerGetter -> (server, resourceManager) -> invokerGetter.get().onStartDataPackReload(new ResourceLoaderEventContextsImpl.ReloadStartContext(
+					() -> resourceManager, null
+			))
 	);
 
 	/**
@@ -113,16 +118,18 @@ public final class ServerLifecycleEvents {
 	 */
 	public static final Event<EndDataPackReload> END_DATA_PACK_RELOAD = QuiltCompatEvent.fromQuilt(
 			ResourceLoaderEvents.END_DATA_PACK_RELOAD,
-			endDataPackReload -> (server, resourceManager, error) -> {
-				if (server != null) {
-					// Fabric only triggers it at reloads, not startup.
-					// Also using an actual cast, unlike Fabric.
-					endDataPackReload.endDataPackReload(server, (LifecycledResourceManager) resourceManager, error == null);
+			endDataPackReload -> context -> {
+				// Fabric only triggers it at reloads, not startup.
+				// Also using an actual cast, unlike Fabric.
+				if (!context.isFirst()) {
+					endDataPackReload.endDataPackReload(context.server(), (LifecycledResourceManager) context.resourceManager(), context.error().isEmpty());
 				}
 			},
 			invokerGetter -> (server, resourceManager, success) -> {
-				invokerGetter.get().onEndDataPackReload(server, resourceManager,
-						success ? null : new RuntimeException("Unknown error"));
+				invokerGetter.get().onEndDataPackReload(new ResourceLoaderEventContextsImpl.ReloadEndContext(
+						resourceManager, server.getRegistryManager(), Optional.ofNullable(
+							success ? null : new RuntimeException("Unknown error")
+				)));
 			}
 	);
 
