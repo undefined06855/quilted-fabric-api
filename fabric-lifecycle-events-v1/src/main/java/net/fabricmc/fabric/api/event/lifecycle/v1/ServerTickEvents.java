@@ -17,6 +17,7 @@
 
 package net.fabricmc.fabric.api.event.lifecycle.v1;
 
+import org.quiltmc.qsl.lifecycle.api.event.ServerWorldLoadEvents;
 import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
 
 import net.minecraft.server.MinecraftServer;
@@ -25,6 +26,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
+/**
+ * @deprecated Use Quilt Lifecycle Events API's {@link org.quiltmc.qsl.lifecycle.api.event.ServerTickEvents} and {@link ServerWorldTickEvents} instead.
+ */
 @Deprecated
 public final class ServerTickEvents {
 	private ServerTickEvents() {

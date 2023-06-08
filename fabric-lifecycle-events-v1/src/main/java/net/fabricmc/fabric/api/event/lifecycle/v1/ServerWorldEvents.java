@@ -26,6 +26,9 @@ import net.minecraft.world.PersistentState;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
+/**
+ * @deprecated Use Quilt Lifecycle Events API's {@link ServerWorldLoadEvents} instead.
+ */
 @Deprecated
 public final class ServerWorldEvents {
 	/**

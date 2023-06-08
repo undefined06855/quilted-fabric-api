@@ -19,6 +19,7 @@ package net.fabricmc.fabric.api.event.lifecycle.v1;
 
 import java.util.Optional;
 
+import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoaderEvents;
 import org.quiltmc.qsl.resource.loader.impl.ResourceLoaderEventContextsImpl;
 
@@ -31,6 +32,10 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
+/**
+ * @deprecated Use Quilt Lifecycle Events API's {@link org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents}
+ * and Quilt Resource Loader's {@link ResourceLoaderEvents} instead.
+ */
 @Deprecated
 public final class ServerLifecycleEvents {
 	private ServerLifecycleEvents() {
