@@ -68,10 +68,6 @@ abstract class ClientPlayNetworkHandlerMixin {
 	private void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
 		// If a world already exists, we need to unload all (block)entities in the world.
 		if (this.world != null) {
-			for (Entity entity : world.getEntities()) {
-				ClientEntityEvents.ENTITY_UNLOAD.invoker().onUnload(entity, this.world);
-			}
-
 			for (WorldChunk chunk : ((LoadedChunksCache) this.world).fabric_getLoadedChunks()) {
 				for (BlockEntity blockEntity : chunk.getBlockEntities().values()) {
 					ClientBlockEntityEvents.BLOCK_ENTITY_UNLOAD.invoker().onUnload(blockEntity, this.world);
@@ -85,10 +81,6 @@ abstract class ClientPlayNetworkHandlerMixin {
 	private void onClearWorld(CallbackInfo ci) {
 		// If a world already exists, we need to unload all (block)entities in the world.
 		if (this.world != null) {
-			for (Entity entity : this.world.getEntities()) {
-				ClientEntityEvents.ENTITY_UNLOAD.invoker().onUnload(entity, this.world);
-			}
-
 			for (WorldChunk chunk : ((LoadedChunksCache) this.world).fabric_getLoadedChunks()) {
 				for (BlockEntity blockEntity : chunk.getBlockEntities().values()) {
 					ClientBlockEntityEvents.BLOCK_ENTITY_UNLOAD.invoker().onUnload(blockEntity, this.world);
