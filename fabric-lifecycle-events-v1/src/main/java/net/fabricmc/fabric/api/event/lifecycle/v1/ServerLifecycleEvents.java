@@ -19,7 +19,6 @@ package net.fabricmc.fabric.api.event.lifecycle.v1;
 
 import java.util.Optional;
 
-import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoaderEvents;
 import org.quiltmc.qsl.resource.loader.impl.ResourceLoaderEventContextsImpl;
 

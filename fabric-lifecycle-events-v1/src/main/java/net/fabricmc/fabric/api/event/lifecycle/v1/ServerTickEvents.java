@@ -17,7 +17,6 @@
 
 package net.fabricmc.fabric.api.event.lifecycle.v1;
 
-import org.quiltmc.qsl.lifecycle.api.event.ServerWorldLoadEvents;
 import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
 
 import net.minecraft.server.MinecraftServer;
