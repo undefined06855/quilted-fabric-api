@@ -780,7 +780,7 @@ curseforge {
 		id = '634179'
 		changelog = ENV.CHANGELOG ?: 'No changelog provided'
 		releaseType = project.prerelease == 'true' ? 'beta' : 'release'
-		addGameVersion '1.20-Snapshot'
+		addGameVersion '1.20'
 		addGameVersion 'Quilt'
 
 		mainArtifact(renameJar) {
