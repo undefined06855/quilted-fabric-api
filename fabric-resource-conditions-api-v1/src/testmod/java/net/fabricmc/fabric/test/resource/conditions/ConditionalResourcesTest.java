@@ -20,6 +20,8 @@ package net.fabricmc.fabric.test.resource.conditions;
 import org.quiltmc.qsl.testing.api.game.QuiltGameTest;
 import org.quiltmc.qsl.testing.api.game.QuiltTestContext;
 
+import net.minecraft.loot.LootDataType;
+import net.minecraft.loot.LootManager;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.test.GameTest;
 import net.minecraft.util.Identifier;
@@ -65,6 +67,24 @@ public class ConditionalResourcesTest {
 
 		long loadedRecipes = manager.values().stream().filter(r -> r.getId().getNamespace().equals(MOD_ID)).count();
 		if (loadedRecipes != 5) throw new AssertionError("Unexpected loaded recipe count: " + loadedRecipes);
+
+		context.complete();
+	}
+
+	@GameTest(templateName = QuiltGameTest.EMPTY_STRUCTURE)
+	public void conditionalPredicates(QuiltTestContext context) {
+		// Predicates are internally handled as a kind of loot data,
+		// hence the yarn name "loot condition".
+
+		LootManager manager = context.getWorld().getServer().getLootManager();
+
+		if (manager.getElementOptional(LootDataType.PREDICATES, id("loaded")).isEmpty()) {
+			throw new AssertionError("loaded predicate should have been loaded.");
+		}
+
+		if (manager.getElementOptional(LootDataType.PREDICATES, id("not_loaded")).isPresent()) {
+			throw new AssertionError("not_loaded predicate should not have been loaded.");
+		}
 
 		context.complete();
 	}
