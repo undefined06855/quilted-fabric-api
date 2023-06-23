@@ -42,6 +42,11 @@
 		"quilted_fabric_renderer_api_v1.mixins.json",
 		"quilted_fabric_renderer_api_v1.debughud.mixins.json"
 	],
+	"quilt_loom": {
+		"injected_interfaces": {
+			"net/minecraft/class_1087": ["net/fabricmc/fabric/api/renderer/v1/model/FabricBakedModel"]
+		}
+	},
 	"fabric-api:module-lifecycle": "stable",
 	"modmenu": {
 		"badges": [
