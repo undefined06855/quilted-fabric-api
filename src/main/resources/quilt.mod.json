@@ -103,6 +103,10 @@
 				"optional": true
 			},
 			{
+				"id": "quilted_fabric_models_v0",
+				"optional": true
+			},
+			{
 				"id": "quilted_fabric_networking_v0",
 				"optional": true
 			},
@@ -112,10 +116,6 @@
 			},
 			{
 				"id": "quilted_fabric_rendering_v0",
-				"optional": true
-			},
-			{
-				"id": "quilted_fabric_models_v0",
 				"optional": true
 			},
 			"quilt_advancement",
