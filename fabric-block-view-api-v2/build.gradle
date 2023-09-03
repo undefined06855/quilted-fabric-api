@@ -1,0 +1,7 @@
+archivesBaseName = "quilted_fabric_block_view_api_v2"
+version = getSubprojectVersion(project)
+upstream_version = getSubprojectUpstreamVersion(project)
+
+loom {
+	accessWidenerPath = file("src/main/resources/quilted_fabric_block_view_api_v2.accesswidener")
+}
