@@ -42,6 +42,7 @@
 			"quilted_fabric_api_lookup_api_v1",
 			"quilted_fabric_biome_api_v1",
 			"quilted_fabric_block_api_v1",
+			"quilted_fabric_block_view_api_v2",
 			"quilted_fabric_blockrenderlayer_v1",
 			"quilted_fabric_client_tags_api_v1",
 			"quilted_fabric_command_api_v2",
@@ -68,7 +69,6 @@
 			"quilted_fabric_registry_sync_v0",
 			"quilted_fabric_renderer_api_v1",
 			"quilted_fabric_renderer_indigo",
-			"quilted_fabric_rendering_data_attachment_v1",
 			"quilted_fabric_rendering_fluids_v1",
 			"quilted_fabric_rendering_v1",
 			"quilted_fabric_resource_conditions_api_v1",
@@ -112,6 +112,10 @@
 			},
 			{
 				"id": "quilted_fabric_renderer_registries_v1",
+				"optional": true
+			},
+			{
+				"id": "quilted_fabric_rendering_data_attachment_v1",
 				"optional": true
 			},
 			{
