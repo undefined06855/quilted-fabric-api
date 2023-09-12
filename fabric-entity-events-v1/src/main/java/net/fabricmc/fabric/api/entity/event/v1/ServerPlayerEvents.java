@@ -38,8 +38,8 @@ public final class ServerPlayerEvents {
 	 */
 	public static final Event<ServerPlayerEvents.CopyFrom> COPY_FROM = QuiltCompatEvent.fromQuilt(
 			org.quiltmc.qsl.entity.event.api.ServerPlayerEntityCopyCallback.EVENT,
-			playerCopyCallback -> (copy, original, wasDeath) -> playerCopyCallback.copyFromPlayer(original, copy, wasDeath),
-			invokerGetter -> (oldPlayer, newPlayer, alive) -> invokerGetter.get().onPlayerCopy(newPlayer, oldPlayer, alive)
+			playerCopyCallback -> (copy, original, wasDeath) -> playerCopyCallback.copyFromPlayer(original, copy, !wasDeath),
+			invokerGetter -> (oldPlayer, newPlayer, alive) -> invokerGetter.get().onPlayerCopy(newPlayer, oldPlayer, !alive)
 	);
 
 	/**
