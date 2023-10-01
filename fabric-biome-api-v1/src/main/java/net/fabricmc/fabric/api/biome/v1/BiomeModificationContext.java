@@ -61,8 +61,8 @@ public interface BiomeModificationContext extends org.quiltmc.qsl.worldgen.biome
 
 	interface WeatherContext extends org.quiltmc.qsl.worldgen.biome.api.BiomeModificationContext.WeatherContext {
 		/**
-		 * @see Biome#getPrecipitation()
-		 * @see Biome.Builder#precipitation(Biome.Precipitation)
+		 * @see Biome#hasPrecipitation()
+		 * @see Biome.Builder#precipitation(boolean)
 		 */
 		default void setPrecipitation(boolean hasPrecipitation) {
 			this.setHasPrecipitation(hasPrecipitation);
