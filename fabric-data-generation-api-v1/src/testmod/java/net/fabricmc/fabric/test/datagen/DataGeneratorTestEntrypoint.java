@@ -133,6 +133,7 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 				TEST_DATAGEN_DYNAMIC_REGISTRY_KEY,
 				this::bootstrapTestDatagenRegistry
 		);
+		// do NOT add TEST_DATAGEN_DYNAMIC_EMPTY_REGISTRY_KEY, should still work without it
 	}
 
 	private void bootstrapTestDatagenRegistry(Registerable<DataGeneratorTestContent.TestDatagenObject> registerable) {
@@ -163,7 +164,7 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 			// - Create a new fabric server with the ingredient API.
 			// - Copy the generated recipes to a datapack, for example to world/datapacks/<packname>/data/test/recipes/.
 			// - Remember to also include a pack.mcmeta file in world/datapacks/<packname>.
-			// (see https://minecraft.fandom.com/wiki/Tutorials/Creating_a_data_pack)
+			// (see https://minecraft.wiki/w/Tutorials/Creating_a_data_pack)
 			// - Start the server and connect to it with a vanilla client.
 			// - Test all the following recipes
 
