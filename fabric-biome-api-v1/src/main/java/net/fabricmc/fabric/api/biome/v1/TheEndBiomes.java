@@ -23,10 +23,6 @@ import net.minecraft.world.biome.Biome;
 /**
  * API that exposes some internals of the minecraft default biome source for The End.
  *
- * <p><b>Experimental feature</b>, may be removed or changed without further notice.
- * Because of the volatility of world generation in Minecraft 1.16, this API is marked experimental
- * since it is likely to change in future Minecraft versions.
- *
  * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.TheEndBiomes} instead.
  */
 @Deprecated

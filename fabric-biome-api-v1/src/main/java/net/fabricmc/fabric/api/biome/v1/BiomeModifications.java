@@ -36,8 +36,6 @@ import net.minecraft.world.gen.feature.PlacedFeature;
  *
  * <p>Any modifications made to biomes will not be available for use in the demo level.
  *
- * <p><b>Experimental feature</b>, may be removed or changed without further notice.
- *
  * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.BiomeModifications} instead.
  */
 @Deprecated

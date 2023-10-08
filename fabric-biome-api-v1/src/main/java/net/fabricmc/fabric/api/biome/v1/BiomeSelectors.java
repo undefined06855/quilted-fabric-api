@@ -30,8 +30,6 @@ import net.minecraft.world.biome.Biome;
 /**
  * Provides several convenient biome selectors that can be used with {@link BiomeModifications}.
  *
- * <p><b>Experimental feature</b>, may be removed or changed without further notice.
- *
  * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors} instead.
  */
 @Deprecated

@@ -24,8 +24,6 @@ import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 /**
  * API that exposes the internals of Minecraft's nether biome code.
  *
- * <p><b>Experimental feature</b>, may be removed or changed without further notice.
- *
  * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.NetherBiomes} instead.
  */
 @Deprecated
