@@ -14,12 +14,27 @@
  * limitations under the License.
  */
 
+<<<<<<<< HEAD:fabric-biome-api-v1/src/main/java/net/fabricmc/fabric/mixin/biome/BiomeModificationContextImplMixin.java
 package net.fabricmc.fabric.mixin.biome;
+========
+package net.fabricmc.fabric.mixin.networking.client.accessor;
+>>>>>>>> fabric/1.20.2:fabric-networking-api-v1/src/client/java/net/fabricmc/fabric/mixin/networking/client/accessor/ClientCommonNetworkHandlerAccessor.java
 
 import org.quiltmc.qsl.worldgen.biome.impl.modification.BiomeModificationContextImpl;
 import org.spongepowered.asm.mixin.Mixin;
 
+<<<<<<<< HEAD:fabric-biome-api-v1/src/main/java/net/fabricmc/fabric/mixin/biome/BiomeModificationContextImplMixin.java
 import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
 
 @Mixin(BiomeModificationContextImpl.class)
 public abstract class BiomeModificationContextImplMixin implements BiomeModificationContext { }
+========
+import net.minecraft.client.network.ClientCommonNetworkHandler;
+import net.minecraft.network.ClientConnection;
+
+@Mixin(ClientCommonNetworkHandler.class)
+public interface ClientCommonNetworkHandlerAccessor {
+	@Accessor
+	ClientConnection getConnection();
+}
+>>>>>>>> fabric/1.20.2:fabric-networking-api-v1/src/client/java/net/fabricmc/fabric/mixin/networking/client/accessor/ClientCommonNetworkHandlerAccessor.java

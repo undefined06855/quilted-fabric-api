@@ -20,6 +20,7 @@ package net.fabricmc.fabric.api.networking.v1;
 import java.util.Set;
 import java.util.concurrent.Future;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.PacketByteBuf;
@@ -35,6 +36,7 @@ import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
  * <p>Server-side networking functionalities include receiving serverbound query responses and sending clientbound query requests.
  *
  * @see ServerPlayNetworking
+ * @see ServerConfigurationNetworking
  * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.ServerLoginNetworking} instead.
  */
 @Deprecated
@@ -168,11 +170,10 @@ public final class ServerLoginNetworking {
 
 	/**
 	 * Allows blocking client log-in until all futures passed into {@link LoginSynchronizer#waitFor(Future)} are completed.
-	 *
-	 * @apiNote this interface is not intended to be implemented by users of api.
 	 */
 	@Deprecated
 	@FunctionalInterface
+	@ApiStatus.NonExtendable
 	public interface LoginSynchronizer extends org.quiltmc.qsl.networking.api.ServerLoginNetworking.LoginSynchronizer {
 		/**
 		 * Allows blocking client log-in until the {@code future} is {@link Future#isDone() done}.

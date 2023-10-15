@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2023 The Quilt Project
+ * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +14,30 @@
  * limitations under the License.
  */
 
+<<<<<<<< HEAD:fabric-registry-sync-v0/src/testmod/java/net/fabricmc/fabric/test/registry/sync/mixin/StatusEffectAccessor.java
+package net.fabricmc.fabric.test.registry.sync.mixin;
+========
 package net.fabricmc.fabric.mixin.blockview;
+>>>>>>>> fabric/1.20.2:fabric-block-view-api-v2/src/main/java/net/fabricmc/fabric/mixin/blockview/BlockViewMixin.java
 
 import org.spongepowered.asm.mixin.Mixin;
 
+<<<<<<<< HEAD:fabric-registry-sync-v0/src/testmod/java/net/fabricmc/fabric/test/registry/sync/mixin/StatusEffectAccessor.java
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
+
+@Mixin(StatusEffect.class)
+public interface StatusEffectAccessor {
+	@Invoker("<init>")
+	static StatusEffect createNewStatusEffect(StatusEffectCategory category, int color) {
+		throw new IllegalStateException("Mixin injection failed.");
+	}
+========
 import net.minecraft.world.BlockView;
 
 import net.fabricmc.fabric.api.blockview.v2.FabricBlockView;
 
 @Mixin(BlockView.class)
 public interface BlockViewMixin extends FabricBlockView {
+>>>>>>>> fabric/1.20.2:fabric-block-view-api-v2/src/main/java/net/fabricmc/fabric/mixin/blockview/BlockViewMixin.java
 }

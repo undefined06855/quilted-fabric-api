@@ -8,6 +8,7 @@
     "DebugChunkGeneratorAccessor",
     "IdListMixin",
     "LevelStorageSessionMixin",
+    "MinecraftServerMixin",
     "RegistriesAccessor",
     "RegistriesMixin",
     "SimpleRegistryMixin",

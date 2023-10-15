@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
- * Copyright 2022 The Quilt Project
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +27,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BundleS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -44,11 +45,16 @@ import net.fabricmc.fabric.test.networking.NetworkingTestmods;
 
 public final class NetworkingPlayPacketTest implements ModInitializer {
 	public static final Identifier TEST_CHANNEL = NetworkingTestmods.id("test_channel");
+	private static final Identifier UNKNOWN_TEST_CHANNEL = NetworkingTestmods.id("unknown_test_channel");
 
 	public static void sendToTestChannel(ServerPlayerEntity player, String stuff) {
 		ServerPlayNetworking.getSender(player).sendPacket(new OverlayPacket(Text.literal(stuff)), future -> {
 			NetworkingTestmods.LOGGER.info("Sent custom payload packet in {}", TEST_CHANNEL);
 		});
+	}
+
+	private static void sendToUnknownChannel(ServerPlayerEntity player) {
+		ServerPlayNetworking.getSender(player).sendPacket(UNKNOWN_TEST_CHANNEL, PacketByteBufs.create());
 	}
 
 	public static void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -60,13 +66,17 @@ public final class NetworkingPlayPacketTest implements ModInitializer {
 					sendToTestChannel(ctx.getSource().getPlayer(), stuff);
 					return Command.SINGLE_SUCCESS;
 				}))
+				.then(literal("unknown").executes(ctx -> {
+					sendToUnknownChannel(ctx.getSource().getPlayer());
+					return Command.SINGLE_SUCCESS;
+				}))
 				.then(literal("bundled").executes(ctx -> {
 					PacketByteBuf buf1 = PacketByteBufs.create();
 					buf1.writeText(Text.literal("bundled #1"));
 					PacketByteBuf buf2 = PacketByteBufs.create();
 					buf2.writeText(Text.literal("bundled #2"));
 
-					BundleS2CPacket packet = new BundleS2CPacket(List.of(
+					BundleS2CPacket packet = new BundleS2CPacket((List<Packet<ClientPlayPacketListener>>) (Object) List.of(
 							ServerPlayNetworking.createS2CPacket(TEST_CHANNEL, buf1),
 							ServerPlayNetworking.createS2CPacket(TEST_CHANNEL, buf2)));
 					ctx.getSource().getPlayer().networkHandler.sendPacket(packet);
