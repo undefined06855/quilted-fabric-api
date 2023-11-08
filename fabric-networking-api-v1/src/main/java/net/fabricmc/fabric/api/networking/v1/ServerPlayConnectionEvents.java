@@ -17,13 +17,14 @@
 
 package net.fabricmc.fabric.api.networking.v1;
 
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
-import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to events related to the connection to a client on a logical server while a client is in game.
@@ -48,8 +49,8 @@ public final class ServerPlayConnectionEvents {
 	 * <p>At this stage, the network handler is ready to send packets to the client.
 	 */
 	public static final Event<Join> JOIN = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents.JOIN,
-			join -> (handler, sender, server) -> join.onPlayReady(handler, new QuiltPacketSender(sender), server),
-			invokerGetter -> (handler, sender, server) -> invokerGetter.get().onPlayReady(handler, sender, server)
+			join -> (handler, sender, server) -> join.onPlayReady(handler, QuiltUtils.toFabricSender(sender), server),
+			invokerGetter -> (handler, sender, server) -> invokerGetter.get().onPlayReady(handler, QuiltUtils.toQuiltSender(sender), server)
 	);
 
 	/**

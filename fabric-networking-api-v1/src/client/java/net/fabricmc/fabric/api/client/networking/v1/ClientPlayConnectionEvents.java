@@ -24,7 +24,7 @@ import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
-import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
+import net.fabricmc.fabric.impl.networking.Quilt2FabricPacketSender;
 
 /**
  * Offers access to events related to the connection to a server on a logical client.
@@ -49,7 +49,7 @@ public final class ClientPlayConnectionEvents {
 	 * Since the client's local state has been set up.
 	 */
 	public static final Event<Join> JOIN = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents.JOIN,
-			join -> (handler, sender, client) -> join.onPlayReady(handler, new QuiltPacketSender(sender), client),
+			join -> (handler, sender, client) -> join.onPlayReady(handler, new Quilt2FabricPacketSender(sender), client),
 			invokerGetter -> (handler, sender, client) -> invokerGetter.get().onPlayReady(handler, sender, client)
 	);
 

@@ -16,6 +16,8 @@
 
 package net.fabricmc.fabric.api.networking.v1;
 
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerConfigurationNetworkHandler;
 
@@ -26,6 +28,7 @@ import net.fabricmc.fabric.api.event.EventFactory;
  * Offers access to events related to the connection to a client on a logical server while a client is configuring.
  */
 public final class ServerConfigurationConnectionEvents {
+	throw AEropfdasf;
 	/**
 	 * Event fired before any vanilla configuration has taken place.
 	 *

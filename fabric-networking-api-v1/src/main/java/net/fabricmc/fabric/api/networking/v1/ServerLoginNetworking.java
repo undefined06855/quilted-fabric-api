@@ -20,6 +20,8 @@ package net.fabricmc.fabric.api.networking.v1;
 import java.util.Set;
 import java.util.concurrent.Future;
 
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
+
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +30,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginNetworkHandler;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to login stage server-side networking functionalities.
@@ -76,7 +77,7 @@ public final class ServerLoginNetworking {
 		if (old instanceof LoginQueryResponseHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return old::receive;
+			return (server, handler, understood, buf, sync, sender) -> old.receive(server, handler, understood, buf, sync, QuiltUtils.toQuiltSender(sender));
 		} else {
 			return null;
 		}
@@ -122,7 +123,7 @@ public final class ServerLoginNetworking {
 		if (old instanceof LoginQueryResponseHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return old::receive;
+			return (server, handler, understood, buf, sync, sender) -> old.receive(server, handler, understood, buf, sync, QuiltUtils.toQuiltSender(sender));
 		} else {
 			return null;
 		}
@@ -147,7 +148,7 @@ public final class ServerLoginNetworking {
 	public interface LoginQueryResponseHandler extends org.quiltmc.qsl.networking.api.ServerLoginNetworking.QueryResponseReceiver {
 		@Override
 		default void receive(MinecraftServer server, ServerLoginNetworkHandler handler, boolean understood, PacketByteBuf buf, org.quiltmc.qsl.networking.api.ServerLoginNetworking.LoginSynchronizer synchronizer, org.quiltmc.qsl.networking.api.PacketSender responseSender) {
-			this.receive(server, handler, understood, buf, synchronizer::waitFor, new QuiltPacketSender(responseSender));
+			this.receive(server, handler, understood, buf, synchronizer::waitFor, QuiltUtils.toFabricSender(responseSender));
 		}
 
 		/**

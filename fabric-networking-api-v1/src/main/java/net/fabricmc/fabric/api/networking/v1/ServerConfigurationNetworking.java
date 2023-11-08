@@ -19,6 +19,10 @@ package net.fabricmc.fabric.api.networking.v1;
 import java.util.Objects;
 import java.util.Set;
 
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
+
+import net.minecraft.network.packet.CustomPayload;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.PacketByteBuf;
@@ -29,8 +33,7 @@ import net.minecraft.server.network.ServerConfigurationNetworkHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.thread.ThreadExecutor;
 
-import net.fabricmc.fabric.impl.networking.server.ServerNetworkingImpl;
-import net.fabricmc.fabric.mixin.networking.accessor.ServerCommonNetworkHandlerAccessor;
+import org.quiltmc.qsl.networking.impl.server.ServerNetworkingImpl;
 
 /**
  * Offers access to configuration stage server-side networking functionalities.
@@ -68,7 +71,7 @@ public final class ServerConfigurationNetworking {
 	 * @see ServerConfigurationNetworking#registerReceiver(ServerConfigurationNetworkHandler, Identifier, ConfigurationChannelHandler)
 	 */
 	public static boolean registerGlobalReceiver(Identifier channelName, ConfigurationChannelHandler channelHandler) {
-		return ServerNetworkingImpl.CONFIGURATION.registerGlobalReceiver(channelName, channelHandler);
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.registerGlobalReceiver(channelName, channelHandler);
 	}
 
 	/**
@@ -112,7 +115,7 @@ public final class ServerConfigurationNetworking {
 	 */
 	@Nullable
 	public static ServerConfigurationNetworking.ConfigurationChannelHandler unregisterGlobalReceiver(Identifier channelName) {
-		return ServerNetworkingImpl.CONFIGURATION.unregisterGlobalReceiver(channelName);
+		return (ConfigurationChannelHandler) org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.unregisterGlobalReceiver(channelName);
 	}
 
 	/**
@@ -130,7 +133,7 @@ public final class ServerConfigurationNetworking {
 	@Nullable
 	@SuppressWarnings("unchecked")
 	public static <T extends FabricPacket> ServerConfigurationNetworking.ConfigurationPacketHandler<T> unregisterGlobalReceiver(PacketType<T> type) {
-		ConfigurationChannelHandler handler = ServerNetworkingImpl.CONFIGURATION.unregisterGlobalReceiver(type.getId());
+		ConfigurationChannelHandler handler = (ConfigurationChannelHandler) ServerNetworkingImpl.CONFIGURATION.unregisterGlobalReceiver(type.getId());
 		return handler instanceof ConfigurationChannelHandlerProxy<?> proxy ? (ConfigurationPacketHandler<T>) proxy.getOriginalHandler() : null;
 	}
 
@@ -141,7 +144,7 @@ public final class ServerConfigurationNetworking {
 	 * @return all channel names which global receivers are registered for.
 	 */
 	public static Set<Identifier> getGlobalReceivers() {
-		return ServerNetworkingImpl.CONFIGURATION.getChannels();
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.getGlobalReceivers();
 	}
 
 	/**
@@ -168,9 +171,7 @@ public final class ServerConfigurationNetworking {
 	 * @see ServerPlayConnectionEvents#INIT
 	 */
 	public static boolean registerReceiver(ServerConfigurationNetworkHandler networkHandler, Identifier channelName, ConfigurationChannelHandler channelHandler) {
-		Objects.requireNonNull(networkHandler, "Network handler cannot be null");
-
-		return ServerNetworkingImpl.getAddon(networkHandler).registerChannel(channelName, channelHandler);
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.registerReceiver(networkHandler, channelName, channelHandler);
 	}
 
 	/**
@@ -215,9 +216,7 @@ public final class ServerConfigurationNetworking {
 	 */
 	@Nullable
 	public static ServerConfigurationNetworking.ConfigurationChannelHandler unregisterReceiver(ServerConfigurationNetworkHandler networkHandler, Identifier channelName) {
-		Objects.requireNonNull(networkHandler, "Network handler cannot be null");
-
-		return ServerNetworkingImpl.getAddon(networkHandler).unregisterChannel(channelName);
+		return (ConfigurationChannelHandler) org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.unregisterReceiver(networkHandler, channelName);
 	}
 
 	/**
@@ -243,9 +242,7 @@ public final class ServerConfigurationNetworking {
 	 * @return All the channel names that the server can receive packets on
 	 */
 	public static Set<Identifier> getReceived(ServerConfigurationNetworkHandler handler) {
-		Objects.requireNonNull(handler, "Server configuration network handler cannot be null");
-
-		return ServerNetworkingImpl.getAddon(handler).getReceivableChannels();
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.getReceived(handler);
 	}
 
 	/**
@@ -255,9 +252,7 @@ public final class ServerConfigurationNetworking {
 	 * @return {@code true} if the connected client has declared the ability to receive a packet on the specified channel
 	 */
 	public static Set<Identifier> getSendable(ServerConfigurationNetworkHandler handler) {
-		Objects.requireNonNull(handler, "Server configuration network handler cannot be null");
-
-		return ServerNetworkingImpl.getAddon(handler).getSendableChannels();
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.getSendable(handler);
 	}
 
 	/**
@@ -268,10 +263,7 @@ public final class ServerConfigurationNetworking {
 	 * @return {@code true} if the connected client has declared the ability to receive a packet on the specified channel
 	 */
 	public static boolean canSend(ServerConfigurationNetworkHandler handler, Identifier channelName) {
-		Objects.requireNonNull(handler, "Server configuration network handler cannot be null");
-		Objects.requireNonNull(channelName, "Channel name cannot be null");
-
-		return ServerNetworkingImpl.getAddon(handler).getSendableChannels().contains(channelName);
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.canSend(handler, channelName);
 	}
 
 	/**
@@ -282,10 +274,7 @@ public final class ServerConfigurationNetworking {
 	 * @return {@code true} if the connected client has declared the ability to receive a specific type of packet
 	 */
 	public static boolean canSend(ServerConfigurationNetworkHandler handler, PacketType<?> type) {
-		Objects.requireNonNull(handler, "Server configuration network handler cannot be null");
-		Objects.requireNonNull(type, "Packet type cannot be null");
-
-		return ServerNetworkingImpl.getAddon(handler).getSendableChannels().contains(type.getId());
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.canSend(handler, type.getId());
 	}
 
 	/**
@@ -296,10 +285,7 @@ public final class ServerConfigurationNetworking {
 	 * @return a new packet
 	 */
 	public static Packet<ClientCommonPacketListener> createS2CPacket(Identifier channelName, PacketByteBuf buf) {
-		Objects.requireNonNull(channelName, "Channel cannot be null");
-		Objects.requireNonNull(buf, "Buf cannot be null");
-
-		return ServerNetworkingImpl.createS2CPacket(channelName, buf);
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.createS2CPacket(channelName, buf);
 	}
 
 	/**
@@ -309,10 +295,7 @@ public final class ServerConfigurationNetworking {
 	 * @return a new packet
 	 */
 	public static <T extends FabricPacket> Packet<ClientCommonPacketListener> createS2CPacket(T packet) {
-		Objects.requireNonNull(packet, "Packet cannot be null");
-		Objects.requireNonNull(packet.getType(), "Packet#getType cannot return null");
-
-		return ServerNetworkingImpl.createS2CPacket(packet);
+		return QuiltUtils.createS2CPacket(packet, ServerConfigurationNetworking::createS2CPacket);
 	}
 
 	/**
@@ -322,9 +305,7 @@ public final class ServerConfigurationNetworking {
 	 * @return the packet sender
 	 */
 	public static PacketSender getSender(ServerConfigurationNetworkHandler handler) {
-		Objects.requireNonNull(handler, "Server configuration network handler cannot be null");
-
-		return ServerNetworkingImpl.getAddon(handler);
+		return QuiltUtils.toFabricSender(org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.getSender(handler));
 	}
 
 	/**
@@ -364,16 +345,14 @@ public final class ServerConfigurationNetworking {
 	 * @param handler the server configuration network handler
 	 */
 	public static MinecraftServer getServer(ServerConfigurationNetworkHandler handler) {
-		Objects.requireNonNull(handler, "Network handler cannot be null");
-
-		return ((ServerCommonNetworkHandlerAccessor) handler).getServer();
+		return org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.getServer(handler);
 	}
 
 	private ServerConfigurationNetworking() {
 	}
 
 	@FunctionalInterface
-	public interface ConfigurationChannelHandler {
+	public interface ConfigurationChannelHandler extends org.quiltmc.qsl.networking.api.ServerConfigurationNetworking.ChannelReceiver {
 		/**
 		 * Handles an incoming packet.
 		 *
@@ -397,6 +376,9 @@ public final class ServerConfigurationNetworking {
 		 * @param responseSender the packet sender
 		 */
 		void receive(MinecraftServer server, ServerConfigurationNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);
+		default void receive(MinecraftServer server, ServerConfigurationNetworkHandler handler, PacketByteBuf buf, org.quiltmc.qsl.networking.api.PacketSender<CustomPayload> responseSender) {
+			receive(server, handler, buf, QuiltUtils.toFabricSender(responseSender));
+		}
 	}
 
 	/**

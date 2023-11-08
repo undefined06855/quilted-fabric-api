@@ -20,8 +20,11 @@ package net.fabricmc.fabric.api.client.networking.v1;
 import java.util.Objects;
 import java.util.Set;
 
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
+
+import net.minecraft.network.listener.ServerPlayPacketListener;
+
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.networking.impl.client.ClientNetworkingImpl;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -36,7 +39,7 @@ import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
+import net.fabricmc.fabric.impl.networking.Quilt2FabricPacketSender;
 
 /**
  * Offers access to play stage client-side networking functionalities.
@@ -136,7 +139,13 @@ public final class ClientPlayNetworking {
 		if (old instanceof PlayChannelHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return old::receive;
+			return (client, handler, buf, responseSender) ->  {
+				if (old instanceof org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.ChannelReceiver r) {
+					r.receive(client, handler, buf, QuiltUtils.toQuiltSender(responseSender));
+				} else {
+					throw new UnsupportedOperationException("Receiver does not accept byte bufs, cannot bridge to Quilt");
+				}
+			};
 		} else {
 			return null;
 		}
@@ -157,7 +166,7 @@ public final class ClientPlayNetworking {
 	@Nullable
 	@SuppressWarnings("unchecked")
 	public static <T extends FabricPacket> PlayPacketHandler<T> unregisterGlobalReceiver(PacketType<T> type) {
-		PlayChannelHandler handler = (PlayChannelHandler) ClientNetworkingImpl.PLAY.unregisterGlobalReceiver(type.getId());
+		PlayChannelHandler handler = (PlayChannelHandler) org.quiltmc.qsl.networking.impl.client.ClientNetworkingImpl.PLAY.unregisterGlobalReceiver(type.getId());
 		return handler instanceof PlayChannelHandlerProxy<?> proxy ? (PlayPacketHandler<T>) proxy.getOriginalHandler() : null;
 	}
 
@@ -249,7 +258,13 @@ public final class ClientPlayNetworking {
 		if (old instanceof PlayChannelHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return old::receive;
+			return (client, handler, buf, responseSender) ->  {
+				if (old instanceof org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.ChannelReceiver r) {
+					r.receive(client, handler, buf, QuiltUtils.toQuiltSender(responseSender));
+				} else {
+					throw new UnsupportedOperationException("Receiver does not accept byte bufs, cannot bridge to Quilt");
+				}
+			};
 		} else {
 			return null;
 		}
@@ -322,10 +337,7 @@ public final class ClientPlayNetworking {
 	 * @return a new packet
 	 */
 	public static Packet<ServerCommonPacketListener> createC2SPacket(Identifier channelName, PacketByteBuf buf) {
-		Objects.requireNonNull(channelName, "Channel name cannot be null");
-		Objects.requireNonNull(buf, "Buf cannot be null");
-
-		return ClientNetworkingImpl.createC2SPacket(channelName, buf);
+		return org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.createC2SPacket(channelName, buf);
 	}
 
 	/**
@@ -335,9 +347,7 @@ public final class ClientPlayNetworking {
 	 * @return a new packet
 	 */
 	public static <T extends FabricPacket> Packet<ServerCommonPacketListener> createC2SPacket(T packet) {
-		return ClientNetworkingImpl.createC2SPacket(packet);
-	public static Packet<ServerPlayPacketListener> createC2SPacket(Identifier channelName, PacketByteBuf buf) {
-		return org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.createC2SPacket(channelName, buf);
+		return QuiltUtils.createS2CPacket(packet, ClientPlayNetworking::createC2SPacket);
 	}
 
 	/**
@@ -347,7 +357,7 @@ public final class ClientPlayNetworking {
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static PacketSender getSender() throws IllegalStateException {
-		return new QuiltPacketSender(org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.getSender());
+		return QuiltUtils.toFabricSender(org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.getSender());
 	}
 
 	/**
@@ -388,7 +398,7 @@ public final class ClientPlayNetworking {
 	public interface PlayChannelHandler extends org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.ChannelReceiver {
 		@Override
 		default void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, org.quiltmc.qsl.networking.api.PacketSender responseSender) {
-			this.receive(client, handler, buf, new QuiltPacketSender(responseSender));
+			this.receive(client, handler, buf, QuiltUtils.toFabricSender(responseSender));
 		}
 
 		/**

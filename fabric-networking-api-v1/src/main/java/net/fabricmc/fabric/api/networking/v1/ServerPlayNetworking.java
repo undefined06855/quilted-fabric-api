@@ -20,6 +20,8 @@ package net.fabricmc.fabric.api.networking.v1;
 import java.util.Objects;
 import java.util.Set;
 
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
+
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.networking.impl.server.ServerNetworkingImpl;
 
@@ -32,7 +34,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.thread.ThreadExecutor;
 
-import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
 
 /**
  * Offers access to play stage server-side networking functionalities.
@@ -142,12 +143,18 @@ public final class ServerPlayNetworking {
 	 */
 	@Nullable
 	public static PlayChannelHandler unregisterGlobalReceiver(Identifier channelName) {
-		var old = org.quiltmc.qsl.networking.api.ServerPlayNetworking.unregisterGlobalReceiver(channelName);
+		org.quiltmc.qsl.networking.api.ServerPlayNetworking.CustomChannelReceiver old = org.quiltmc.qsl.networking.api.ServerPlayNetworking.unregisterGlobalReceiver(channelName);
 
 		if (old instanceof PlayChannelHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return old::receive;
+			return (server, player, buf, handler, sender) ->  {
+				if (old instanceof org.quiltmc.qsl.networking.api.ServerPlayNetworking.ChannelReceiver r) {
+					r.receive(server, player, buf, handler, QuiltUtils.toQuiltSender(sender));
+				} else {
+					throw new UnsupportedOperationException("Receiver does not accept byte bufs, cannot bridge to Quilt");
+				}
+			};
 		} else {
 			return null;
 		}
@@ -399,7 +406,7 @@ public final class ServerPlayNetworking {
 	 * @return a new packet
 	 */
 	public static <T extends FabricPacket> Packet<ClientCommonPacketListener> createS2CPacket(T packet) {
-		return org.quiltmc.qsl.networking.api.ServerPlayNetworking.createS2CPacket(packet);
+		return QuiltUtils.createS2CPacket(packet, ServerPlayNetworking::createS2CPacket);
 	}
 
 	/**
@@ -409,7 +416,7 @@ public final class ServerPlayNetworking {
 	 * @return the packet sender
 	 */
 	public static PacketSender getSender(ServerPlayerEntity player) {
-		return new QuiltPacketSender(org.quiltmc.qsl.networking.api.ServerPlayNetworking.getSender(player));
+		return QuiltUtils.toFabricSender(org.quiltmc.qsl.networking.api.ServerPlayNetworking.getSender(player));
 	}
 
 	/**
@@ -419,7 +426,7 @@ public final class ServerPlayNetworking {
 	 * @return the packet sender
 	 */
 	public static PacketSender getSender(ServerPlayNetworkHandler handler) {
-		return new QuiltPacketSender(org.quiltmc.qsl.networking.api.ServerPlayNetworking.getSender(handler));
+		return QuiltUtils.toFabricSender(org.quiltmc.qsl.networking.api.ServerPlayNetworking.getSender(handler));
 	}
 
 	/**
@@ -466,7 +473,7 @@ public final class ServerPlayNetworking {
 	public interface PlayChannelHandler extends org.quiltmc.qsl.networking.api.ServerPlayNetworking.ChannelReceiver {
 		@Override
 		default void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, org.quiltmc.qsl.networking.api.PacketSender responseSender) {
-			this.receive(server, player, handler, buf, new QuiltPacketSender(responseSender));
+			this.receive(server, player, handler, buf, QuiltUtils.toFabricSender(responseSender));
 		}
 
 		/**
