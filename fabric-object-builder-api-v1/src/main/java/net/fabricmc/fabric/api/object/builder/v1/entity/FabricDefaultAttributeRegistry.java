@@ -27,6 +27,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.registry.Registries;
 
 /**
  * Allows registering custom default attributes for living entities.

@@ -22,6 +22,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 /**

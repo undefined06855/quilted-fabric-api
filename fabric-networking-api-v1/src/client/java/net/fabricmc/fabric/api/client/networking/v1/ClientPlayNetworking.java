@@ -96,29 +96,7 @@ public final class ClientPlayNetworking {
 	 * @see ClientPlayNetworking#registerReceiver(PacketType, PlayPacketHandler)
 	 */
 	public static <T extends FabricPacket> boolean registerGlobalReceiver(PacketType<T> type, PlayPacketHandler<T> handler) {
-		return registerGlobalReceiver(type.getId(), new PlayChannelHandlerProxy<T>() {
-			@Override
-			public PlayPacketHandler<T> getOriginalHandler() {
-				return handler;
-			}
-
-			@Override
-			public void receive(MinecraftClient client, ClientPlayNetworkHandler networkHandler, PacketByteBuf buf, PacketSender sender) {
-				T packet = type.read(buf);
-
-				if (client.isOnThread()) {
-					// Do not submit to the render thread if we're already running there.
-					// Normally, packets are handled on the network IO thread - though it is
-					// not guaranteed (for example, with 1.19.4 S2C packet bundling)
-					// Since we're handling it right now, connection check is redundant.
-					handler.receive(packet, client.player, sender);
-				} else {
-					client.execute(() -> {
-						if (networkHandler.getConnection().isOpen()) handler.receive(packet, client.player, sender);
-					});
-				}
-			}
-		});
+		return ClientNetworkingImpl.PLAY.registerGlobalReceiver(type.getId(), wrapTyped(type, handler));
 	}
 
 	/**
@@ -164,7 +142,6 @@ public final class ClientPlayNetworking {
 	 * @see ClientPlayNetworking#unregisterReceiver(PacketType)
 	 */
 	@Nullable
-	@SuppressWarnings("unchecked")
 	public static <T extends FabricPacket> PlayPacketHandler<T> unregisterGlobalReceiver(PacketType<T> type) {
 		PlayChannelHandler handler = (PlayChannelHandler) org.quiltmc.qsl.networking.impl.client.ClientNetworkingImpl.PLAY.unregisterGlobalReceiver(type.getId());
 		return handler instanceof PlayChannelHandlerProxy<?> proxy ? (PlayPacketHandler<T>) proxy.getOriginalHandler() : null;
@@ -217,29 +194,13 @@ public final class ClientPlayNetworking {
 	 * @see ClientPlayConnectionEvents#INIT
 	 */
 	public static <T extends FabricPacket> boolean registerReceiver(PacketType<T> type, PlayPacketHandler<T> handler) {
-		return registerReceiver(type.getId(), new PlayChannelHandlerProxy<T>() {
-			@Override
-			public PlayPacketHandler<T> getOriginalHandler() {
-				return handler;
-			}
+		final ClientPlayNetworkAddon addon = ClientNetworkingImpl.getClientPlayAddon();
 
-			@Override
-			public void receive(MinecraftClient client, ClientPlayNetworkHandler networkHandler, PacketByteBuf buf, PacketSender sender) {
-				T packet = type.read(buf);
+		if (addon != null) {
+			return addon.registerChannel(type.getId(), wrapTyped(type, handler));
+		}
 
-				if (client.isOnThread()) {
-					// Do not submit to the render thread if we're already running there.
-					// Normally, packets are handled on the network IO thread - though it is
-					// not guaranteed (for example, with 1.19.4 S2C packet bundling)
-					// Since we're handling it right now, connection check is redundant.
-					handler.receive(packet, client.player, sender);
-				} else {
-					client.execute(() -> {
-						if (networkHandler.getConnection().isOpen()) handler.receive(packet, client.player, sender);
-					});
-				}
-			}
-		});
+		throw new IllegalStateException("Cannot register receiver while not in game!");
 	}
 
 	/**
@@ -281,10 +242,14 @@ public final class ClientPlayNetworking {
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	@Nullable
-	@SuppressWarnings("unchecked")
 	public static <T extends FabricPacket> PlayPacketHandler<T> unregisterReceiver(PacketType<T> type) {
-		PlayChannelHandler handler = unregisterReceiver(type.getId());
-		return handler instanceof PlayChannelHandlerProxy<?> proxy ? (PlayPacketHandler<T>) proxy.getOriginalHandler() : null;
+		final ClientPlayNetworkAddon addon = ClientNetworkingImpl.getClientPlayAddon();
+
+		if (addon != null) {
+			return unwrapTyped(addon.unregisterChannel(type.getId()));
+		}
+
+		throw new IllegalStateException("Cannot unregister receiver while not in game!");
 	}
 
 	/**
@@ -424,14 +389,6 @@ public final class ClientPlayNetworking {
 		 * @param responseSender the packet sender
 		 */
 		void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);
-	}
-
-	/**
-	 * An internal packet handler that works as a proxy between old and new API.
-	 * @param <T> the type of the packet
-	 */
-	private interface PlayChannelHandlerProxy<T extends FabricPacket> extends PlayChannelHandler {
-		PlayPacketHandler<T> getOriginalHandler();
 	}
 
 	/**

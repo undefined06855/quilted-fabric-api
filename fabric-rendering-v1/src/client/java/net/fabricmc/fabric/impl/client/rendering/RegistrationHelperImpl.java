@@ -39,4 +39,3 @@ public final class RegistrationHelperImpl implements LivingEntityFeatureRenderer
 		this.delegate.apply(featureRenderer);
 	}
 }
-
