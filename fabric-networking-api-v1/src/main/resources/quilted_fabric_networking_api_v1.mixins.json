@@ -3,7 +3,8 @@
   "package": "net.fabricmc.fabric.mixin.networking",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ClientConnectionMixin"
+    "ClientConnectionMixin",
+    "ServerConfigurationNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

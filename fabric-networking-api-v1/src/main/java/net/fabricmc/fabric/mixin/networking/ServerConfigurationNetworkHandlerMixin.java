@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2024 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +15,19 @@
  * limitations under the License.
  */
 
-package net.fabricmc.fabric.impl.networking.payload;
+package net.fabricmc.fabric.mixin.networking;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.s2c.login.LoginQueryRequestPayload;
-import net.minecraft.util.Identifier;
+import org.spongepowered.asm.mixin.Mixin;
 
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.minecraft.server.network.ServerConfigurationNetworkHandler;
+import net.minecraft.server.network.ServerPlayerConfigurationTask;
 
-public record FabricPacketLoginQueryRequestPayload(FabricPacket fabricPacket) implements LoginQueryRequestPayload {
+import net.fabricmc.fabric.api.networking.v1.FabricServerConfigurationNetworkHandler;
+
+@Mixin(value = ServerConfigurationNetworkHandler.class)
+public abstract class ServerConfigurationNetworkHandlerMixin implements FabricServerConfigurationNetworkHandler {
 	@Override
-	public void write(PacketByteBuf buf) {
-		fabricPacket.write(buf);
-	}
-
-	@Override
-	public Identifier id() {
-		return fabricPacket.getType().getId();
+	public void completeTask(ServerPlayerConfigurationTask.Key key) {
+		this.finishTask(key);
 	}
 }

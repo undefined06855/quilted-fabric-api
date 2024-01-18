@@ -17,14 +17,13 @@
 
 package net.fabricmc.fabric.api.networking.v1;
 
-import net.fabricmc.fabric.impl.networking.QuiltUtils;
-
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginNetworkHandler;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to events related to the connection to a client on a logical server while a client is logging in.

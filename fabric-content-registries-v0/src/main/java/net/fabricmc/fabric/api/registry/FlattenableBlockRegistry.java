@@ -19,7 +19,6 @@ package net.fabricmc.fabric.api.registry;
 
 import java.util.Objects;
 
-import org.slf4j.LoggerFactory;
 import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
 import org.quiltmc.quilted_fabric_api.impl.content.registry.util.QuiltDeferringQueues;
 import org.slf4j.Logger;

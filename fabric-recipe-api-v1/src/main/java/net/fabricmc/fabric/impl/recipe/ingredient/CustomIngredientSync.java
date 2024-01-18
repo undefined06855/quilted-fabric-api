@@ -31,10 +31,10 @@ import net.minecraft.server.network.ServerPlayerConfigurationTask;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.FabricServerConfigurationNetworkHandler;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
-import net.fabricmc.fabric.mixin.networking.accessor.ServerCommonNetworkHandlerAccessor;
 import net.fabricmc.fabric.mixin.recipe.ingredient.PacketEncoderMixin;
 
 /**
@@ -88,19 +88,19 @@ public class CustomIngredientSync implements ModInitializer {
 	public void onInitialize() {
 		ServerConfigurationConnectionEvents.CONFIGURE.register((handler, server) -> {
 			if (ServerConfigurationNetworking.canSend(handler, PACKET_ID)) {
-				handler.addTask(new IngredientSyncTask());
+				((FabricServerConfigurationNetworkHandler) handler).addTask(new IngredientSyncTask());
 			}
 		});
 
 		ServerConfigurationNetworking.registerGlobalReceiver(PACKET_ID, (server, handler, buf, responseSender) -> {
 			Set<Identifier> supportedCustomIngredients = decodeResponsePacket(buf);
-			ChannelHandler packetEncoder = ((ServerCommonNetworkHandlerAccessor) handler).getConnection().channel.pipeline().get("encoder");
+			ChannelHandler packetEncoder = ((org.quiltmc.qsl.networking.mixin.accessor.AbstractServerPacketHandlerAccessor) handler).getConnection().channel.pipeline().get("encoder");
 
 			if (packetEncoder != null) { // Null in singleplayer
 				((SupportedIngredientsPacketEncoder) packetEncoder).fabric_setSupportedCustomIngredients(supportedCustomIngredients);
 			}
 
-			handler.completeTask(IngredientSyncTask.KEY);
+			((FabricServerConfigurationNetworkHandler) handler).finishTask(IngredientSyncTask.KEY);
 		});
 	}
 

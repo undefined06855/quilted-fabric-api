@@ -20,8 +20,6 @@ package net.fabricmc.fabric.api.networking.v1;
 import java.util.Set;
 import java.util.concurrent.Future;
 
-import net.fabricmc.fabric.impl.networking.QuiltUtils;
-
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +28,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginNetworkHandler;
 import net.minecraft.util.Identifier;
 
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to login stage server-side networking functionalities.

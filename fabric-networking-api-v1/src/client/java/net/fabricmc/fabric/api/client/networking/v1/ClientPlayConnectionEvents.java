@@ -19,23 +19,20 @@ package net.fabricmc.fabric.api.client.networking.v1;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
-import net.fabricmc.fabric.impl.networking.Quilt2FabricPacketSender;
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to events related to the connection to a server on a logical client.
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents} instead.
  */
 @Deprecated
 public final class ClientPlayConnectionEvents {
 	/**
 	 * Event indicating a connection entered the PLAY state, ready for registering channel handlers.
-	 *
-	 * @see ClientPlayNetworking#registerReceiver(Identifier, ClientPlayNetworking.PlayChannelHandler)
-	 * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents} instead.
 	 */
 	public static final Event<Init> INIT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents.INIT,
 			init -> init::onPlayInit,
@@ -49,8 +46,8 @@ public final class ClientPlayConnectionEvents {
 	 * Since the client's local state has been set up.
 	 */
 	public static final Event<Join> JOIN = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents.JOIN,
-			join -> (handler, sender, client) -> join.onPlayReady(handler, new Quilt2FabricPacketSender(sender), client),
-			invokerGetter -> (handler, sender, client) -> invokerGetter.get().onPlayReady(handler, sender, client)
+			join -> (handler, sender, client) -> join.onPlayReady(handler, QuiltUtils.toFabricSender(sender), client),
+			invokerGetter -> (handler, sender, client) -> invokerGetter.get().onPlayReady(handler, QuiltUtils.toQuiltSender(sender), client)
 	);
 
 	/**

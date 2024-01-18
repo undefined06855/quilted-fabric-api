@@ -22,8 +22,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
+import org.quiltmc.qsl.resource.loader.api.GroupPack;
 import org.quiltmc.quilted_fabric_api.fabric.resource.loader.v0.impl.QuiltedFabricResource;
-import org.quiltmc.qsl.resource.loader.api.GroupResourcePack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -51,7 +51,7 @@ public class NamespaceResourceManagerMixin {
 
 	@Inject(method = "getAllResources", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", remap = false, shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void trackSourceOnGetAllResources(Identifier id, CallbackInfoReturnable<List<Resource>> cir, Identifier metadataId, List<Resource> list, boolean bl, int i, NamespaceResourceManager.FilterablePack filterablePack, ResourcePack pack, InputSupplier<InputStream> inputSupplier, InputSupplier<InputStream> inputSupplier2) {
-		if (pack instanceof GroupResourcePack groupPack) {
+		if (pack instanceof GroupPack groupPack) {
 			var innerPacks = groupPack.getPacks(id.getNamespace());
 
 			for (ResourcePack innerPack : innerPacks) {
@@ -71,7 +71,7 @@ public class NamespaceResourceManagerMixin {
 	@Inject(method = "getResource", at = @At(value = "RETURN", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void trackSourceOnGetResource(Identifier identifier, CallbackInfoReturnable<Optional<Resource>> cir, int i, NamespaceResourceManager.FilterablePack filterablePack, ResourcePack pack, InputSupplier<InputStream> inputSupplier, InputSupplier<ResourceMetadata> inputSupplier2) {
 		if (cir.getReturnValue().orElseThrow() instanceof FabricResource resource) {
-			if (pack instanceof GroupResourcePack groupPack) {
+			if (pack instanceof GroupPack groupPack) {
 				var innerPacks = groupPack.getPacks(identifier.getNamespace());
 
 				for (ResourcePack innerPack : innerPacks) {

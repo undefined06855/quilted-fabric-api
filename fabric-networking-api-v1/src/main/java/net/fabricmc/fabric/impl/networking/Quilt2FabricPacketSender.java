@@ -19,9 +19,6 @@ package net.fabricmc.fabric.impl.networking;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.PacketByteBuf;
@@ -29,12 +26,13 @@ import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.util.Identifier;
 
+import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
 final class Quilt2FabricPacketSender implements PacketSender {
-	final org.quiltmc.qsl.networking.api.PacketSender sender;
+	final org.quiltmc.qsl.networking.api.PacketSender<?> sender;
 
-	Quilt2FabricPacketSender(org.quiltmc.qsl.networking.api.PacketSender sender) {
+	protected Quilt2FabricPacketSender(org.quiltmc.qsl.networking.api.PacketSender<?> sender) {
 		this.sender = sender;
 	}
 

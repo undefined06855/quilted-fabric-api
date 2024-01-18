@@ -60,6 +60,7 @@ import net.minecraft.util.thread.ThreadExecutor;
 
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.fabricmc.fabric.api.event.registry.RegistryAttributeHolder;
+import net.fabricmc.fabric.api.networking.v1.FabricServerConfigurationNetworkHandler;
 import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
 import net.fabricmc.fabric.impl.registry.sync.packet.DirectRegistryPacketHandler;
 import net.fabricmc.fabric.impl.registry.sync.packet.RegistryPacketHandler;
@@ -95,7 +96,7 @@ public final class RegistrySyncManager {
 			return;
 		}
 
-		handler.addTask(new SyncConfigurationTask(handler, map));
+		((FabricServerConfigurationNetworkHandler) handler).addTask(new SyncConfigurationTask(handler, map));
 	}
 
 	public record SyncConfigurationTask(

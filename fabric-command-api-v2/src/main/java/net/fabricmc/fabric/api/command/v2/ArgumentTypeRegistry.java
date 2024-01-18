@@ -17,12 +17,11 @@
 
 package net.fabricmc.fabric.api.command.v2;
 
-import org.quiltmc.qsl.command.mixin.ArgumentTypeInfosAccessor;
 import com.mojang.brigadier.arguments.ArgumentType;
+import org.quiltmc.qsl.command.mixin.ArgumentTypeInfosAccessor;
 
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 /**

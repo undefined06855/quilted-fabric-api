@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2024 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import net.minecraft.util.Identifier;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.fabricmc.fabric.api.networking.v1.FabricServerConfigurationNetworkHandler;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.fabricmc.fabric.api.networking.v1.ServerConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
@@ -40,7 +42,7 @@ public class NetworkingConfigurationTest implements ModInitializer {
 		ServerConfigurationConnectionEvents.CONFIGURE.register((handler, server) -> {
 			// You must check to see if the client can handle your config task
 			if (ServerConfigurationNetworking.canSend(handler, ConfigurationPacket.PACKET_TYPE)) {
-				handler.addTask(new TestConfigurationTask("Example data"));
+				((FabricServerConfigurationNetworkHandler) handler).addTask(new TestConfigurationTask("Example data"));
 			} else {
 				// You can opt to disconnect the client if it cannot handle the configuration task
 				handler.disconnect(Text.literal("Network test configuration not supported by client"));
@@ -48,7 +50,7 @@ public class NetworkingConfigurationTest implements ModInitializer {
 		});
 
 		ServerConfigurationNetworking.registerGlobalReceiver(ConfigurationCompletePacket.PACKET_TYPE, (packet, networkHandler, responseSender) -> {
-			networkHandler.completeTask(TestConfigurationTask.KEY);
+			((FabricServerConfigurationNetworkHandler) networkHandler).completeTask(TestConfigurationTask.KEY);
 		});
 	}
 

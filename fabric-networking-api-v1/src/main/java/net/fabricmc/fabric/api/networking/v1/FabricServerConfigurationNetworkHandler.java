@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2024 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,8 @@
 
 package net.fabricmc.fabric.api.networking.v1;
 
+import org.quiltmc.qsl.networking.api.ServerConfigurationTaskManager;
+
 import net.minecraft.server.network.ServerConfigurationNetworkHandler;
 import net.minecraft.server.network.ServerPlayerConfigurationTask;
 import net.minecraft.util.Identifier;
@@ -24,7 +27,7 @@ import net.minecraft.util.Identifier;
  * Fabric-provided extensions for {@link ServerConfigurationNetworkHandler}.
  * This interface is automatically implemented via Mixin and interface injection.
  */
-public interface FabricServerConfigurationNetworkHandler {
+public interface FabricServerConfigurationNetworkHandler extends ServerConfigurationTaskManager {
 	/**
 	 * Enqueues a {@link ServerPlayerConfigurationTask} task to be processed.
 	 *

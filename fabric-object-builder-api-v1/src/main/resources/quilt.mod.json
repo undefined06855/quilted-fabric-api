@@ -27,10 +27,7 @@
 			"quilt_advancement",
 			"quilt_block_entity",
 			"quilt_block_extensions",
-			"quilt_entity",
-			"quilt_point_of_interest",
-			"quilt_vehicle",
-			"quilt_villager"
+			"quilt_entity_extensions"
 		],
 		"provides": [
 			{

@@ -84,7 +84,7 @@ public interface ResourceManagerHelper {
 	 */
 	static boolean registerBuiltinResourcePack(Identifier id, ModContainer container, ResourcePackActivationType activationType) {
 		org.quiltmc.loader.api.ModContainer quiltyContainer = QuiltLoader.getModContainer(container.getMetadata().getId()).get();
-		return ResourceLoader.registerBuiltinResourcePack(id, quiltyContainer, activationType.getQuiltEquivalent());
+		return ResourceLoader.registerBuiltinPack(id, quiltyContainer, activationType.getQuiltEquivalent());
 	}
 
 	/**
@@ -106,7 +106,7 @@ public interface ResourceManagerHelper {
 	 */
 	static boolean registerBuiltinResourcePack(Identifier id, ModContainer container, Text displayName, ResourcePackActivationType activationType) {
 		org.quiltmc.loader.api.ModContainer quiltyContainer = QuiltLoader.getModContainer(container.getMetadata().getId()).get();
-		return org.quiltmc.qsl.resource.loader.api.ResourceLoader.registerBuiltinResourcePack(id, quiltyContainer, activationType.getQuiltEquivalent(), displayName);
+		return org.quiltmc.qsl.resource.loader.api.ResourceLoader.registerBuiltinPack(id, quiltyContainer, activationType.getQuiltEquivalent(), displayName);
 	}
 
 	/**
@@ -130,7 +130,7 @@ public interface ResourceManagerHelper {
 	@Deprecated
 	static boolean registerBuiltinResourcePack(Identifier id, ModContainer container, String displayName, ResourcePackActivationType activationType) {
 		org.quiltmc.loader.api.ModContainer quiltyContainer = QuiltLoader.getModContainer(container.getMetadata().getId()).get();
-		return org.quiltmc.qsl.resource.loader.api.ResourceLoader.registerBuiltinResourcePack(id, quiltyContainer, activationType.getQuiltEquivalent(), Text.of(displayName));
+		return org.quiltmc.qsl.resource.loader.api.ResourceLoader.registerBuiltinPack(id, quiltyContainer, activationType.getQuiltEquivalent(), Text.of(displayName));
 	}
 
 	/**
@@ -157,9 +157,9 @@ public interface ResourceManagerHelper {
 	@Deprecated
 	static boolean registerBuiltinResourcePack(Identifier id, String subPath, ModContainer container, boolean enabledByDefault) {
 		org.quiltmc.loader.api.ModContainer quiltyContainer = QuiltLoader.getModContainer(container.getMetadata().getId()).get();
-		return ResourceLoaderImpl.registerBuiltinResourcePack(id, subPath, quiltyContainer,
-				enabledByDefault ? org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.DEFAULT_ENABLED
-						: org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.NORMAL,
+		return ResourceLoaderImpl.registerBuiltinPack(id, subPath, quiltyContainer,
+				enabledByDefault ? org.quiltmc.qsl.resource.loader.api.PackActivationType.DEFAULT_ENABLED
+						: org.quiltmc.qsl.resource.loader.api.PackActivationType.NORMAL,
 				ResourceLoaderImpl.getBuiltinPackDisplayNameFromId(id));
 	}
 }

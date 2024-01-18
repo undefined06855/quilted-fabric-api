@@ -20,10 +20,6 @@ package net.fabricmc.fabric.api.client.networking.v1;
 import java.util.Objects;
 import java.util.Set;
 
-import net.fabricmc.fabric.impl.networking.QuiltUtils;
-
-import net.minecraft.network.listener.ServerPlayPacketListener;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.MinecraftClient;
@@ -39,7 +35,7 @@ import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.impl.networking.Quilt2FabricPacketSender;
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to play stage client-side networking functionalities.
@@ -72,7 +68,7 @@ public final class ClientPlayNetworking {
 	 * <p>For new code, {@link #registerGlobalReceiver(PacketType, PlayPacketHandler)}
 	 * is preferred, as it is designed in a way that prevents thread safety issues.
 	 *
-	 * @param channelName the id of the channel
+	 * @param channelName    the id of the channel
 	 * @param channelHandler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientPlayNetworking#unregisterGlobalReceiver(Identifier)
@@ -89,14 +85,14 @@ public final class ClientPlayNetworking {
 	 * <p>If a handler is already registered for the {@code type}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterGlobalReceiver(PacketType)} to unregister the existing handler.
 	 *
-	 * @param type the packet type
+	 * @param type    the packet type
 	 * @param handler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientPlayNetworking#unregisterGlobalReceiver(PacketType)
 	 * @see ClientPlayNetworking#registerReceiver(PacketType, PlayPacketHandler)
 	 */
 	public static <T extends FabricPacket> boolean registerGlobalReceiver(PacketType<T> type, PlayPacketHandler<T> handler) {
-		return ClientNetworkingImpl.PLAY.registerGlobalReceiver(type.getId(), wrapTyped(type, handler));
+		return org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.registerGlobalReceiver(type.getId(), wrapTyped(type, handler));
 	}
 
 	/**
@@ -117,7 +113,7 @@ public final class ClientPlayNetworking {
 		if (old instanceof PlayChannelHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return (client, handler, buf, responseSender) ->  {
+			return (client, handler, buf, responseSender) -> {
 				if (old instanceof org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.ChannelReceiver r) {
 					r.receive(client, handler, buf, QuiltUtils.toQuiltSender(responseSender));
 				} else {
@@ -144,7 +140,7 @@ public final class ClientPlayNetworking {
 	@Nullable
 	public static <T extends FabricPacket> PlayPacketHandler<T> unregisterGlobalReceiver(PacketType<T> type) {
 		PlayChannelHandler handler = (PlayChannelHandler) org.quiltmc.qsl.networking.impl.client.ClientNetworkingImpl.PLAY.unregisterGlobalReceiver(type.getId());
-		return handler instanceof PlayChannelHandlerProxy<?> proxy ? (PlayPacketHandler<T>) proxy.getOriginalHandler() : null;
+		return handler instanceof PlayPacketWrapper<?> proxy ? (PlayPacketHandler<T>) proxy.actualHandler() : null;
 	}
 
 	/**
@@ -187,20 +183,14 @@ public final class ClientPlayNetworking {
 	 * <p>For example, if you only register a receiver using this method when a {@linkplain ClientLoginNetworking#registerGlobalReceiver(Identifier, ClientLoginNetworking.LoginQueryRequestHandler)}
 	 * login query has been received, you should use {@link ClientPlayConnectionEvents#INIT} to register the channel handler.
 	 *
-	 * @param type the packet type
+	 * @param type    the packet type
 	 * @param handler the handler
 	 * @return {@code false} if a handler is already registered for the type
 	 * @throws IllegalStateException if the client is not connected to a server
 	 * @see ClientPlayConnectionEvents#INIT
 	 */
 	public static <T extends FabricPacket> boolean registerReceiver(PacketType<T> type, PlayPacketHandler<T> handler) {
-		final ClientPlayNetworkAddon addon = ClientNetworkingImpl.getClientPlayAddon();
-
-		if (addon != null) {
-			return addon.registerChannel(type.getId(), wrapTyped(type, handler));
-		}
-
-		throw new IllegalStateException("Cannot register receiver while not in game!");
+		return org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.registerReceiver(type.getId(), wrapTyped(type, handler));
 	}
 
 	/**
@@ -219,7 +209,7 @@ public final class ClientPlayNetworking {
 		if (old instanceof PlayChannelHandler fabric) {
 			return fabric;
 		} else if (old != null) {
-			return (client, handler, buf, responseSender) ->  {
+			return (client, handler, buf, responseSender) -> {
 				if (old instanceof org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.ChannelReceiver r) {
 					r.receive(client, handler, buf, QuiltUtils.toQuiltSender(responseSender));
 				} else {
@@ -243,10 +233,10 @@ public final class ClientPlayNetworking {
 	 */
 	@Nullable
 	public static <T extends FabricPacket> PlayPacketHandler<T> unregisterReceiver(PacketType<T> type) {
-		final ClientPlayNetworkAddon addon = ClientNetworkingImpl.getClientPlayAddon();
+		final var receiver = org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.unregisterReceiver(type.getId());
 
-		if (addon != null) {
-			return unwrapTyped(addon.unregisterChannel(type.getId()));
+		if (receiver != null) {
+			return unwrapTyped(receiver);
 		}
 
 		throw new IllegalStateException("Cannot unregister receiver while not in game!");
@@ -298,7 +288,7 @@ public final class ClientPlayNetworking {
 	 * Creates a packet which may be sent to the connected server.
 	 *
 	 * @param channelName the channel name
-	 * @param buf the packet byte buf which represents the payload of the packet
+	 * @param buf         the packet byte buf which represents the payload of the packet
 	 * @return a new packet
 	 */
 	public static Packet<ServerCommonPacketListener> createC2SPacket(Identifier channelName, PacketByteBuf buf) {
@@ -329,7 +319,7 @@ public final class ClientPlayNetworking {
 	 * Sends a packet to the connected server.
 	 *
 	 * @param channelName the channel of the packet
-	 * @param buf the payload of the packet
+	 * @param buf         the payload of the packet
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static void send(Identifier channelName, PacketByteBuf buf) throws IllegalStateException {
@@ -346,16 +336,41 @@ public final class ClientPlayNetworking {
 		Objects.requireNonNull(packet, "Packet cannot be null");
 		Objects.requireNonNull(packet.getType(), "Packet#getType cannot return null");
 
-		// You cant send without a client player, so this is fine
-		if (MinecraftClient.getInstance().getNetworkHandler() != null) {
-			MinecraftClient.getInstance().getNetworkHandler().sendPacket(createC2SPacket(packet));
-			return;
-		}
-
-		throw new IllegalStateException("Cannot send packets when not in game!");
+		ClientConfigurationNetworking.getSender().sendPacket(packet);
 	}
 
 	private ClientPlayNetworking() {
+	}
+
+	private record PlayPacketWrapper<T extends FabricPacket>(PacketType<T> type, PlayPacketHandler<T> actualHandler) implements PlayChannelHandler {
+		@Override
+		public void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+			T packet = type.read(buf);
+
+			if (client.isOnThread()) {
+				// Do not submit to the render thread if we're already running there.
+				// Normally, packets are handled on the network IO thread - though it is
+				// not guaranteed (for example, with 1.19.4 S2C packet bundling)
+				// Since we're handling it right now, connection check is redundant.
+				actualHandler.receive(packet, client.player, responseSender);
+			} else {
+				client.execute(() -> {
+					if (handler.getConnection().isOpen()) actualHandler.receive(packet, client.player, responseSender);
+				});
+			}
+		}
+	}
+
+	private static <T extends FabricPacket> PlayChannelHandler wrapTyped(PacketType<T> type, PlayPacketHandler<T> actualHandler) {
+		return new PlayPacketWrapper<>(type, actualHandler);
+	}
+
+	@Nullable
+	@SuppressWarnings({"unchecked"})
+	private static <T extends FabricPacket> PlayPacketHandler<T> unwrapTyped(@Nullable org.quiltmc.qsl.networking.api.client.ClientPlayNetworking.CustomChannelReceiver<?> receiver) {
+		if (receiver == null) return null;
+		if (receiver instanceof PlayPacketWrapper<?> wrapper) return (PlayPacketHandler<T>) wrapper.actualHandler();
+		return null;
 	}
 
 	@Deprecated
@@ -380,12 +395,13 @@ public final class ClientPlayNetworking {
 		 * 	// All operations on the server or world must be executed on the server thread
 		 * 	client.execute(() -> {
 		 * 		client.inGameHud.setOverlayMessage(message, true);
-		 * 	});
+		 *    });
 		 * });
 		 * }</pre>
-		 *  @param client the client
-		 * @param handler the network handler that received this packet
-		 * @param buf the payload of the packet
+		 *
+		 * @param client         the client
+		 * @param handler        the network handler that received this packet
+		 * @param buf            the payload of the packet
 		 * @param responseSender the packet sender
 		 */
 		void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);
@@ -393,6 +409,7 @@ public final class ClientPlayNetworking {
 
 	/**
 	 * A thread-safe packet handler utilizing {@link FabricPacket}.
+	 *
 	 * @param <T> the type of the packet
 	 */
 	@FunctionalInterface
@@ -411,8 +428,8 @@ public final class ClientPlayNetworking {
 		 *
 		 * <p>The network handler can be accessed via {@link ClientPlayerEntity#networkHandler}.
 		 *
-		 * @param packet the packet
-		 * @param player the player that received the packet
+		 * @param packet         the packet
+		 * @param player         the player that received the packet
 		 * @param responseSender the packet sender
 		 * @see FabricPacket
 		 */

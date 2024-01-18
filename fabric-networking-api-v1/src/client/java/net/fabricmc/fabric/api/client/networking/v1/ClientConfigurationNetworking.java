@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2024 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +33,8 @@ import net.minecraft.util.thread.ThreadExecutor;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.fabricmc.fabric.impl.networking.client.ClientConfigurationNetworkAddon;
-import net.fabricmc.fabric.impl.networking.client.ClientNetworkingImpl;
-import net.fabricmc.fabric.impl.networking.payload.ResolvablePayload;
-import net.fabricmc.fabric.impl.networking.payload.TypedPayload;
-import net.fabricmc.fabric.impl.networking.payload.UntypedPayload;
-import net.fabricmc.fabric.mixin.networking.client.accessor.ClientCommonNetworkHandlerAccessor;
+import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to configuration stage client-side networking functionalities.
@@ -51,7 +48,9 @@ import net.fabricmc.fabric.mixin.networking.client.accessor.ClientCommonNetworkH
  * object-based API.
  *
  * @see ServerConfigurationNetworking
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking} instead.
  */
+@Deprecated
 public final class ClientConfigurationNetworking {
 	/**
 	 * Registers a handler to a channel.
@@ -66,14 +65,14 @@ public final class ClientConfigurationNetworking {
 	 * <p>For new code, {@link #registerGlobalReceiver(PacketType, ConfigurationPacketHandler)}
 	 * is preferred, as it is designed in a way that prevents thread safety issues.
 	 *
-	 * @param channelName the id of the channel
+	 * @param channelName    the id of the channel
 	 * @param channelHandler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientConfigurationNetworking#unregisterGlobalReceiver(Identifier)
 	 * @see ClientConfigurationNetworking#registerReceiver(Identifier, ConfigurationChannelHandler)
 	 */
 	public static boolean registerGlobalReceiver(Identifier channelName, ConfigurationChannelHandler channelHandler) {
-		return ClientNetworkingImpl.CONFIGURATION.registerGlobalReceiver(channelName, wrapUntyped(channelHandler));
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.registerGlobalReceiver(channelName, channelHandler);
 	}
 
 	/**
@@ -83,14 +82,14 @@ public final class ClientConfigurationNetworking {
 	 * <p>If a handler is already registered for the {@code type}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterGlobalReceiver(PacketType)} to unregister the existing handler.
 	 *
-	 * @param type the packet type
+	 * @param type    the packet type
 	 * @param handler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientConfigurationNetworking#unregisterGlobalReceiver(PacketType)
 	 * @see ClientConfigurationNetworking#registerReceiver(PacketType, ConfigurationPacketHandler)
 	 */
 	public static <T extends FabricPacket> boolean registerGlobalReceiver(PacketType<T> type, ConfigurationPacketHandler<T> handler) {
-		return ClientNetworkingImpl.CONFIGURATION.registerGlobalReceiver(type.getId(), wrapTyped(type, handler));
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.registerGlobalReceiver(type.getId(), wrapTyped(type, handler));
 	}
 
 	/**
@@ -106,7 +105,21 @@ public final class ClientConfigurationNetworking {
 	 */
 	@Nullable
 	public static ClientConfigurationNetworking.ConfigurationChannelHandler unregisterGlobalReceiver(Identifier channelName) {
-		return unwrapUntyped(ClientNetworkingImpl.CONFIGURATION.unregisterGlobalReceiver(channelName));
+		var old = org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.unregisterGlobalReceiver(channelName);
+
+		if (old instanceof ClientConfigurationNetworking.ConfigurationChannelHandler fabric) {
+			return fabric;
+		} else if (old != null) {
+			return (client, handler, buf, responseSender) -> {
+				if (old instanceof org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.ChannelReceiver r) {
+					r.receive(client, handler, buf, QuiltUtils.toQuiltSender(responseSender));
+				} else {
+					throw new UnsupportedOperationException("Receiver does not accept byte bufs, cannot bridge to Quilt");
+				}
+			};
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -123,7 +136,8 @@ public final class ClientConfigurationNetworking {
 	 */
 	@Nullable
 	public static <T extends FabricPacket> ClientConfigurationNetworking.ConfigurationPacketHandler<T> unregisterGlobalReceiver(PacketType<T> type) {
-		return unwrapTyped(ClientNetworkingImpl.CONFIGURATION.unregisterGlobalReceiver(type.getId()));
+		ClientConfigurationNetworking.ConfigurationChannelHandler handler = (ClientConfigurationNetworking.ConfigurationChannelHandler) org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.unregisterGlobalReceiver(type.getId());
+		return handler instanceof ConfigurationPacketWrapper<?> proxy ? (ClientConfigurationNetworking.ConfigurationPacketHandler<T>) proxy.actualHandler() : null;
 	}
 
 	/**
@@ -133,7 +147,7 @@ public final class ClientConfigurationNetworking {
 	 * @return all channel names which global receivers are registered for.
 	 */
 	public static Set<Identifier> getGlobalReceivers() {
-		return ClientNetworkingImpl.CONFIGURATION.getChannels();
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.getGlobalReceivers();
 	}
 
 	/**
@@ -154,13 +168,7 @@ public final class ClientConfigurationNetworking {
 	 * @see ClientPlayConnectionEvents#INIT
 	 */
 	public static boolean registerReceiver(Identifier channelName, ConfigurationChannelHandler channelHandler) {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
-
-		if (addon != null) {
-			return addon.registerChannel(channelName, wrapUntyped(channelHandler));
-		}
-
-		throw new IllegalStateException("Cannot register receiver while not configuring!");
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.registerReceiver(channelName, channelHandler);
 	}
 
 	/**
@@ -172,20 +180,14 @@ public final class ClientConfigurationNetworking {
 	 * <p>For example, if you only register a receiver using this method when a {@linkplain ClientLoginNetworking#registerGlobalReceiver(Identifier, ClientLoginNetworking.LoginQueryRequestHandler)}
 	 * login query has been received, you should use {@link ClientPlayConnectionEvents#INIT} to register the channel handler.
 	 *
-	 * @param type the packet type
+	 * @param type    the packet type
 	 * @param handler the handler
 	 * @return {@code false} if a handler is already registered for the type
 	 * @throws IllegalStateException if the client is not connected to a server
 	 * @see ClientPlayConnectionEvents#INIT
 	 */
 	public static <T extends FabricPacket> boolean registerReceiver(PacketType<T> type, ConfigurationPacketHandler<T> handler) {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
-
-		if (addon != null) {
-			return addon.registerChannel(type.getId(), wrapTyped(type, handler));
-		}
-
-		throw new IllegalStateException("Cannot register receiver while not configuring!");
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.registerReceiver(type.getId(), wrapTyped(type, handler));
 	}
 
 	/**
@@ -199,13 +201,21 @@ public final class ClientConfigurationNetworking {
 	 */
 	@Nullable
 	public static ClientConfigurationNetworking.ConfigurationChannelHandler unregisterReceiver(Identifier channelName) throws IllegalStateException {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
+		var old = org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.unregisterReceiver(channelName);
 
-		if (addon != null) {
-			return unwrapUntyped(addon.unregisterChannel(channelName));
+		if (old instanceof ClientConfigurationNetworking.ConfigurationChannelHandler fabric) {
+			return fabric;
+		} else if (old != null) {
+			return (client, handler, buf, responseSender) -> {
+				if (old instanceof org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.ChannelReceiver r) {
+					r.receive(client, handler, buf, QuiltUtils.toQuiltSender(responseSender));
+				} else {
+					throw new UnsupportedOperationException("Receiver does not accept byte bufs, cannot bridge to Quilt");
+				}
+			};
+		} else {
+			return null;
 		}
-
-		throw new IllegalStateException("Cannot unregister receiver while not configuring!");
 	}
 
 	/**
@@ -220,13 +230,13 @@ public final class ClientConfigurationNetworking {
 	 */
 	@Nullable
 	public static <T extends FabricPacket> ClientConfigurationNetworking.ConfigurationPacketHandler<T> unregisterReceiver(PacketType<T> type) {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
+		final var receiver = org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.unregisterReceiver(type.getId());
 
-		if (addon != null) {
-			return unwrapTyped(addon.unregisterChannel(type.getId()));
+		if (receiver != null) {
+			return unwrapTyped(receiver);
 		}
 
-		throw new IllegalStateException("Cannot unregister receiver while not configuring!");
+		throw new IllegalStateException("Cannot unregister receiver while not in game!");
 	}
 
 	/**
@@ -236,13 +246,7 @@ public final class ClientConfigurationNetworking {
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static Set<Identifier> getReceived() throws IllegalStateException {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
-
-		if (addon != null) {
-			return addon.getReceivableChannels();
-		}
-
-		throw new IllegalStateException("Cannot get a list of channels the client can receive packets on while not configuring!");
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.getReceived();
 	}
 
 	/**
@@ -252,13 +256,7 @@ public final class ClientConfigurationNetworking {
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static Set<Identifier> getSendable() throws IllegalStateException {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
-
-		if (addon != null) {
-			return addon.getSendableChannels();
-		}
-
-		throw new IllegalStateException("Cannot get a list of channels the server can receive packets on while not configuring!");
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.getSendable();
 	}
 
 	/**
@@ -269,13 +267,7 @@ public final class ClientConfigurationNetworking {
 	 * False if the client is not in game.
 	 */
 	public static boolean canSend(Identifier channelName) throws IllegalArgumentException {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
-
-		if (addon != null) {
-			return addon.getSendableChannels().contains(channelName);
-		}
-
-		throw new IllegalStateException("Cannot get a list of channels the server can receive packets on while not configuring!");
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.canSend(channelName);
 	}
 
 	/**
@@ -293,14 +285,11 @@ public final class ClientConfigurationNetworking {
 	 * Creates a packet which may be sent to the connected server.
 	 *
 	 * @param channelName the channel name
-	 * @param buf the packet byte buf which represents the payload of the packet
+	 * @param buf         the packet byte buf which represents the payload of the packet
 	 * @return a new packet
 	 */
 	public static Packet<ServerCommonPacketListener> createC2SPacket(Identifier channelName, PacketByteBuf buf) {
-		Objects.requireNonNull(channelName, "Channel name cannot be null");
-		Objects.requireNonNull(buf, "Buf cannot be null");
-
-		return ClientNetworkingImpl.createC2SPacket(channelName, buf);
+		return org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.createC2SPacket(channelName, buf);
 	}
 
 	/**
@@ -310,31 +299,18 @@ public final class ClientConfigurationNetworking {
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static PacketSender getSender() throws IllegalStateException {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
-
-		if (addon != null) {
-			return addon;
-		}
-
-		throw new IllegalStateException("Cannot get PacketSender while not configuring!");
+		return QuiltUtils.toFabricSender(org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.getSender());
 	}
 
 	/**
 	 * Sends a packet to the connected server.
 	 *
 	 * @param channelName the channel of the packet
-	 * @param buf the payload of the packet
+	 * @param buf         the payload of the packet
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static void send(Identifier channelName, PacketByteBuf buf) throws IllegalStateException {
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
-
-		if (addon != null) {
-			addon.sendPacket(createC2SPacket(channelName, buf));
-			return;
-		}
-
-		throw new IllegalStateException("Cannot send packet while not configuring!");
+		org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.send(channelName, buf);
 	}
 
 	/**
@@ -347,29 +323,16 @@ public final class ClientConfigurationNetworking {
 		Objects.requireNonNull(packet, "Packet cannot be null");
 		Objects.requireNonNull(packet.getType(), "Packet#getType cannot return null");
 
-		final ClientConfigurationNetworkAddon addon = ClientNetworkingImpl.getClientConfigurationAddon();
-
-		if (addon != null) {
-			addon.sendPacket(packet);
-			return;
-		}
-
-		throw new IllegalStateException("Cannot send packet while not configuring!");
+		ClientConfigurationNetworking.getSender().sendPacket(packet);
 	}
 
 	private ClientConfigurationNetworking() {
 	}
 
-	private static ResolvablePayload.Handler<ClientConfigurationNetworkAddon.Handler> wrapUntyped(ConfigurationChannelHandler actualHandler) {
-		return new ResolvablePayload.Handler<>(null, actualHandler, (client, handler, payload, responseSender) -> {
-			actualHandler.receive(client, handler, ((UntypedPayload) payload).buffer(), responseSender);
-		});
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T extends FabricPacket> ResolvablePayload.Handler<ClientConfigurationNetworkAddon.Handler> wrapTyped(PacketType<T> type, ConfigurationPacketHandler<T> actualHandler) {
-		return new ResolvablePayload.Handler<>(type, actualHandler, (client, handler, payload, responseSender) -> {
-			T packet = (T) ((TypedPayload) payload).packet();
+	private record ConfigurationPacketWrapper<T extends FabricPacket>(PacketType<T> type, ClientConfigurationNetworking.ConfigurationPacketHandler<T> actualHandler) implements ClientConfigurationNetworking.ConfigurationChannelHandler {
+		@Override
+		public void receive(MinecraftClient client, ClientConfigurationNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+			T packet = type.read(buf);
 
 			if (client.isOnThread()) {
 				// Do not submit to the render thread if we're already running there.
@@ -379,31 +342,34 @@ public final class ClientConfigurationNetworking {
 				actualHandler.receive(packet, responseSender);
 			} else {
 				client.execute(() -> {
-					if (((ClientCommonNetworkHandlerAccessor) handler).getConnection().isOpen()) {
+					if (((org.quiltmc.qsl.networking.mixin.accessor.AbstractServerPacketHandlerAccessor) handler).getConnection().isOpen()) {
 						actualHandler.receive(packet, responseSender);
 					}
 				});
 			}
-		});
+		}
+	}
+
+	private static <T extends FabricPacket> ClientConfigurationNetworking.ConfigurationChannelHandler wrapTyped(PacketType<T> type, ClientConfigurationNetworking.ConfigurationPacketHandler<T> actualHandler) {
+		return new ClientConfigurationNetworking.ConfigurationPacketWrapper<>(type, actualHandler);
 	}
 
 	@Nullable
-	private static ConfigurationChannelHandler unwrapUntyped(@Nullable ResolvablePayload.Handler<ClientConfigurationNetworkAddon.Handler> handler) {
-		if (handler == null) return null;
-		if (handler.actual() instanceof ConfigurationChannelHandler actual) return actual;
+	@SuppressWarnings({"unchecked"})
+	private static <T extends FabricPacket> ClientConfigurationNetworking.ConfigurationPacketHandler<T> unwrapTyped(@Nullable org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.CustomChannelReceiver<?> receiver) {
+		if (receiver == null) return null;
+		if (receiver instanceof ClientConfigurationNetworking.ConfigurationPacketWrapper<?> wrapper) return (ClientConfigurationNetworking.ConfigurationPacketHandler<T>) wrapper.actualHandler();
 		return null;
 	}
 
-	@Nullable
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private static <T extends FabricPacket> ConfigurationPacketHandler<T> unwrapTyped(@Nullable ResolvablePayload.Handler<ClientConfigurationNetworkAddon.Handler> handler) {
-		if (handler == null) return null;
-		if (handler.actual() instanceof ConfigurationPacketHandler actual) return actual;
-		return null;
-	}
-
+	@Deprecated
 	@FunctionalInterface
-	public interface ConfigurationChannelHandler {
+	public interface ConfigurationChannelHandler extends org.quiltmc.qsl.networking.api.client.ClientConfigurationNetworking.ChannelReceiver {
+		@Override
+		default void receive(MinecraftClient client, ClientConfigurationNetworkHandler handler, PacketByteBuf buf, org.quiltmc.qsl.networking.api.PacketSender responseSender) {
+			this.receive(client, handler, buf, QuiltUtils.toFabricSender(responseSender));
+		}
+
 		/**
 		 * Handles an incoming packet.
 		 *
@@ -418,12 +384,13 @@ public final class ClientConfigurationNetworking {
 		 * 	// All operations on the server or world must be executed on the server thread
 		 * 	client.execute(() -> {
 		 * 		client.inGameHud.setOverlayMessage(message, true);
-		 * 	});
+		 *    });
 		 * });
 		 * }</pre>
-		 *  @param client the client
-		 * @param handler the network handler that received this packet
-		 * @param buf the payload of the packet
+		 *
+		 * @param client         the client
+		 * @param handler        the network handler that received this packet
+		 * @param buf            the payload of the packet
 		 * @param responseSender the packet sender
 		 */
 		void receive(MinecraftClient client, ClientConfigurationNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);
@@ -431,6 +398,7 @@ public final class ClientConfigurationNetworking {
 
 	/**
 	 * A thread-safe packet handler utilizing {@link FabricPacket}.
+	 *
 	 * @param <T> the type of the packet
 	 */
 	@FunctionalInterface
@@ -447,8 +415,7 @@ public final class ClientConfigurationNetworking {
 		 * });
 		 * }</pre>
 		 *
-		 *
-		 * @param packet the packet
+		 * @param packet         the packet
 		 * @param responseSender the packet sender
 		 * @see FabricPacket
 		 */

@@ -19,14 +19,13 @@ package net.fabricmc.fabric.api.networking.v1;
 
 import java.util.List;
 
-import net.fabricmc.fabric.impl.networking.QuiltUtils;
-
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to events related to the indication of a connected client's ability to receive packets in certain channels.

@@ -20,8 +20,6 @@ package net.fabricmc.fabric.api.object.builder.v1.world.poi;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestType;
@@ -32,7 +30,7 @@ import net.minecraft.world.poi.PointOfInterestType;
  * <p>A point of interest is typically used by villagers to specify their workstation blocks, meeting zones and homes.
  * Points of interest are also used by bees to specify where their bee hive is and nether portals to find existing portals.
  *
- * @deprecated Use Quilt Point of Interest's {@link org.quiltmc.qsl.poi.api.PointOfInterestHelper} instead.
+ * @deprecated Use Quilt Point of Interest's {@link org.quiltmc.qsl.entity.extensions.api.PointOfInterestHelper} instead.
  */
 @Deprecated
 public final class PointOfInterestHelper {
@@ -49,7 +47,7 @@ public final class PointOfInterestHelper {
 	 * @return a new {@link PointOfInterestType}.
 	 */
 	public static PointOfInterestType register(Identifier id, int ticketCount, int searchDistance, Block... blocks) {
-		var key = org.quiltmc.qsl.poi.api.PointOfInterestHelper.register(id, ticketCount, searchDistance, blocks);
+		var key = org.quiltmc.qsl.entity.extensions.api.PointOfInterestHelper.register(id, ticketCount, searchDistance, blocks);
 
 		return Registries.POINT_OF_INTEREST_TYPE.get(key);
 	}
@@ -64,7 +62,7 @@ public final class PointOfInterestHelper {
 	 * @return a new {@link PointOfInterestType}.
 	 */
 	public static PointOfInterestType register(Identifier id, int ticketCount, int searchDistance, Iterable<BlockState> blocks) {
-		var key = org.quiltmc.qsl.poi.api.PointOfInterestHelper.register(id, ticketCount, searchDistance, blocks);
+		var key = org.quiltmc.qsl.entity.extensions.api.PointOfInterestHelper.register(id, ticketCount, searchDistance, blocks);
 
 		return Registries.POINT_OF_INTEREST_TYPE.get(key);
 	}

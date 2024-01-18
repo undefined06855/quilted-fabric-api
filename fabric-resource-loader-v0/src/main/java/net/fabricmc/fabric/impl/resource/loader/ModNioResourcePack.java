@@ -273,7 +273,7 @@ public class ModNioResourcePack implements ResourcePack, ModResourcePack {
 		return modInfo;
 	}
 
-	public org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType getActivationType() {
+	public org.quiltmc.qsl.resource.loader.api.PackActivationType getActivationType() {
 		return this.activationType.getQuiltEquivalent();
 	}
 

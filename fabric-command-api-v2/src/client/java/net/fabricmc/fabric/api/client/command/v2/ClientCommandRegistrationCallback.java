@@ -17,8 +17,8 @@
 
 package net.fabricmc.fabric.api.client.command.v2;
 
-import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 import com.mojang.brigadier.CommandDispatcher;
+import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager.RegistrationEnvironment;
@@ -36,6 +36,7 @@ import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
  * @deprecated Use Quilt Command API's {@link org.quiltmc.qsl.command.api.client.ClientCommandRegistrationCallback} instead.
  */
 @SuppressWarnings("unchecked")
+@Deprecated
 public interface ClientCommandRegistrationCallback {
 	Event<ClientCommandRegistrationCallback> EVENT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.command.api.client.ClientCommandRegistrationCallback.EVENT,
 			callback -> (dispatcher, buildContext, environment) -> callback.register((CommandDispatcher<FabricClientCommandSource>) (Object) dispatcher, buildContext),

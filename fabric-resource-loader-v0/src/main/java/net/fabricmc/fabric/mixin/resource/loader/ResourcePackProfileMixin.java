@@ -17,8 +17,8 @@
 
 package net.fabricmc.fabric.mixin.resource.loader;
 
-import org.quiltmc.qsl.resource.loader.api.GroupResourcePack;
-import org.quiltmc.qsl.resource.loader.impl.ModNioResourcePack;
+import org.quiltmc.qsl.resource.loader.api.GroupPack;
+import org.quiltmc.qsl.resource.loader.impl.ModNioPack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -49,11 +49,11 @@ abstract class ResourcePackProfileMixin {
 
 	@Inject(method = "createResourcePack", at = @At("RETURN"))
 	private void onCreateResourcePack(CallbackInfoReturnable<ResourcePack> cir) {
-		if (cir.getReturnValue() instanceof GroupResourcePack grouped) {
+		if (cir.getReturnValue() instanceof GroupPack grouped) {
 			grouped.streamPacks().forEach(pack -> {
 				if (pack instanceof DefaultResourcePack) {
 					ResourcePackSourceTracker.setSource(pack, source);
-				} else if (pack instanceof ModNioResourcePack) {
+				} else if (pack instanceof ModNioPack) {
 					// There could be a check for if it's a ModNioResourcePack, but I doubt that any other added pack wouldn't be modded
 					ResourcePackSourceTracker.setSource(pack, ModResourcePackCreator.RESOURCE_PACK_SOURCE);
 				}

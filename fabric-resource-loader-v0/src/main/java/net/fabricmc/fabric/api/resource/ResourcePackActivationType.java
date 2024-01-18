@@ -20,26 +20,26 @@ package net.fabricmc.fabric.api.resource;
 /**
  * Represents the resource pack activation type.
  *
- * @deprecated Use Quilt Resource Loader API's {@link org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType} instead.
+ * @deprecated Use Quilt Resource Loader API's {@link org.quiltmc.qsl.resource.loader.api.PackActivationType} instead.
  */
 @Deprecated
 public enum ResourcePackActivationType {
 	/**
 	 * Normal activation. The user has full control over the activation of the resource pack.
 	 */
-	NORMAL(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.NORMAL),
+	NORMAL(org.quiltmc.qsl.resource.loader.api.PackActivationType.NORMAL),
 	/**
 	 * Enabled by default. The user has still full control over the activation of the resource pack.
 	 */
-	DEFAULT_ENABLED(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.DEFAULT_ENABLED),
+	DEFAULT_ENABLED(org.quiltmc.qsl.resource.loader.api.PackActivationType.DEFAULT_ENABLED),
 	/**
 	 * Always enabled. The user cannot disable the resource pack.
 	 */
-	ALWAYS_ENABLED(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType.ALWAYS_ENABLED);
+	ALWAYS_ENABLED(org.quiltmc.qsl.resource.loader.api.PackActivationType.ALWAYS_ENABLED);
 
-	private final org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType quiltEquivalent;
+	private final org.quiltmc.qsl.resource.loader.api.PackActivationType quiltEquivalent;
 
-	ResourcePackActivationType(org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType quiltEquivalent) {
+	ResourcePackActivationType(org.quiltmc.qsl.resource.loader.api.PackActivationType quiltEquivalent) {
 		this.quiltEquivalent = quiltEquivalent;
 	}
 
@@ -52,7 +52,7 @@ public enum ResourcePackActivationType {
 		return this == DEFAULT_ENABLED || this == ALWAYS_ENABLED;
 	}
 
-	public org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType getQuiltEquivalent() {
+	public org.quiltmc.qsl.resource.loader.api.PackActivationType getQuiltEquivalent() {
 		return this.quiltEquivalent;
 	}
 }

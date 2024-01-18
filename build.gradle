@@ -5,7 +5,7 @@ plugins {
 	id "maven-publish"
 	id 'jacoco'
 	id "org.quiltmc.loom" version "1.4.1" apply false
-	id "org.quiltmc.gradle.licenser" version "2.0.+"
+	id "dev.yumi.gradle.licenser" version "1.0.+"
 	id "com.diffplug.spotless" version "6.20.0"
 	id "org.ajoberstar.grgit" version "3.1.0"
 	id "me.modmuss50.remotesign" version "0.4.0" apply false
@@ -138,7 +138,7 @@ allprojects {
 	apply plugin: "java-library"
 	apply plugin: "checkstyle"
 	apply plugin: "org.quiltmc.loom"
-	apply plugin: "org.quiltmc.gradle.licenser"
+	apply plugin: "dev.yumi.gradle.licenser"
 
 	tasks.withType(JavaCompile).configureEach {
 		it.options.release = 17
@@ -261,10 +261,7 @@ allprojects {
 	}
 
 	license {
-		rule rootProject.file('codeformat/FABRIC_MODIFIED_HEADER')
 		rule rootProject.file('codeformat/HEADER')
-
-		include '**/*.java'
 	}
 
 	checkstyle {
@@ -802,6 +799,10 @@ publishMods {
 }
 tasks.build.dependsOn optimizedJar
 assemble.dependsOn signRemapJar
+
+project.afterEvaluate {
+	signRemapJar.mustRunAfter optimizeOutputsOfRemapJar
+}
 
 import java.util.stream.Collectors
 

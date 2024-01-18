@@ -19,10 +19,10 @@ package net.fabricmc.fabric.impl.client.screen;
 
 import java.util.Set;
 
+import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.base.api.util.TriState;
-import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 
 import net.minecraft.client.gui.screen.Screen;
 

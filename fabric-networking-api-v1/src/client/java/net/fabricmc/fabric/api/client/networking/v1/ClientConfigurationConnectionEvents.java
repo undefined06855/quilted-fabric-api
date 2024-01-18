@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2024 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,44 +22,44 @@ import net.minecraft.client.network.ClientConfigurationNetworkHandler;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
 
 /**
  * Offers access to events related to the configuration connection to a server on a logical client.
+ *
+ * @deprecated
  */
+@Deprecated
 public final class ClientConfigurationConnectionEvents {
 	/**
 	 * Event indicating a connection entering the CONFIGURATION state, ready for registering channel handlers.
 	 *
 	 * @see ClientConfigurationNetworking#registerReceiver(Identifier, ClientConfigurationNetworking.ConfigurationChannelHandler)
 	 */
-	public static final Event<ClientConfigurationConnectionEvents.Init> INIT = EventFactory.createArrayBacked(ClientConfigurationConnectionEvents.Init.class, callbacks -> (handler, client) -> {
-		for (ClientConfigurationConnectionEvents.Init callback : callbacks) {
-			callback.onConfigurationInit(handler, client);
-		}
-	});
+	public static final Event<ClientConfigurationConnectionEvents.Init> INIT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientConfigurationConnectionEvents.INIT,
+			init -> init::onConfigurationInit,
+			invokerGetter -> (handler, client) -> invokerGetter.get().onConfigurationInit(handler, client)
+	);
 
 	/**
 	 * An event called after the ReadyS2CPacket has been received, just before switching to the PLAY state.
 	 *
 	 * <p>No packets should be sent when this event is invoked.
 	 */
-	public static final Event<ClientConfigurationConnectionEvents.Ready> READY = EventFactory.createArrayBacked(ClientConfigurationConnectionEvents.Ready.class, callbacks -> (handler, client) -> {
-		for (ClientConfigurationConnectionEvents.Ready callback : callbacks) {
-			callback.onConfigurationReady(handler, client);
-		}
-	});
+	public static final Event<ClientConfigurationConnectionEvents.Ready> READY = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientConfigurationConnectionEvents.READY,
+			init -> (handler, sender, client) -> init.onConfigurationReady(handler, client),
+			invokerGetter -> (handler, client) -> invokerGetter.get().onConfigurationReady(handler, org.quiltmc.qsl.networking.impl.client.ClientNetworkingImpl.getClientConfigurationAddon(), client)
+	);
 
 	/**
 	 * An event for the disconnection of the client configuration network handler.
 	 *
 	 * <p>No packets should be sent when this event is invoked.
 	 */
-	public static final Event<ClientConfigurationConnectionEvents.Disconnect> DISCONNECT = EventFactory.createArrayBacked(ClientConfigurationConnectionEvents.Disconnect.class, callbacks -> (handler, client) -> {
-		for (ClientConfigurationConnectionEvents.Disconnect callback : callbacks) {
-			callback.onConfigurationDisconnect(handler, client);
-		}
-	});
+	public static final Event<ClientConfigurationConnectionEvents.Disconnect> DISCONNECT = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientConfigurationConnectionEvents.DISCONNECT,
+			init -> init::onConfigurationDisconnect,
+			invokerGetter -> (handler, client) -> invokerGetter.get().onConfigurationDisconnect(handler, client)
+	);
 
 	private ClientConfigurationConnectionEvents() {
 	}
