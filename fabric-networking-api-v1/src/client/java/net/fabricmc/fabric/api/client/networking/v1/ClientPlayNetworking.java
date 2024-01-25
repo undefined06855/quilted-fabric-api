@@ -183,7 +183,7 @@ public final class ClientPlayNetworking {
 	 * <p>For example, if you only register a receiver using this method when a {@linkplain ClientLoginNetworking#registerGlobalReceiver(Identifier, ClientLoginNetworking.LoginQueryRequestHandler)}
 	 * login query has been received, you should use {@link ClientPlayConnectionEvents#INIT} to register the channel handler.
 	 *
-	 * @param type    the packet type
+	 * @param type the packet type
 	 * @param handler the handler
 	 * @return {@code false} if a handler is already registered for the type
 	 * @throws IllegalStateException if the client is not connected to a server
@@ -288,7 +288,7 @@ public final class ClientPlayNetworking {
 	 * Creates a packet which may be sent to the connected server.
 	 *
 	 * @param channelName the channel name
-	 * @param buf         the packet byte buf which represents the payload of the packet
+	 * @param buf the packet byte buf which represents the payload of the packet
 	 * @return a new packet
 	 */
 	public static Packet<ServerCommonPacketListener> createC2SPacket(Identifier channelName, PacketByteBuf buf) {
@@ -319,7 +319,7 @@ public final class ClientPlayNetworking {
 	 * Sends a packet to the connected server.
 	 *
 	 * @param channelName the channel of the packet
-	 * @param buf         the payload of the packet
+	 * @param buf the payload of the packet
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static void send(Identifier channelName, PacketByteBuf buf) throws IllegalStateException {
@@ -428,8 +428,8 @@ public final class ClientPlayNetworking {
 		 *
 		 * <p>The network handler can be accessed via {@link ClientPlayerEntity#networkHandler}.
 		 *
-		 * @param packet         the packet
-		 * @param player         the player that received the packet
+		 * @param packet the packet
+		 * @param player the player that received the packet
 		 * @param responseSender the packet sender
 		 * @see FabricPacket
 		 */

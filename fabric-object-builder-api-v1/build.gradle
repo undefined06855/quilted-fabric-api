@@ -21,7 +21,7 @@ testDependencies(project, [
 ])
 
 loom {
-	accessWidenerPath = file("src/main/resources/fabric-object-builder-api-v1.accesswidener")
+	accessWidenerPath = file("src/main/resources/quilted_fabric_object_builder_api_v1.accesswidener")
 }
 
 validateMixinNames {

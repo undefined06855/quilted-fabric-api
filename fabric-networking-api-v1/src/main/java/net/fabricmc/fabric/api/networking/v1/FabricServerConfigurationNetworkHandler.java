@@ -26,7 +26,10 @@ import net.minecraft.util.Identifier;
 /**
  * Fabric-provided extensions for {@link ServerConfigurationNetworkHandler}.
  * This interface is automatically implemented via Mixin and interface injection.
+ *
+ * @deprecated See {@link ServerConfigurationTaskManager}
  */
+@Deprecated
 public interface FabricServerConfigurationNetworkHandler extends ServerConfigurationTaskManager {
 	/**
 	 * Enqueues a {@link ServerPlayerConfigurationTask} task to be processed.

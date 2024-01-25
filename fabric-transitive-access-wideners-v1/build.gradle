@@ -3,7 +3,14 @@ version = getSubprojectVersion(project)
 upstream_version = getSubprojectUpstreamVersion(project)
 
 loom {
-	accessWidenerPath = file('src/main/resources/fabric-transitive-access-wideners-v1.accesswidener')
+	accessWidenerPath = file('src/main/resources/quilted_fabric_transitive_access_wideners_v1.accesswidener')
+}
+
+dependencies {
+	modApi(getQslModule('block', 'block_entity'))
+	modApi(getQslModule('block', 'block_extensions'))
+	modApi(getQslModule('data', 'advancement'))
+	modApi(getQslModule('entity', 'entity_extensions'))
 }
 
 testDependencies(project, [
@@ -48,7 +55,7 @@ task generateAccessWidener {
 			generateRenderPhaseFields(lines, fs)
 		}
 
-		file('src/main/resources/fabric-transitive-access-wideners-v1.accesswidener').text = String.join('\n', lines) + '\n'
+		file('src/main/resources/quilted_fabric_transitive_access_wideners_v1.accesswidener').text = String.join('\n', lines) + '\n'
 
 		validateAccessWidener(lines)
 	}
@@ -137,7 +144,7 @@ def validateAccessWidener(List<String> lines) {
 	}
 
 	if (exceptions.size() > 0) {
-		throw new InvalidUserDataException("\"fabric-transitive-access-wideners-v1.accesswidener\" contains non-transitive access modifiers at lines: [" + String.join(", ", exceptions) + "]")
+		throw new InvalidUserDataException("\"quilted_fabric_transitive_access_wideners_v1.accesswidener\" contains non-transitive access modifiers at lines: [" + String.join(", ", exceptions) + "]")
 	}
 }
 

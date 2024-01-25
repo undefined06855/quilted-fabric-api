@@ -34,7 +34,7 @@
 			}
 		]
 	},
-	"access_widener": "fabric-transitive-access-wideners-v1.accesswidener",
+	"access_widener": "quilted_fabric_transitive_access_wideners_v1.accesswidener",
 	"fabric-api:module-lifecycle": "stable",
 	"modmenu": {
 		"badges": [

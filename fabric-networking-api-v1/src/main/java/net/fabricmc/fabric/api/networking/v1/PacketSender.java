@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,9 @@ import net.fabricmc.fabric.impl.networking.GenericFutureListenerHolder;
 /**
  * Represents something that supports sending packets to channels.
  * @see PacketByteBufs
+ * @deprecated Use Quilt Networking's {@link org.quiltmc.qsl.networking.api.PacketSender} instead.
  */
+@Deprecated
 @ApiStatus.NonExtendable
 public interface PacketSender {
 	/**
