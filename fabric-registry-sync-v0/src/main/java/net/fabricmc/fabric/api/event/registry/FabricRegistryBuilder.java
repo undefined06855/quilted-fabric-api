@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,10 @@ import net.fabricmc.fabric.mixin.registry.sync.RegistriesAccessor;
  * 													.buildAndRegister();
  * 	}
  * </pre>
+ *
+ * <p>Tags for the entries of a custom registry must be placed in
+ * {@code /tags/<registry namespace>/<registry path>/}. For example, the tags for the example
+ * registry above would be placed in {@code /tags/modid/registry_name/}.
  *
  * @param <T> The type stored in the Registry
  * @param <R> The registry type

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
-import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to events related to the indication of a connected client's ability to receive packets in certain channels.
@@ -39,8 +39,8 @@ public final class S2CPlayChannelEvents {
 	 * This event may be invoked at any time after login and up to disconnection.
 	 */
 	public static final Event<Register> REGISTER = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.S2CPlayChannelEvents.REGISTER,
-			register -> (handler, sender, server, channels) -> register.onChannelRegister(handler, new QuiltPacketSender(sender), server, channels),
-			invokerGetter -> (handler, sender, server, channels) -> invokerGetter.get().onChannelRegister(handler, sender, server, channels)
+			register -> (handler, sender, server, channels) -> register.onChannelRegister(handler, QuiltUtils.toFabricSender(sender), server, channels),
+			invokerGetter -> (handler, sender, server, channels) -> invokerGetter.get().onChannelRegister(handler, QuiltUtils.toQuiltSender(sender), server, channels)
 	);
 
 	/**
@@ -48,8 +48,8 @@ public final class S2CPlayChannelEvents {
 	 * This event may be invoked at any time after login and up to disconnection.
 	 */
 	public static final Event<Unregister> UNREGISTER = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.S2CPlayChannelEvents.UNREGISTER,
-			unregister -> (handler, sender, server, channels) -> unregister.onChannelUnregister(handler, new QuiltPacketSender(sender), server, channels),
-			invokerGetter -> (handler, sender, server, channels) -> invokerGetter.get().onChannelUnregister(handler, sender, server, channels)
+			unregister -> (handler, sender, server, channels) -> unregister.onChannelUnregister(handler, QuiltUtils.toFabricSender(sender), server, channels),
+			invokerGetter -> (handler, sender, server, channels) -> invokerGetter.get().onChannelUnregister(handler, QuiltUtils.toQuiltSender(sender), server, channels)
 	);
 
 	private S2CPlayChannelEvents() {

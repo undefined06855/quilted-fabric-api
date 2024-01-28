@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
 /**
- * For example, a block entity may use the methods in this class to send a packet to all clients which can see the block entity in order notify clients about a change.
+ * Helper methods to lookup players in a server.
  *
  * <p>The word "tracking" means that an entity/chunk on the server is known to a player's client (within in view distance) and the (block) entity should notify tracking clients of changes.
  *
@@ -120,7 +120,7 @@ public final class PlayerLookup {
 	 * <p>The distance check is done in the three-dimensional space instead of in the horizontal plane.
 	 *
 	 * @param world  the world
-	 * @param pos    the position
+	 * @param pos the position
 	 * @param radius the maximum distance from the position in blocks
 	 * @return the players around the position
 	 */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,18 +19,22 @@ package net.fabricmc.fabric.impl.recipe.ingredient;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import io.netty.channel.ChannelHandler;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.PacketEncoder;
+import net.minecraft.network.handler.PacketEncoder;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.server.network.ServerPlayerConfigurationTask;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.FabricServerConfigurationNetworkHandler;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerConfigurationConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
 import net.fabricmc.fabric.mixin.recipe.ingredient.PacketEncoderMixin;
 
 /**
@@ -82,25 +86,39 @@ public class CustomIngredientSync implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
-			// Send packet with 1 so the client can send us back the list of supported tags.
-			// 1 is sent in case we need a different protocol later for some reason.
-			PacketByteBuf buf = PacketByteBufs.create();
-			buf.writeVarInt(PROTOCOL_VERSION_1); // max supported server protocol version
-			sender.sendPacket(PACKET_ID, buf);
-		});
-		ServerLoginNetworking.registerGlobalReceiver(PACKET_ID, (server, handler, understood, buf, synchronizer, responseSender) -> {
-			if (!understood) {
-				// Skip if the client didn't understand the query.
-				return;
+		ServerConfigurationConnectionEvents.CONFIGURE.register((handler, server) -> {
+			if (ServerConfigurationNetworking.canSend(handler, PACKET_ID)) {
+				((FabricServerConfigurationNetworkHandler) handler).addTask(new IngredientSyncTask());
 			}
+		});
 
+		ServerConfigurationNetworking.registerGlobalReceiver(PACKET_ID, (server, handler, buf, responseSender) -> {
 			Set<Identifier> supportedCustomIngredients = decodeResponsePacket(buf);
-			ChannelHandler packetEncoder = handler.connection.channel.pipeline().get("encoder");
+			ChannelHandler packetEncoder = ((org.quiltmc.qsl.networking.mixin.accessor.AbstractServerPacketHandlerAccessor) handler).getConnection().channel.pipeline().get("encoder");
 
 			if (packetEncoder != null) { // Null in singleplayer
 				((SupportedIngredientsPacketEncoder) packetEncoder).fabric_setSupportedCustomIngredients(supportedCustomIngredients);
 			}
+
+			((FabricServerConfigurationNetworkHandler) handler).finishTask(IngredientSyncTask.KEY);
 		});
+	}
+
+	private record IngredientSyncTask() implements ServerPlayerConfigurationTask {
+		public static final Key KEY = new Key(PACKET_ID.toString());
+
+		@Override
+		public void sendPacket(Consumer<Packet<?>> sender) {
+			// Send packet with 1 so the client can send us back the list of supported tags.
+			// 1 is sent in case we need a different protocol later for some reason.
+			PacketByteBuf buf = PacketByteBufs.create();
+			buf.writeVarInt(PROTOCOL_VERSION_1); // max supported server protocol version
+			sender.accept(ServerConfigurationNetworking.createS2CPacket(PACKET_ID, buf));
+		}
+
+		@Override
+		public Key getKey() {
+			return KEY;
+		}
 	}
 }

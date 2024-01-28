@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,8 @@
 
 package net.fabricmc.fabric.mixin.recipe.ingredient;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,51 +27,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.util.dynamic.Codecs;
 
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.FabricIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
-import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AnyIngredient;
 
 @Mixin(Ingredient.class)
 public class IngredientMixin implements FabricIngredient {
-	/**
-	 * Inject right when vanilla detected a json object and check for our custom key.
-	 */
-	@Inject(
-			at = @At(
-					value = "INVOKE",
-					target = "net/minecraft/recipe/Ingredient.entryFromJson(Lcom/google/gson/JsonObject;)Lnet/minecraft/recipe/Ingredient$Entry;",
-					ordinal = 0
-			),
-			method = "fromJson(Lcom/google/gson/JsonElement;Z)Lnet/minecraft/recipe/Ingredient;",
-			cancellable = true
-	)
-	private static void injectFromJson(JsonElement json, boolean requireNotEmpty, CallbackInfoReturnable<Ingredient> cir) {
-		JsonObject obj = json.getAsJsonObject();
+	@Inject(method = "createCodec", at = @At("RETURN"), cancellable = true)
+	private static void injectCodec(boolean allowEmpty, CallbackInfoReturnable<Codec<Ingredient>> cir) {
+		Codec<CustomIngredient> customIngredientCodec = CustomIngredientImpl.CODEC.dispatch(
+				CustomIngredientImpl.TYPE_KEY,
+				CustomIngredient::getSerializer,
+				serializer -> serializer.getCodec(allowEmpty));
 
-		if (obj.has(CustomIngredientImpl.TYPE_KEY)) {
-			Identifier id = new Identifier(JsonHelper.getString(obj, CustomIngredientImpl.TYPE_KEY));
-			CustomIngredientSerializer<?> serializer = CustomIngredientSerializer.get(id);
-
-			if (serializer != null) {
-				cir.setReturnValue(serializer.read(obj).toVanilla());
-			} else {
-				throw new IllegalArgumentException("Unknown custom ingredient type: " + id);
-			}
-		}
-	}
-
-	/**
-	 * Throw exception when someone attempts to use our custom key inside an array ingredient.
-	 * The {@link AnyIngredient} should be used instead.
-	 */
-	@Inject(at = @At("HEAD"), method = "entryFromJson")
-	private static void injectEntryFromJson(JsonObject obj, CallbackInfoReturnable<?> cir) {
-		if (obj.has(CustomIngredientImpl.TYPE_KEY)) {
-			throw new IllegalArgumentException("Custom ingredient cannot be used inside an array ingredient. You can replace the array by a fabric:any ingredient.");
-		}
+		cir.setReturnValue(Codecs.either(customIngredientCodec, cir.getReturnValue()).xmap(
+				either -> either.map(CustomIngredient::toVanilla, ingredient -> ingredient),
+				ingredient -> {
+					CustomIngredient customIngredient = ingredient.getCustomIngredient();
+					return customIngredient == null ? Either.right(ingredient) : Either.left(customIngredient);
+				}
+		));
 	}
 
 	@Inject(

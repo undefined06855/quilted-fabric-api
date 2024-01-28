@@ -31,7 +31,7 @@
 		]
 	},
 	"mixin": "quilted_fabric_resource_conditions_api_v1.mixins.json",
-	"fabric-api:module-lifecycle": "experimental",
+	"fabric-api:module-lifecycle": "stable",
 	"modmenu": {
 		"badges": [
 			"library"

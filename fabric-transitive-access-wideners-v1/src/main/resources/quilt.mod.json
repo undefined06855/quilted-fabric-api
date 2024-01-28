@@ -25,8 +25,7 @@
 			"quilt_advancement",
 			"quilt_block_entity",
 			"quilt_block_extensions",
-			"quilt_entity",
-			"quilt_villager"
+			"quilt_entity_extensions"
 		],
 		"provides": [
 			{

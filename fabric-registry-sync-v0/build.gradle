@@ -5,6 +5,9 @@ upstream_version = getSubprojectUpstreamVersion(project)
 dependencies {
 	modApi(getQslModule('core', 'registry'))
 	modApi(getQslModule('core', 'lifecycle_events'))
+
+	// This should be testmodModImplementation, but that isnt being found for some reason. This works but adds an extra dependency.
+	modImplementation(getQslModule('entity', 'status_effect'))
 }
 
 loom {

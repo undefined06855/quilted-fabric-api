@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,8 @@
 
 package net.fabricmc.fabric.impl.recipe.ingredient.client;
 
-import java.util.concurrent.CompletableFuture;
-
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationNetworking;
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientSync;
 
 /**
@@ -29,10 +27,9 @@ import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientSync;
 public class CustomIngredientSyncClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		ClientLoginNetworking.registerGlobalReceiver(CustomIngredientSync.PACKET_ID, (client, handler, buf, listenerAdder) -> {
+		ClientConfigurationNetworking.registerGlobalReceiver(CustomIngredientSync.PACKET_ID, (client, handler, buf, responseSender) -> {
 			int protocolVersion = buf.readVarInt();
-
-			return CompletableFuture.completedFuture(CustomIngredientSync.createResponsePacket(protocolVersion));
+			handler.sendPacket(ClientConfigurationNetworking.createC2SPacket(CustomIngredientSync.PACKET_ID, CustomIngredientSync.createResponsePacket(protocolVersion)));
 		});
 	}
 }

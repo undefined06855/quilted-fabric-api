@@ -16,7 +16,7 @@
 
 package net.fabricmc.fabric.mixin.object.builder;
 
-import org.quiltmc.qsl.vehicle.api.MinecartComparatorLogic;
+import org.quiltmc.qsl.entity.extensions.api.MinecartComparatorLogic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

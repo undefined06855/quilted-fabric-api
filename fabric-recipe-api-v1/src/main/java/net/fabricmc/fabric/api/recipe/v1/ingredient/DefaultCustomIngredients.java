@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 
 package net.fabricmc.fabric.api.recipe.v1.ingredient;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
@@ -27,9 +28,9 @@ import net.minecraft.nbt.NbtHelper;
 import net.minecraft.recipe.Ingredient;
 
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AllIngredient;
+import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AnyIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.DifferenceIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.NbtIngredient;
-import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AnyIngredient;
 
 /**
  * Factory methods for the custom ingredients directly provided by Fabric API.
@@ -55,7 +56,7 @@ public final class DefaultCustomIngredients {
 	public static Ingredient all(Ingredient... ingredients) {
 		for (Ingredient ing : ingredients) Objects.requireNonNull(ing, "Ingredient cannot be null");
 
-		return new AllIngredient(ingredients).toVanilla();
+		return new AllIngredient(List.of(ingredients)).toVanilla();
 	}
 
 	/**
@@ -78,7 +79,7 @@ public final class DefaultCustomIngredients {
 	public static Ingredient any(Ingredient... ingredients) {
 		for (Ingredient ing : ingredients) Objects.requireNonNull(ing, "Ingredient cannot be null");
 
-		return new AnyIngredient(ingredients).toVanilla();
+		return new AnyIngredient(List.of(ingredients)).toVanilla();
 	}
 
 	/**

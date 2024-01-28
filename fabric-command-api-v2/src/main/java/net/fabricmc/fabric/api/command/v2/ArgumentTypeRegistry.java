@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,8 @@
 
 package net.fabricmc.fabric.api.command.v2;
 
-import org.quiltmc.qsl.command.mixin.ArgumentTypeInfosAccessor;
 import com.mojang.brigadier.arguments.ArgumentType;
+import org.quiltmc.qsl.command.mixin.ArgumentTypeInfosAccessor;
 
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.registry.Registries;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +23,9 @@ import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.carver.ConfiguredCarver;
@@ -35,8 +35,6 @@ import net.minecraft.world.gen.feature.PlacedFeature;
  * Provides an API to modify Biomes after they have been loaded and before they are used in the World.
  *
  * <p>Any modifications made to biomes will not be available for use in the demo level.
- *
- * <p><b>Experimental feature</b>, may be removed or changed without further notice.
  *
  * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.BiomeModifications} instead.
  */
@@ -100,4 +98,3 @@ public final class BiomeModifications {
 		return new BiomeModification(id);
 	}
 }
-

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,6 @@
 package net.fabricmc.fabric.api.event.registry;
 
 public enum RegistryAttribute {
-	/**
-	 * Registry will be saved to disk when modded.
-	 */
-	PERSISTED,
-
 	/**
 	 * Registry will be synced to the client when modded.
 	 */

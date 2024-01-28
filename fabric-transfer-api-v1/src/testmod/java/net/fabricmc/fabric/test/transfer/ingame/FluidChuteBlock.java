@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,14 +66,18 @@ public class FluidChuteBlock extends Block implements BlockEntityProvider {
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (!world.isClient() && world.getBlockEntity(pos) instanceof FluidChuteBlockEntity chute) {
+		if (world.getBlockEntity(pos) instanceof FluidChuteBlockEntity chute) {
 			if (!FluidStorageUtil.interactWithFluidStorage(chute.storage, player, hand)) {
-				player.sendMessage(
-						Text.literal("Fluid: ")
-								.append(FluidVariantAttributes.getName(chute.storage.variant))
-								.append(", amount: " + chute.storage.amount),
-						false
-				);
+				if (!world.isClient()) {
+					player.sendMessage(
+							Text.literal("Fluid: ")
+									.append(FluidVariantAttributes.getName(chute.storage.variant))
+									.append(", amount: " + chute.storage.amount),
+							false
+					);
+				}
+
+				return ActionResult.CONSUME;
 			}
 		}
 

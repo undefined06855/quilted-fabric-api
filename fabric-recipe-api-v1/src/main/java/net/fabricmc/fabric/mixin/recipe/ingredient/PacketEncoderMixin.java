@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,8 +27,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.network.handler.PacketEncoder;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.network.PacketEncoder;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientSync;

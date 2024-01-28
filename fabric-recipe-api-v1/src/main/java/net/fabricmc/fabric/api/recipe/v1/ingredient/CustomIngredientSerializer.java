@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,11 @@
 
 package net.fabricmc.fabric.api.recipe.v1.ingredient;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
@@ -57,17 +57,14 @@ public interface CustomIngredientSerializer<T extends CustomIngredient> {
 	Identifier getIdentifier();
 
 	/**
-	 * Deserializes the custom ingredient from a JSON object.
+	 * {@return the codec}.
 	 *
-	 * @throws JsonSyntaxException if the JSON object does not match the format expected by the serializer
-	 * @throws IllegalArgumentException if the JSON object is invalid for some other reason
+	 * <p>Codecs are used to read the ingredient from the recipe JSON files.
+	 *
+	 * @see Ingredient#ALLOW_EMPTY_CODEC
+	 * @see Ingredient#DISALLOW_EMPTY_CODEC
 	 */
-	T read(JsonObject json);
-
-	/**
-	 * Serializes the custom ingredient to a JSON object.
-	 */
-	void write(JsonObject json, T ingredient);
+	Codec<T> getCodec(boolean allowEmpty);
 
 	/**
 	 * Deserializes the custom ingredient from a packet buffer.

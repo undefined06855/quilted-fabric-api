@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,7 +56,7 @@ public final class EntityTrackingEvents {
 		 * Called before an entity starts getting tracked by a player.
 		 *
 		 * @param trackedEntity the entity that will be tracked
-		 * @param player        the player that will track the entity
+		 * @param player the player that will track the entity
 		 */
 		void onStartTracking(Entity trackedEntity, ServerPlayerEntity player);
 	}
@@ -67,7 +67,7 @@ public final class EntityTrackingEvents {
 		 * Called after an entity stops getting tracked by a player.
 		 *
 		 * @param trackedEntity the entity that is no longer being tracked
-		 * @param player        the player that is no longer tracking the entity
+		 * @param player the player that is no longer tracking the entity
 		 */
 		void onStopTracking(Entity trackedEntity, ServerPlayerEntity player);
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +27,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.packet.s2c.common.SynchronizeTagsS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
-import net.minecraft.network.packet.s2c.play.SynchronizeTagsS2CPacket;
 import net.minecraft.world.chunk.WorldChunk;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientBlockEntityEvents;
@@ -94,7 +94,7 @@ abstract class ClientPlayNetworkHandlerMixin {
 			method = "onSynchronizeTags",
 			at = @At(
 					value = "INVOKE",
-					target = "java/util/Map.forEach(Ljava/util/function/BiConsumer;)V",
+					target = "Lnet/minecraft/client/network/ClientCommonNetworkHandler;onSynchronizeTags(Lnet/minecraft/network/packet/s2c/common/SynchronizeTagsS2CPacket;)V",
 					shift = At.Shift.AFTER, by = 1
 			)
 	)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,6 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
@@ -93,12 +92,7 @@ public class RecipeGameTest implements FabricGameTest {
 			}
 
 			@Override
-			public ItemStack getOutput(DynamicRegistryManager dynamicRegistryManager) {
-				return null;
-			}
-
-			@Override
-			public Identifier getId() {
+			public ItemStack getResult(DynamicRegistryManager registryManager) {
 				return null;
 			}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
  *
  * @see ServerPlayNetworking#registerGlobalReceiver(PacketType, ServerPlayNetworking.PlayPacketHandler)
  * @see ServerPlayNetworking#send(ServerPlayerEntity, PacketType, FabricPacket)
- * @see PacketSender#sendPacket(PacketType, FabricPacket)
+ * @see PacketSender#sendPacket(FabricPacket)
  */
 public interface FabricPacket {
 	/**

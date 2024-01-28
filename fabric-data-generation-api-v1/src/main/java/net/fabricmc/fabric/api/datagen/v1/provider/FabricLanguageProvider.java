@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -200,7 +200,7 @@ public abstract class FabricLanguageProvider implements DataProvider {
 		 * @param value    The value of the entry.
 		 */
 		default void add(StatType<?> statType, String value) {
-			add(statType.getTranslationKey(), value);
+			add("stat_type." + Registries.STAT_TYPE.getId(statType).toString().replace(':', '.'), value);
 		}
 
 		/**

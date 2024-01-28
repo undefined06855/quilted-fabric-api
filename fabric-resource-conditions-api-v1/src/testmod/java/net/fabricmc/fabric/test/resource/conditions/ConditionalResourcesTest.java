@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,7 +65,7 @@ public class ConditionalResourcesTest {
 			throw new AssertionError("features_enabled recipe should have been loaded.");
 		}
 
-		long loadedRecipes = manager.values().stream().filter(r -> r.getId().getNamespace().equals(MOD_ID)).count();
+		long loadedRecipes = manager.values().stream().filter(r -> r.id().getNamespace().equals(MOD_ID)).count();
 		if (loadedRecipes != 5) throw new AssertionError("Unexpected loaded recipe count: " + loadedRecipes);
 
 		context.complete();
@@ -84,6 +84,21 @@ public class ConditionalResourcesTest {
 
 		if (manager.getElementOptional(LootDataType.PREDICATES, id("not_loaded")).isPresent()) {
 			throw new AssertionError("not_loaded predicate should not have been loaded.");
+		}
+
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void conditionalLootTables(TestContext context) {
+		LootManager manager = context.getWorld().getServer().getLootManager();
+
+		if (manager.getElementOptional(LootDataType.LOOT_TABLES, id("blocks/loaded")).isEmpty()) {
+			throw new AssertionError("loaded loot table should have been loaded.");
+		}
+
+		if (manager.getElementOptional(LootDataType.LOOT_TABLES, id("blocks/not_loaded")).isPresent()) {
+			throw new AssertionError("not_loaded loot table should not have been loaded.");
 		}
 
 		context.complete();

@@ -23,7 +23,7 @@
 		"depends": [
 			{
 				"id": "quilt_loader",
-				"versions": ">=0.19.2"
+				"versions": ">=0.23.1"
 			},
 			{
 				"id": "java",
@@ -33,8 +33,8 @@
 				"id": "minecraft",
 				"versions": {
 					"all": [
-						">=1.20-",
-						"<1.20.2-"
+						">=1.20.2-",
+						"<1.20.3-"
 					]
 				}
 			},
@@ -133,17 +133,15 @@
 			"quilt_command",
 			"quilt_crash_info",
 			"quilt_dimension",
-			"quilt_entity",
 			"quilt_entity_events",
+			"quilt_entity_extensions",
 			"quilt_entity_multipart",
-			"quilt_entity_networking",
 			"quilt_entity_rendering",
 			"quilt_item_content_registry",
 			"quilt_item_extensions",
 			"quilt_item_setting",
 			"quilt_lifecycle_events",
 			"quilt_networking",
-			"quilt_point_of_interest",
 			"quilt_recipe",
 			"quilt_registry",
 			"quilt_registry_entry_attachment",
@@ -152,10 +150,7 @@
 			"quilt_status_effect",
 			"quilt_surface_rule",
 			"quilt_tags",
-			"quilt_testing",
-			"quilt_tooltip",
-			"quilt_vehicle",
-			"quilt_villager"
+			"quilt_tooltip"
 		],
 		"provides": [
 			{

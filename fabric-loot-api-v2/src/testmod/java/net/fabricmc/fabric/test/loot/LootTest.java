@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,6 +91,14 @@ public class LootTest implements ModInitializer {
 			// emeralds to the same loot pool.
 			if (Blocks.YELLOW_WOOL.getLootTableId().equals(id)) {
 				tableBuilder.modifyPools(poolBuilder -> poolBuilder.with(ItemEntry.builder(Items.EMERALD)));
+			}
+		});
+
+		LootTableEvents.ALL_LOADED.register((resourceManager, lootManager) -> {
+			LootTable blackWoolTable = lootManager.getLootTable(Blocks.BLACK_WOOL.getLootTableId());
+
+			if (blackWoolTable == LootTable.EMPTY) {
+				throw new AssertionError("black wool loot table should not be empty");
 			}
 		});
 	}

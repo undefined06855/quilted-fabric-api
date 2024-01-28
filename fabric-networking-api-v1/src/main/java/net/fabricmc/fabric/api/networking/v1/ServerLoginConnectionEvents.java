@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
-import net.fabricmc.fabric.impl.networking.QuiltPacketSender;
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to events related to the connection to a client on a logical server while a client is logging in.
@@ -51,8 +51,8 @@ public final class ServerLoginConnectionEvents {
 	 * <p>You may send login queries to the connected client using the provided {@link PacketSender}.
 	 */
 	public static final Event<QueryStart> QUERY_START = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.ServerLoginConnectionEvents.QUERY_START,
-			queryStart -> (handler, server, sender, synchronizer) -> queryStart.onLoginStart(handler, server, new QuiltPacketSender(sender), synchronizer::waitFor),
-			invokerGetter -> (handler, server, sender, synchronizer) -> invokerGetter.get().onLoginStart(handler, server, sender, synchronizer)
+			queryStart -> (handler, server, sender, synchronizer) -> queryStart.onLoginStart(handler, server, QuiltUtils.toFabricSender(sender), synchronizer::waitFor),
+			invokerGetter -> (handler, server, sender, synchronizer) -> invokerGetter.get().onLoginStart(handler, server, QuiltUtils.toQuiltSender(sender), synchronizer)
 	);
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,12 +19,13 @@ package net.fabricmc.fabric.impl.recipe.ingredient;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,13 @@ public class CustomIngredientImpl extends Ingredient {
 	public static final int PACKET_MARKER = -1;
 
 	static final Map<Identifier, CustomIngredientSerializer<?>> REGISTERED_SERIALIZERS = new ConcurrentHashMap<>();
+
+	public static final Codec<CustomIngredientSerializer<?>> CODEC = Identifier.CODEC.flatXmap(identifier ->
+					Optional.ofNullable(REGISTERED_SERIALIZERS.get(identifier))
+					.map(DataResult::success)
+					.orElseGet(() -> DataResult.error(() -> "Unknown custom ingredient serializer: " + identifier)),
+			serializer -> DataResult.success(serializer.getIdentifier())
+	);
 
 	public static void registerSerializer(CustomIngredientSerializer<?> serializer) {
 		Objects.requireNonNull(serializer.getIdentifier(), "CustomIngredientSerializer identifier may not be null.");
@@ -112,14 +120,6 @@ public class CustomIngredientImpl extends Ingredient {
 			buf.writeIdentifier(customIngredient.getSerializer().getIdentifier());
 			customIngredient.getSerializer().write(buf, coerceIngredient());
 		}
-	}
-
-	@Override
-	public JsonElement toJson() {
-		JsonObject json = new JsonObject();
-		json.addProperty(TYPE_KEY, customIngredient.getSerializer().getIdentifier().toString());
-		customIngredient.getSerializer().write(json, coerceIngredient());
-		return json;
 	}
 
 	@Override

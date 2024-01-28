@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -144,7 +144,7 @@ public final class FabricClientTestHelper {
 
 	public static void enableDebugHud() {
 		submitAndWait(client -> {
-			client.options.debugEnabled = true;
+			client.inGameHud.getDebugHud().toggleDebugHud();
 			return null;
 		});
 	}

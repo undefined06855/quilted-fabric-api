@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,8 +30,6 @@ import org.jetbrains.annotations.ApiStatus;
  *     <li>Replacements (removal + add) in biomes</li>
  *     <li>Generic post-processing of biomes</li>
  * </ol>
- *
- * <p><b>Experimental feature</b>, may be removed or changed without further notice.
  *
  * @deprecated Use Quilt Biome API's {@link org.quiltmc.qsl.worldgen.biome.api.ModificationPhase} instead.
  */

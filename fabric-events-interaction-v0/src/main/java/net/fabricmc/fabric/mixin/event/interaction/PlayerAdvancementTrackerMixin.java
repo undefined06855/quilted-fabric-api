@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2023 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.advancement.Advancement;
+import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.advancement.PlayerAdvancementTracker;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -44,7 +44,7 @@ public class PlayerAdvancementTrackerMixin {
 	}
 
 	@Inject(method = "grantCriterion", at = @At("HEAD"), cancellable = true)
-	void preventGrantCriterion(Advancement advancement, String criterionName, CallbackInfoReturnable<Boolean> ci) {
+	void preventGrantCriterion(AdvancementEntry advancement, String criterionName, CallbackInfoReturnable<Boolean> ci) {
 		if (owner instanceof FakePlayer) {
 			// Prevent granting advancements to fake players.
 			ci.setReturnValue(false);

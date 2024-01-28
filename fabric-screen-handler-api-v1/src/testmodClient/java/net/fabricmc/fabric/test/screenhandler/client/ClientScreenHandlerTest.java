@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,8 @@ package net.fabricmc.fabric.test.screenhandler.client;
 import net.minecraft.client.gui.screen.ingame.Generic3x3ContainerScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 
-import net.fabricmc.fabric.test.screenhandler.ScreenHandlerTest;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.test.screenhandler.ScreenHandlerTest;
 
 public class ClientScreenHandlerTest implements ClientModInitializer {
 	@Override

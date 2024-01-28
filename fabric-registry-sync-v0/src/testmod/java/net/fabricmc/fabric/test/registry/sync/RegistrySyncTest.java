@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +50,6 @@ import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.fabricmc.fabric.api.event.registry.RegistryAttributeHolder;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.fabricmc.fabric.impl.registry.sync.RemapException;
-import net.fabricmc.fabric.test.registry.sync.mixin.StatusEffectAccessor;
 
 public class RegistrySyncTest implements ModInitializer {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -87,7 +86,6 @@ public class RegistrySyncTest implements ModInitializer {
 
 		Validate.isTrue(RegistryAttributeHolder.get(fabricRegistry).hasAttribute(RegistryAttribute.MODDED));
 		Validate.isTrue(RegistryAttributeHolder.get(fabricRegistry).hasAttribute(RegistryAttribute.SYNCED));
-		Validate.isTrue(!RegistryAttributeHolder.get(fabricRegistry).hasAttribute(RegistryAttribute.PERSISTED));
 
 		final AtomicBoolean setupCalled = new AtomicBoolean(false);
 
@@ -107,7 +105,7 @@ public class RegistrySyncTest implements ModInitializer {
 		// Vanilla status effects don't have an entry for the int id 0, test we can handle this.
 		RegistryAttributeHolder.get(Registries.STATUS_EFFECT).addAttribute(RegistryAttribute.MODDED);
 		Registry.register(Registries.STATUS_EFFECT, new Identifier("test", "status_effect"),
-				StatusEffectAccessor.createNewStatusEffect(StatusEffectCategory.NEUTRAL, 0xffff9900)
+				org.quiltmc.qsl.entity.effect.api.StatusEffectUtils.createEffect(StatusEffectCategory.NEUTRAL, 0xffff9900)
 		);
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->

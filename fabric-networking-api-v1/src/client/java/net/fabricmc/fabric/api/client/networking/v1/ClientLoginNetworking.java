@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,9 +21,9 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-import org.jetbrains.annotations.Nullable;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
@@ -51,7 +51,7 @@ public final class ClientLoginNetworking {
 	 * <p>If a handler is already registered to the {@code channel}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterGlobalReceiver(Identifier)} to unregister the existing handler.
 	 *
-	 * @param channelName  the id of the channel
+	 * @param channelName the id of the channel
 	 * @param queryHandler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientLoginNetworking#unregisterGlobalReceiver(Identifier)
@@ -103,7 +103,7 @@ public final class ClientLoginNetworking {
 	 * <p>If a handler is already registered to the {@code channelName}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterReceiver(Identifier)} to unregister the existing handler.
 	 *
-	 * @param channelName  the id of the channel
+	 * @param channelName the id of the channel
 	 * @param queryHandler the handler
 	 * @return false if a handler is already registered to the channel name
 	 * @throws IllegalStateException if the client is not logging in
@@ -152,9 +152,9 @@ public final class ClientLoginNetworking {
 		 * The future should complete in reasonably time to prevent disconnection by the server.
 		 * If your request processes instantly, you may use {@link CompletableFuture#completedFuture(Object)} to wrap your response for immediate sending.
 		 *
-		 * @param client        the client
-		 * @param handler       the network handler that received this packet
-		 * @param buf           the payload of the packet
+		 * @param client the client
+		 * @param handler the network handler that received this packet
+		 * @param buf the payload of the packet
 		 * @param listenerAdder listeners to be called when the response packet is sent to the server
 		 * @return a completable future which contains the payload to respond to the server with.
 		 * If the future contains {@code null}, then the server will be notified that the client did not understand the query.

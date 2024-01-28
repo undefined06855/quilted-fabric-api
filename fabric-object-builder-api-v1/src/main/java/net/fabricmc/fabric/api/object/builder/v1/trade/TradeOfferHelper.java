@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +17,15 @@
 
 package net.fabricmc.fabric.api.object.builder.v1.trade;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.minecraft.util.Identifier;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 
@@ -37,6 +40,9 @@ public final class TradeOfferHelper {
 
 	/**
 	 * Registers trade offer factories for use by villagers.
+	 * This adds the same trade offers to current and rebalanced trades.
+	 * To add separate offers for the rebalanced trade experiment, use
+	 * {@link #registerVillagerOffers(VillagerProfession, int, VillagerOffersAdder)}.
 	 *
 	 * <p>Below is an example, of registering a trade offer factory to be added a blacksmith with a profession level of 3:
 	 * <blockquote><pre>
@@ -50,17 +56,72 @@ public final class TradeOfferHelper {
 	 * @param factories a consumer to provide the factories
 	 */
 	public static void registerVillagerOffers(VillagerProfession profession, int level, Consumer<List<TradeOffers.Factory>> factories) {
-		org.quiltmc.qsl.villager.api.TradeOfferHelper.registerVillagerOffers(profession, level, factories);
+		org.quiltmc.qsl.entity.extensions.api.TradeOfferHelper.registerVillagerOffers(profession, level, factories);
+	}
+
+	/**
+	 * Registers trade offer factories for use by villagers.
+	 * This method allows separate offers to be added depending on whether the rebalanced
+	 * trade experiment is enabled.
+	 * If a particular profession's rebalanced trade offers are not added at all, it falls back
+	 * to the regular trade offers.
+	 *
+	 * <p>Below is an example, of registering a trade offer factory to be added a blacksmith with a profession level of 3:
+	 * <blockquote><pre>
+	 * TradeOfferHelper.registerVillagerOffers(VillagerProfession.BLACKSMITH, 3, (factories, rebalanced) -> {
+	 * 	factories.add(new CustomTradeFactory(...);
+	 * });
+	 * </pre></blockquote>
+	 *
+	 * <p><strong>Experimental feature</strong>. This API may receive changes as necessary to adapt to further experiment changes.
+	 *
+	 * @param profession the villager profession to assign the trades to
+	 * @param level the profession level the villager must be to offer the trades
+	 * @param factories a consumer to provide the factories
+	 */
+	@ApiStatus.Experimental
+	public static void registerVillagerOffers(VillagerProfession profession, int level, VillagerOffersAdder factories) {
+		org.quiltmc.qsl.entity.extensions.api.TradeOfferHelper.registerVillagerOffers(profession, level, factories);
 	}
 
 	/**
 	 * Registers trade offer factories for use by wandering trades.
+	 * This does not add offers for the rebalanced trade experiment.
+	 * To add rebalanced trades, use {@link #registerRebalancedWanderingTraderOffers}.
 	 *
 	 * @param level the level the trades
 	 * @param factory a consumer to provide the factories
 	 */
 	public static void registerWanderingTraderOffers(int level, Consumer<List<TradeOffers.Factory>> factory) {
-		org.quiltmc.qsl.villager.api.TradeOfferHelper.registerWanderingTraderOffers(level, factory);
+		org.quiltmc.qsl.entity.extensions.api.TradeOfferHelper.registerWanderingTraderOffers(level, factory);
+	}
+
+	/**
+	 * Registers trade offer factories for use by wandering trades.
+	 * This only adds offers for the rebalanced trade experiment.
+	 * To add regular trades, use {@link #registerWanderingTraderOffers(int, Consumer)}.
+	 *
+	 * <p><strong>Experimental feature</strong>. This API may receive changes as necessary to adapt to further experiment changes.
+	 *
+	 * @param factory a consumer to add trade offers
+	 */
+	@ApiStatus.Experimental
+	public static synchronized void registerRebalancedWanderingTraderOffers(Consumer<WanderingTraderOffersBuilder> factory) {
+		org.quiltmc.qsl.entity.extensions.api.TradeOfferHelper.registerRebalancedWanderingTraderOffers((builder -> {
+			factory.accept(new WanderingTraderOffersBuilder() {
+				@Override
+				public WanderingTraderOffersBuilder pool(Identifier id, int count, TradeOffers.Factory... factories) {
+					builder.pool(id, count, factories);
+					return this;
+				}
+
+				@Override
+				public WanderingTraderOffersBuilder addOffersToPool(Identifier pool, TradeOffers.Factory... factories) {
+					builder.addOffersToPool(pool, factories);
+					return this;
+				}
+			});
+		}));
 	}
 
 	/**
@@ -71,5 +132,116 @@ public final class TradeOfferHelper {
 		// TradeOfferInternals.printRefreshOffersWarning();
 		Throwable loggingThrowable = new Throwable();
 		LOGGER.warn("TradeOfferHelper#refreshOffers does not do anything, yet it was called! Stack trace:", loggingThrowable);
+	}
+
+	@FunctionalInterface
+	public interface VillagerOffersAdder extends org.quiltmc.qsl.entity.extensions.api.TradeOfferHelper.VillagerOffersAdder {
+		void onRegister(List<TradeOffers.Factory> factories, boolean rebalanced);
+	}
+
+	/**
+	 * A builder for rebalanced wandering trader offers.
+	 *
+	 * <p><strong>Experimental feature</strong>. This API may receive changes as necessary to adapt to further experiment changes.
+	 *
+	 * @see #registerRebalancedWanderingTraderOffers(Consumer)
+	 */
+	@ApiStatus.NonExtendable
+	@ApiStatus.Experimental
+	public interface WanderingTraderOffersBuilder extends org.quiltmc.qsl.entity.extensions.api.TradeOfferHelper.WanderingTraderOffersBuilder {
+		/**
+		 * The pool ID for the "buy items" pool.
+		 * Two trade offers are picked from this pool.
+		 *
+		 * <p>In vanilla, this pool contains offers to buy water buckets, baked potatoes, etc.
+		 * for emeralds.
+		 */
+		Identifier BUY_ITEMS_POOL = new Identifier("minecraft", "buy_items");
+		/**
+		 * The pool ID for the "sell special items" pool.
+		 * Two trade offers are picked from this pool.
+		 *
+		 * <p>In vanilla, this pool contains offers to sell logs, enchanted iron pickaxes, etc.
+		 */
+		Identifier SELL_SPECIAL_ITEMS_POOL = new Identifier("minecraft", "sell_special_items");
+		/**
+		 * The pool ID for the "sell common items" pool.
+		 * Five trade offers are picked from this pool.
+		 *
+		 * <p>In vanilla, this pool contains offers to sell flowers, saplings, etc.
+		 */
+		Identifier SELL_COMMON_ITEMS_POOL = new Identifier("minecraft", "sell_common_items");
+
+		/**
+		 * Adds a new pool to the offer list. Exactly {@code count} offers are picked from
+		 * {@code factories} and offered to customers.
+		 * @param id the ID to be assigned to this pool, to allow further modification
+		 * @param count the number of offers to be picked from {@code factories}
+		 * @param factories the trade offer factories
+		 * @return this builder, for chaining
+		 * @throws IllegalArgumentException if {@code count} is not positive or if {@code factories} is empty
+		 */
+		WanderingTraderOffersBuilder pool(Identifier id, int count, TradeOffers.Factory... factories);
+
+		/**
+		 * Adds a new pool to the offer list. Exactly {@code count} offers are picked from
+		 * {@code factories} and offered to customers.
+		 * @param id the ID to be assigned to this pool, to allow further modification
+		 * @param count the number of offers to be picked from {@code factories}
+		 * @param factories the trade offer factories
+		 * @return this builder, for chaining
+		 * @throws IllegalArgumentException if {@code count} is not positive or if {@code factories} is empty
+		 */
+		default WanderingTraderOffersBuilder pool(Identifier id, int count, Collection<? extends TradeOffers.Factory> factories) {
+			return pool(id, count, factories.toArray(TradeOffers.Factory[]::new));
+		}
+
+		/**
+		 * Adds trade offers to the offer list. All offers from {@code factories} are
+		 * offered to each customer.
+		 * @param id the ID to be assigned to this pool, to allow further modification
+		 * @param factories the trade offer factories
+		 * @return this builder, for chaining
+		 * @throws IllegalArgumentException if {@code factories} is empty
+		 */
+		default WanderingTraderOffersBuilder addAll(Identifier id, Collection<? extends TradeOffers.Factory> factories) {
+			return pool(id, factories.size(), factories);
+		}
+
+		/**
+		 * Adds trade offers to the offer list. All offers from {@code factories} are
+		 * offered to each customer.
+		 * @param id the ID to be assigned to this pool, to allow further modification
+		 * @param factories the trade offer factories
+		 * @return this builder, for chaining
+		 * @throws IllegalArgumentException if {@code factories} is empty
+		 */
+		default WanderingTraderOffersBuilder addAll(Identifier id, TradeOffers.Factory... factories) {
+			return pool(id, factories.length, factories);
+		}
+
+		/**
+		 * Adds trade offers to an existing pool identified by an ID.
+		 *
+		 * <p>See the constants for vanilla trade offer pool IDs that are always available.
+		 * @param pool the pool ID
+		 * @param factories the trade offer factories
+		 * @return this builder, for chaining
+		 * @throws IndexOutOfBoundsException if {@code pool} is out of bounds
+		 */
+		WanderingTraderOffersBuilder addOffersToPool(Identifier pool, TradeOffers.Factory... factories);
+
+		/**
+		 * Adds trade offers to an existing pool identified by an ID.
+		 *
+		 * <p>See the constants for vanilla trade offer pool IDs that are always available.
+		 * @param pool the pool ID
+		 * @param factories the trade offer factories
+		 * @return this builder, for chaining
+		 * @throws IndexOutOfBoundsException if {@code pool} is out of bounds
+		 */
+		default WanderingTraderOffersBuilder addOffersToPool(Identifier pool, Collection<TradeOffers.Factory> factories) {
+			return addOffersToPool(pool, factories.toArray(TradeOffers.Factory[]::new));
+		}
 	}
 }

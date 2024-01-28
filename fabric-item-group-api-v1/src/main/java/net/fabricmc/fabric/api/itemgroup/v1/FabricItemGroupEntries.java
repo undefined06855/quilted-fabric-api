@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,6 @@ import net.minecraft.resource.featuretoggle.FeatureSet;
 /**
  * This class allows the entries of {@linkplain ItemGroup item groups} to be modified by the events in {@link ItemGroupEvents}.
  */
-@ApiStatus.Experimental
 public class FabricItemGroupEntries implements ItemGroup.Entries {
 	private final ItemGroup.DisplayContext context;
 	private final List<ItemStack> displayStacks;
