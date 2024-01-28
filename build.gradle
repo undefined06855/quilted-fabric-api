@@ -18,8 +18,8 @@ def ENV = System.getenv()
 version = "$project.version+${ENV.GITHUB_RUN_NUMBER ? '' : 'local-'}$project.upstream_version-${getBranch()}${ENV.SNAPSHOTS_URL ? '-SNAPSHOT' : ''}"
 logger.lifecycle("Building Quilted Fabric API: $version")
 
-
 import net.fabricmc.loom.util.gradle.SourceSetHelper
+import java.util.stream.Collectors
 import groovy.json.JsonSlurper
 
 def getQslModule(String library, String module) {
@@ -773,22 +773,22 @@ publishMods {
 	changelog = "Provides Fabric API ${project.upstream_version}\n" + providers.environmentVariable("CHANGELOG").getOrElse("No changelog provided")
 	type = project.prerelease == "true" ? BETA : STABLE
 	displayName = "[$project.minecraft_version] QFAPI " + project.version.split('\\+')[0] + " and QSL " + project.qsl_version.split('\\+')[0]
-	modLoaders.add("fabric")
+	modLoaders.add("quilt")
 	dryRun = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() == null
 
 	curseforge {
 		accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
-		projectId = "306612"
+		projectId = "634179"
 		minecraftVersions.add(project.curseforge_minecraft_version)
 	}
 	modrinth {
 		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-		projectId = "P7dR8mSH"
+		projectId = "qvIfYCYJ"
 		minecraftVersions.add(project.minecraft_version)
 	}
 	github {
 		accessToken = providers.environmentVariable("GITHUB_TOKEN")
-		repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("FabricMC/dryrun")
+		repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("QuiltMC/dryrun")
 		commitish = providers.environmentVariable("GITHUB_REF_NAME").getOrElse("dryrun")
 	}
 }
@@ -798,8 +798,6 @@ assemble.dependsOn signRemapJar
 project.afterEvaluate {
 	signRemapJar.mustRunAfter optimizeOutputsOfRemapJar
 }
-
-import java.util.stream.Collectors
 
 // A task to ensure that the version being released has not already been released.
 def checkVersion = tasks.register('checkVersion') {

@@ -33,7 +33,6 @@ import net.minecraft.util.thread.ThreadExecutor;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
 import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
@@ -65,7 +64,7 @@ public final class ClientConfigurationNetworking {
 	 * <p>For new code, {@link #registerGlobalReceiver(PacketType, ConfigurationPacketHandler)}
 	 * is preferred, as it is designed in a way that prevents thread safety issues.
 	 *
-	 * @param channelName    the id of the channel
+	 * @param channelName the id of the channel
 	 * @param channelHandler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientConfigurationNetworking#unregisterGlobalReceiver(Identifier)
@@ -82,7 +81,7 @@ public final class ClientConfigurationNetworking {
 	 * <p>If a handler is already registered for the {@code type}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterGlobalReceiver(PacketType)} to unregister the existing handler.
 	 *
-	 * @param type    the packet type
+	 * @param type the packet type
 	 * @param handler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientConfigurationNetworking#unregisterGlobalReceiver(PacketType)
@@ -180,7 +179,7 @@ public final class ClientConfigurationNetworking {
 	 * <p>For example, if you only register a receiver using this method when a {@linkplain ClientLoginNetworking#registerGlobalReceiver(Identifier, ClientLoginNetworking.LoginQueryRequestHandler)}
 	 * login query has been received, you should use {@link ClientPlayConnectionEvents#INIT} to register the channel handler.
 	 *
-	 * @param type    the packet type
+	 * @param type the packet type
 	 * @param handler the handler
 	 * @return {@code false} if a handler is already registered for the type
 	 * @throws IllegalStateException if the client is not connected to a server
@@ -285,7 +284,7 @@ public final class ClientConfigurationNetworking {
 	 * Creates a packet which may be sent to the connected server.
 	 *
 	 * @param channelName the channel name
-	 * @param buf         the packet byte buf which represents the payload of the packet
+	 * @param buf the packet byte buf which represents the payload of the packet
 	 * @return a new packet
 	 */
 	public static Packet<ServerCommonPacketListener> createC2SPacket(Identifier channelName, PacketByteBuf buf) {
@@ -306,7 +305,7 @@ public final class ClientConfigurationNetworking {
 	 * Sends a packet to the connected server.
 	 *
 	 * @param channelName the channel of the packet
-	 * @param buf         the payload of the packet
+	 * @param buf the payload of the packet
 	 * @throws IllegalStateException if the client is not connected to a server
 	 */
 	public static void send(Identifier channelName, PacketByteBuf buf) throws IllegalStateException {
@@ -384,13 +383,12 @@ public final class ClientConfigurationNetworking {
 		 * 	// All operations on the server or world must be executed on the server thread
 		 * 	client.execute(() -> {
 		 * 		client.inGameHud.setOverlayMessage(message, true);
-		 *    });
+		 * 	});
 		 * });
 		 * }</pre>
-		 *
-		 * @param client         the client
-		 * @param handler        the network handler that received this packet
-		 * @param buf            the payload of the packet
+		 *  @param client the client
+		 * @param handler the network handler that received this packet
+		 * @param buf the payload of the packet
 		 * @param responseSender the packet sender
 		 */
 		void receive(MinecraftClient client, ClientConfigurationNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);
@@ -398,7 +396,6 @@ public final class ClientConfigurationNetworking {
 
 	/**
 	 * A thread-safe packet handler utilizing {@link FabricPacket}.
-	 *
 	 * @param <T> the type of the packet
 	 */
 	@FunctionalInterface
@@ -415,7 +412,8 @@ public final class ClientConfigurationNetworking {
 		 * });
 		 * }</pre>
 		 *
-		 * @param packet         the packet
+		 *
+		 * @param packet the packet
 		 * @param responseSender the packet sender
 		 * @see FabricPacket
 		 */

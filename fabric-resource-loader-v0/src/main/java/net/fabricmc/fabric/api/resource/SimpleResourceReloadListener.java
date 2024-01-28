@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +50,7 @@ public interface SimpleResourceReloadListener<T> extends IdentifiableResourceRel
 	@Override
 	default CompletableFuture<Void> reload(ResourceReloader.Synchronizer helper, ResourceManager manager, Profiler loadProfiler, Profiler applyProfiler, Executor loadExecutor, Executor applyExecutor) {
 		return load(manager, loadProfiler, loadExecutor).thenCompose(helper::whenPrepared).thenCompose(
-				(o) -> apply(o, manager, applyProfiler, applyExecutor)
+			(o) -> apply(o, manager, applyProfiler, applyExecutor)
 		);
 	}
 

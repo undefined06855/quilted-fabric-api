@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,8 +59,8 @@ public final class FutureListeners {
 	 *
 	 * @param first  the first future listener
 	 * @param second the second future listener
-	 * @param <A>    the future type of the first listener, used for casting
-	 * @param <B>    the future type of the second listener, used for casting
+	 * @param <A> the future type of the first listener, used for casting
+	 * @param <B> the future type of the second listener, used for casting
 	 * @return the combined future listener.
 	 */
 	// A, B exist just to allow casting

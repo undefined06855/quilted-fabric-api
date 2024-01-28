@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.networking.impl.server.ServerNetworkingImpl;
 
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientCommonPacketListener;
@@ -151,7 +150,7 @@ public final class ServerPlayNetworking {
 	 */
 	@Nullable
 	public static <T extends FabricPacket> PlayPacketHandler<T> unregisterGlobalReceiver(PacketType<T> type) {
-		PlayChannelHandler handler = (PlayChannelHandler) ServerNetworkingImpl.PLAY.unregisterGlobalReceiver(type.getId());
+		PlayChannelHandler handler = (PlayChannelHandler) org.quiltmc.qsl.networking.api.ServerPlayNetworking.unregisterGlobalReceiver(type.getId());
 		return handler instanceof PlayPacketWrapper<?> proxy ? (PlayPacketHandler<T>) proxy.actualHandler() : null;
 	}
 
@@ -319,9 +318,7 @@ public final class ServerPlayNetworking {
 	 * @return {@code true} if the connected client has declared the ability to receive a specific type of packet
 	 */
 	public static boolean canSend(ServerPlayerEntity player, PacketType<?> type) {
-		Objects.requireNonNull(player, "Server player entity cannot be null");
-
-		return canSend(player.networkHandler, type.getId());
+		return org.quiltmc.qsl.networking.api.ServerPlayNetworking.canSend(player, type.getId());
 	}
 
 	/**
@@ -343,10 +340,7 @@ public final class ServerPlayNetworking {
 	 * @return {@code true} if the connected client has declared the ability to receive a specific type of packet
 	 */
 	public static boolean canSend(ServerPlayNetworkHandler handler, PacketType<?> type) {
-		Objects.requireNonNull(handler, "Server play network handler cannot be null");
-		Objects.requireNonNull(type, "Packet type cannot be null");
-
-		return ServerNetworkingImpl.getAddon(handler).getSendableChannels().contains(type.getId());
+		return org.quiltmc.qsl.networking.api.ServerPlayNetworking.canSend(handler, type.getId());
 	}
 
 	/**
@@ -357,9 +351,6 @@ public final class ServerPlayNetworking {
 	 * @return a new packet
 	 */
 	public static Packet<ClientCommonPacketListener> createS2CPacket(Identifier channelName, PacketByteBuf buf) {
-		Objects.requireNonNull(channelName, "Channel cannot be null");
-		Objects.requireNonNull(buf, "Buf cannot be null");
-
 		return org.quiltmc.qsl.networking.api.ServerPlayNetworking.createS2CPacket(channelName, buf);
 	}
 

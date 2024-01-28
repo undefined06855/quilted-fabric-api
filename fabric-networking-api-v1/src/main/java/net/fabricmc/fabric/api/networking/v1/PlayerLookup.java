@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -120,7 +120,7 @@ public final class PlayerLookup {
 	 * <p>The distance check is done in the three-dimensional space instead of in the horizontal plane.
 	 *
 	 * @param world  the world
-	 * @param pos    the position
+	 * @param pos the position
 	 * @param radius the maximum distance from the position in blocks
 	 * @return the players around the position
 	 */

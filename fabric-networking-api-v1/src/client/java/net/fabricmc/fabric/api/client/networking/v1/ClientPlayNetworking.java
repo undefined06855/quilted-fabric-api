@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,7 +68,7 @@ public final class ClientPlayNetworking {
 	 * <p>For new code, {@link #registerGlobalReceiver(PacketType, PlayPacketHandler)}
 	 * is preferred, as it is designed in a way that prevents thread safety issues.
 	 *
-	 * @param channelName    the id of the channel
+	 * @param channelName the id of the channel
 	 * @param channelHandler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientPlayNetworking#unregisterGlobalReceiver(Identifier)
@@ -85,7 +85,7 @@ public final class ClientPlayNetworking {
 	 * <p>If a handler is already registered for the {@code type}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterGlobalReceiver(PacketType)} to unregister the existing handler.
 	 *
-	 * @param type    the packet type
+	 * @param type the packet type
 	 * @param handler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ClientPlayNetworking#unregisterGlobalReceiver(PacketType)
@@ -395,13 +395,13 @@ public final class ClientPlayNetworking {
 		 * 	// All operations on the server or world must be executed on the server thread
 		 * 	client.execute(() -> {
 		 * 		client.inGameHud.setOverlayMessage(message, true);
-		 *    });
+		 * 	});
 		 * });
 		 * }</pre>
 		 *
-		 * @param client         the client
-		 * @param handler        the network handler that received this packet
-		 * @param buf            the payload of the packet
+		 * @param client the client
+		 * @param handler the network handler that received this packet
+		 * @param buf the payload of the packet
 		 * @param responseSender the packet sender
 		 */
 		void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);
@@ -409,7 +409,6 @@ public final class ClientPlayNetworking {
 
 	/**
 	 * A thread-safe packet handler utilizing {@link FabricPacket}.
-	 *
 	 * @param <T> the type of the packet
 	 */
 	@FunctionalInterface

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  * Copyright 2022 The Quilt Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +48,7 @@ public final class ServerLoginNetworking {
 	 * <p>If a handler is already registered to the {@code channel}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterGlobalReceiver(Identifier)} to unregister the existing handler.
 	 *
-	 * @param channelName    the id of the channel
+	 * @param channelName the id of the channel
 	 * @param channelHandler the handler
 	 * @return false if a handler is already registered to the channel
 	 * @see ServerLoginNetworking#unregisterGlobalReceiver(Identifier)
@@ -98,8 +98,8 @@ public final class ServerLoginNetworking {
 	 * <p>If a handler is already registered to the {@code channelName}, this method will return {@code false}, and no change will be made.
 	 * Use {@link #unregisterReceiver(ServerLoginNetworkHandler, Identifier)} to unregister the existing handler.
 	 *
-	 * @param networkHandler  the handler
-	 * @param channelName     the id of the channel
+	 * @param networkHandler the handler
+	 * @param channelName the id of the channel
 	 * @param responseHandler the handler
 	 * @return false if a handler is already registered to the channel name
 	 */
@@ -157,12 +157,11 @@ public final class ServerLoginNetworking {
 		 * Modification to the game should be {@linkplain net.minecraft.util.thread.ThreadExecutor#submit(Runnable) scheduled} using the provided Minecraft client instance.
 		 *
 		 * <p><b>Whether the client understood the query should be checked before reading from the payload of the packet.</b>
-		 *
-		 * @param server         the server
-		 * @param handler        the network handler that received this packet, representing the player/client who sent the response
-		 * @param understood     whether the client understood the packet
-		 * @param buf            the payload of the packet
-		 * @param synchronizer   the synchronizer which may be used to delay log-in till a {@link Future} is completed.
+		 * @param server the server
+		 * @param handler the network handler that received this packet, representing the player/client who sent the response
+		 * @param understood whether the client understood the packet
+		 * @param buf the payload of the packet
+		 * @param synchronizer the synchronizer which may be used to delay log-in till a {@link Future} is completed.
 		 * @param responseSender the packet sender
 		 */
 		void receive(MinecraftServer server, ServerLoginNetworkHandler handler, boolean understood, PacketByteBuf buf, LoginSynchronizer synchronizer, PacketSender responseSender);
@@ -190,7 +189,7 @@ public final class ServerLoginNetworking {
 		 * 	if (!understood) {
 		 * 		handler.disconnect(Text.literal("Only accept clients that can check!"));
 		 * 		return;
-		 *    }
+		 * 	}
 		 *
 		 * 	String checkMessage = buf.readString(32767);
 		 *
@@ -201,10 +200,10 @@ public final class ServerLoginNetworking {
 		 * 		if (!checker.check(handler.getConnectionInfo(), checkMessage)) {
 		 * 			handler.disconnect(Text.literal("Invalid credentials!"));
 		 * 			return;
-		 *        }
+		 * 		}
 		 *
 		 * 		responseSender.send(UPCOMING_CHECK, checker.buildSecondQueryPacket(handler, checkMessage));
-		 *    }));
+		 * 	}));
 		 * });
 		 * }</pre>
 		 * Usually it is enough to pass the return value for {@link net.minecraft.util.thread.ThreadExecutor#submit(Runnable)} for {@code future}.</p>
