@@ -652,7 +652,7 @@ publishing {
 				// Depend on the deprecated BOM to allow opting out of deprecated modules.
 				def depNode = depsNode.appendNode("dependency")
 				depNode.appendNode("groupId", group)
-				depNode.appendNode("artifactId", "fabric-api-deprecated")
+				depNode.appendNode("artifactId", "quilted-fabric-api-deprecated")
 				depNode.appendNode("version", version)
 				depNode.appendNode("scope", "compile")
 			}
