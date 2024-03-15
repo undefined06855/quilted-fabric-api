@@ -17,7 +17,6 @@
 
 package net.fabricmc.fabric.api.transfer.v1.fluid;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.fluid.Fluid;
@@ -47,11 +46,7 @@ import net.fabricmc.fabric.mixin.transfer.BucketItemAccessor;
 
 /**
  * Access to {@link Storage Storage&lt;FluidVariant&gt;} instances.
- *
- * <p><b>Experimental feature</b>, we reserve the right to remove or change it without further notice.
- * The transfer API is a complex addition, and we want to be able to correct possible design mistakes.
  */
-@ApiStatus.Experimental
 public final class FluidStorage {
 	/**
 	 * Sided block access to fluid variant storages.

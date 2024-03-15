@@ -17,6 +17,8 @@
 
 package net.fabricmc.fabric.test.screenhandler.block;
 
+import com.mojang.serialization.MapCodec;
+
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -35,6 +37,11 @@ import net.minecraft.world.World;
 public class BoxBlock extends BlockWithEntity {
 	public BoxBlock(Settings settings) {
 		super(settings);
+	}
+
+	@Override
+	protected MapCodec<? extends BlockWithEntity> getCodec() {
+		throw new UnsupportedOperationException("not implemented yet");
 	}
 
 	@Override

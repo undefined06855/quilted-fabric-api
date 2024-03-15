@@ -28,6 +28,9 @@ import net.minecraft.world.World;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
+/**
+ * Contains server side events triggered by block breaking.
+ */
 public final class PlayerBlockBreakEvents {
 	private PlayerBlockBreakEvents() { }
 
@@ -54,10 +57,11 @@ public final class PlayerBlockBreakEvents {
 	);
 
 	/**
-	 * Callback after a block is broken.
+	 * Callback after a block is broken server side.
 	 *
-	 * <p>Only called on a logical server.
+	 * <p>Only called on a logical server. For client side see {@link net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents#AFTER}
 	 */
+	@SuppressWarnings("JavadocReference")
 	public static final Event<After> AFTER = EventFactory.createArrayBacked(After.class,
 			(listeners) -> (world, player, pos, state, entity) -> {
 				for (After event : listeners) {

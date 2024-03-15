@@ -61,7 +61,7 @@ public final class EntityEventTests implements ModInitializer {
 		Registry.register(Registries.ITEM, new Identifier("fabric-entity-events-v1-testmod", "diamond_elytra"), DIAMOND_ELYTRA);
 
 		ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, entity, killed) -> {
-			LOGGER.info("Entity Killed: {}", killed);
+			LOGGER.info("Entity {} Killed: {}", entity, killed);
 		});
 
 		ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
@@ -113,6 +113,10 @@ public final class EntityEventTests implements ModInitializer {
 
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
 			LOGGER.info("{} died due to {} damage source", entity.getName().getString(), source.getName());
+		});
+
+		ServerLivingEntityEvents.MOB_CONVERSION.register((previous, converted, keepEquipment) -> {
+			LOGGER.info("{} is being converted to {} [{}]", previous.getName().getString(), converted.getName().getString(), keepEquipment);
 		});
 
 		EntitySleepEvents.ALLOW_SLEEPING.register((player, sleepingPos) -> {

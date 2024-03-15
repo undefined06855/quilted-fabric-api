@@ -29,6 +29,7 @@ import net.minecraft.text.Text;
  * Represents a resource pack provider for mods and built-in mods resource packs.
  */
 public class ModResourcePackCreator implements ResourcePackProvider {
+	public static final String FABRIC = "fabric";
 	public static final ResourcePackSource RESOURCE_PACK_SOURCE = new ResourcePackSource() {
 		@Override
 		public Text decorate(Text packName) {
@@ -55,5 +56,7 @@ public class ModResourcePackCreator implements ResourcePackProvider {
 	public void register(Consumer<ResourcePackProfile> consumer) {
 		// This should stay as it's been used in *some* mods, it's bad I know, but it's an easy way to inject resource
 		// packs, it highlights the need for an API.
+
+		throw new RuntimeException("Not Currently implemented in QSL. If your mod uses this, please make a issue at https://github.com/QuiltMC/quilted-fabric-api");
 	}
 }
