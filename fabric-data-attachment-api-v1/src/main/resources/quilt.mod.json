@@ -21,7 +21,7 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "net.fabricmc.fabric.impl.attachment.AttachmentEntrypoint"
+			"main": "net.fabricmc.fabric.impl.attachment.AttachmentEntrypoint"
 		},
 		"depends": [
 			"quilt_loader",

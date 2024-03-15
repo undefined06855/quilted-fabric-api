@@ -46,7 +46,7 @@ class ValidateModuleTask extends DefaultTask {
 			def quiltModJson = new JsonSlurper().parse(quiltModJsonFile)
 
 			def moduleLifecycle = quiltModJson.get("fabric-api:module-lifecycle")
-			validateModuleLifecycle(moduleLifecycle)
+			validateModuleLifecycle(moduleLifecycle, quiltModJson)
 			// TODO - It would be nice if it also ensured that all modules had Mod Menu metadata
 		} else {
 			def fabricModJson = new JsonSlurper().parse(project.file("src/main/resources/quilt.mod.json") as File)
@@ -56,11 +56,11 @@ class ValidateModuleTask extends DefaultTask {
 			}
 
 			def moduleLifecycle = fabricModJson.custom.get("fabric-api:module-lifecycle")
-			validateModuleLifecycle(moduleLifecycle)
+			validateModuleLifecycle(moduleLifecycle, fabricModJson)
 		}
 	}
 
-	def validateModuleLifecycle(moduleLifecycle) {
+	def validateModuleLifecycle(moduleLifecycle, json) {
 		if (moduleLifecycle == null) {
 			throw new GradleException("Module ${project} does not have module lifecycle in custom values!")
 		}
@@ -85,12 +85,8 @@ class ValidateModuleTask extends DefaultTask {
 				throw new GradleException("Module ${project} has an invalid module lifecycle ${json.custom.get('fabric-api:module-lifecycle')}")
 		}
 
-		if (json.depends == null) {
+		if (json.quilt_loader.depends == null) {
 			throw new GradleException("Module ${project} does not have a depends value!")
-		}
-
-		if (json.depends.fabricloader != ">=${project.loader_version}") {
-			throw new GradleException("Module ${project} does not have a valid fabricloader value! Got \"${json.depends.fabricloader}\" but expected \">=${project.loader_version}\"")
 		}
 	}
 }

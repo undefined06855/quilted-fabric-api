@@ -18,7 +18,6 @@ package net.fabricmc.fabric.mixin.item;
 
 import java.util.function.Supplier;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
