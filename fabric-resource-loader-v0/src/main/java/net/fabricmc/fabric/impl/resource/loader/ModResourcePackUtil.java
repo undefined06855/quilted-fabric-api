@@ -21,12 +21,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import net.fabricmc.fabric.api.resource.ModResourcePack;
+
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+
 import org.apache.commons.io.IOUtils;
 
 import net.minecraft.SharedConstants;
@@ -38,6 +44,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Internal utilities for managing resource packs.
  */
@@ -45,6 +53,27 @@ public final class ModResourcePackUtil {
 	public static final Gson GSON = new Gson();
 
 	private ModResourcePackUtil() {
+	}
+
+	/**
+	 * Appends mod resource packs to the given list.
+	 *
+	 * @param packs   the resource pack list to append
+	 * @param type    the type of resource
+	 * @param subPath the resource pack sub path directory in mods, may be {@code null}
+	 */
+	public static void appendModResourcePacks(List<ModResourcePack> packs, ResourceType type, @Nullable String subPath) {
+		for (ModContainer container : FabricLoader.getInstance().getAllMods()) {
+			if (container.getMetadata().getType().equals("builtin")) {
+				continue;
+			}
+
+			ModResourcePack pack = ModNioResourcePack.create(container.getMetadata().getId(), container, subPath, type, ResourcePackActivationType.ALWAYS_ENABLED, true);
+
+			if (pack != null) {
+				packs.add(pack);
+			}
+		}
 	}
 
 	public static boolean containsDefault(String filename, boolean modBundled) {
