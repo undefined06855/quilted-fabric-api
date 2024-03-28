@@ -19,11 +19,7 @@ package net.fabricmc.fabric.impl.resource.loader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import net.fabricmc.fabric.api.resource.ModResourcePack;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +28,8 @@ import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.resource.ResourcePackSource;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
+
+import net.fabricmc.fabric.api.resource.ModResourcePack;
 
 /**
  * Represents a resource pack provider for mods and built-in mods resource packs.
@@ -67,7 +65,6 @@ public class ModResourcePackCreator implements ResourcePackProvider {
 		// This should stay as it's been used in *some* mods, it's bad I know, but it's an easy way to inject resource
 		// packs, it highlights the need for an API.
 
-//		throw new RuntimeException("Not Currently implemented in QSL. If your mod uses this, please make a issue at https://github.com/QuiltMC/quilted-fabric-api");
 		consumer.accept(ResourcePackProfile.create(
 				FABRIC,
 				Text.translatable("pack.name.fabricMods"),
@@ -89,7 +86,6 @@ public class ModResourcePackCreator implements ResourcePackProvider {
 
 		// Register all built-in resource packs provided by mods.
 		org.quiltmc.qsl.resource.loader.impl.ResourceLoaderImpl.registerBuiltinPacks(this.type, consumer);
-
 	}
 
 	private void registerModPack(Consumer<ResourcePackProfile> consumer, @Nullable String subPath) {

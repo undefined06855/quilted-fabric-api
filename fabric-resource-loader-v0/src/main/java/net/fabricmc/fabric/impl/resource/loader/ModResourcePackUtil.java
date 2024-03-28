@@ -28,23 +28,19 @@ import java.util.Optional;
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import net.fabricmc.fabric.api.resource.ModResourcePack;
-
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.metadata.PackResourceMetadata;
 import net.minecraft.text.Text;
 
+import net.fabricmc.fabric.api.resource.ModResourcePack;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal utilities for managing resource packs.

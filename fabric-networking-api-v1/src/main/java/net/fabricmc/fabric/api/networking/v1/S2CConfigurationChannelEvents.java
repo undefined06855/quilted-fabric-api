@@ -24,7 +24,8 @@ import net.minecraft.server.network.ServerConfigurationNetworkHandler;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.impl.base.event.QuiltCompatEvent;
+import net.fabricmc.fabric.impl.networking.QuiltUtils;
 
 /**
  * Offers access to events related to the indication of a connected client's ability to receive packets in certain channels.
@@ -34,21 +35,17 @@ public final class S2CConfigurationChannelEvents {
 	 * An event for the server configuration network handler receiving an update indicating the connected client's ability to receive packets in certain channels.
 	 * This event may be invoked at any time after login and up to disconnection.
 	 */
-	public static final Event<Register> REGISTER = EventFactory.createArrayBacked(Register.class, callbacks -> (handler, sender, server, channels) -> {
-		for (Register callback : callbacks) {
-			callback.onChannelRegister(handler, sender, server, channels);
-		}
-	});
+	public static final Event<Register> REGISTER = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.S2CConfigurationChannelEvents.REGISTER,
+			register -> (handler, sender, server, channels) -> register.onChannelRegister(handler, QuiltUtils.toFabricSender(sender), server, channels),
+			register -> (handler, sender, server, channels) -> register.get().onChannelRegister(handler, QuiltUtils.toQuiltSender(sender), server, channels));
 
 	/**
 	 * An event for the server configuration network handler receiving an update indicating the connected client's lack of ability to receive packets in certain channels.
 	 * This event may be invoked at any time after login and up to disconnection.
 	 */
-	public static final Event<Unregister> UNREGISTER = EventFactory.createArrayBacked(Unregister.class, callbacks -> (handler, sender, server, channels) -> {
-		for (Unregister callback : callbacks) {
-			callback.onChannelUnregister(handler, sender, server, channels);
-		}
-	});
+	public static final Event<Unregister> UNREGISTER = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.S2CConfigurationChannelEvents.UNREGISTER,
+			register -> (handler, sender, server, channels) -> register.onChannelUnregister(handler, QuiltUtils.toFabricSender(sender), server, channels),
+			register -> (handler, sender, server, channels) -> register.get().onChannelUnregister(handler, QuiltUtils.toQuiltSender(sender), server, channels));
 
 	private S2CConfigurationChannelEvents() {
 	}

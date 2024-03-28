@@ -16,9 +16,9 @@
 
 package net.fabricmc.fabric.mixin.biome;
 
-import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
-
 import org.spongepowered.asm.mixin.Mixin;
+
+import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
 
 @Mixin(org.quiltmc.qsl.worldgen.biome.impl.modification.BiomeModificationContextImpl.class)
 public class BiomeModificationContextImplMixin implements BiomeModificationContext {

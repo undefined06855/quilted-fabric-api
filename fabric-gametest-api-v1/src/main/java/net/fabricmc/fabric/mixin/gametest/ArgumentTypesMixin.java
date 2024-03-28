@@ -47,6 +47,11 @@ public abstract class ArgumentTypesMixin {
 		if (FabricGameTestHelper.COMMAND_ENABLED && !SharedConstants.isDevelopment) {
 			register(registry, "test_argument", TestFunctionArgumentType.class, ConstantArgumentSerializer.of(TestFunctionArgumentType::testFunction));
 			register(registry, "test_class", TestClassArgumentType.class, ConstantArgumentSerializer.of(TestClassArgumentType::testClass));
+
+			// TODO: Make sure that QGT only applies when active through a mixin plugin.
+			register(registry, "quilt_game_test:test_name", org.quiltmc.qsl.testing.impl.game.command.TestNameArgumentType.class,
+					ConstantArgumentSerializer.of(org.quiltmc.qsl.testing.impl.game.command.TestNameArgumentType::new)
+			);
 		}
 	}
 }
