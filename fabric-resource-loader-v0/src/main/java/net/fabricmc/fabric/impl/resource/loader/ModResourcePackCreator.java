@@ -17,7 +17,11 @@
 
 package net.fabricmc.fabric.impl.resource.loader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
+
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.resource.ResourcePackProfile;
 import net.minecraft.resource.ResourcePackProvider;
@@ -25,10 +29,15 @@ import net.minecraft.resource.ResourcePackSource;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
 
+import net.fabricmc.fabric.api.resource.ModResourcePack;
+
 /**
  * Represents a resource pack provider for mods and built-in mods resource packs.
  */
 public class ModResourcePackCreator implements ResourcePackProvider {
+	public static final String FABRIC = "fabric";
+	private static final String PROGRAMMER_ART = "programmer_art";
+	private static final String HIGH_CONTRAST = "high_contrast";
 	public static final ResourcePackSource RESOURCE_PACK_SOURCE = new ResourcePackSource() {
 		@Override
 		public Text decorate(Text packName) {
@@ -55,5 +64,51 @@ public class ModResourcePackCreator implements ResourcePackProvider {
 	public void register(Consumer<ResourcePackProfile> consumer) {
 		// This should stay as it's been used in *some* mods, it's bad I know, but it's an easy way to inject resource
 		// packs, it highlights the need for an API.
+
+		consumer.accept(ResourcePackProfile.create(
+				FABRIC,
+				Text.translatable("pack.name.fabricMods"),
+				true,
+				new PlaceholderResourcePack.Factory(this.type),
+				this.type,
+				ResourcePackProfile.InsertionPosition.TOP,
+				RESOURCE_PACK_SOURCE
+		));
+
+		// Build a list of mod resource packs.
+		registerModPack(consumer, null);
+
+		if (this.type == ResourceType.CLIENT_RESOURCES) {
+			// Programmer Art/High Contrast data packs can never be enabled.
+			registerModPack(consumer, PROGRAMMER_ART);
+			registerModPack(consumer, HIGH_CONTRAST);
+		}
+
+		// Register all built-in resource packs provided by mods.
+		org.quiltmc.qsl.resource.loader.impl.ResourceLoaderImpl.registerBuiltinPacks(this.type, consumer);
+	}
+
+	private void registerModPack(Consumer<ResourcePackProfile> consumer, @Nullable String subPath) {
+		List<ModResourcePack> packs = new ArrayList<>();
+		ModResourcePackUtil.appendModResourcePacks(packs, this.type, subPath);
+
+		for (ModResourcePack pack : packs) {
+			Text displayName = subPath == null
+					? Text.translatable("pack.name.fabricMod", pack.getFabricModMetadata().getName())
+					: Text.translatable("pack.name.fabricMod.subPack", pack.getFabricModMetadata().getName(), Text.translatable("resourcePack." + subPath + ".name"));
+			ResourcePackProfile profile = ResourcePackProfile.create(
+					pack.getName(),
+					displayName,
+					subPath == null,
+					new ModResourcePackFactory(pack),
+					this.type,
+					ResourcePackProfile.InsertionPosition.TOP,
+					RESOURCE_PACK_SOURCE
+			);
+
+			if (profile != null) {
+				consumer.accept(profile);
+			}
+		}
 	}
 }

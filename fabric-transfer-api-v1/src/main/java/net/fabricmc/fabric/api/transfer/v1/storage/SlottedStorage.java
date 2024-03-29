@@ -19,7 +19,6 @@ package net.fabricmc.fabric.api.transfer.v1.storage;
 
 import java.util.List;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
@@ -34,11 +33,7 @@ import net.fabricmc.fabric.impl.transfer.TransferApiImpl;
  * Checking whether a storage is slotted can be done using {@code instanceof}.
  *
  * @param <T> The type of the stored resources.
- *
- * <b>Experimental feature</b>, we reserve the right to remove or change it without further notice.
- * The transfer API is a complex addition, and we want to be able to correct possible design mistakes.
  */
-@ApiStatus.Experimental
 public interface SlottedStorage<T> extends Storage<T> {
 	/**
 	 * Retrieve the number of slots in this storage.

@@ -8,7 +8,7 @@ import groovy.json.JsonSlurper
  */
 
 subprojects {
-	if (it.name == "deprecated") {
+	if (it.name == "deprecated" || it.name == "fabric-api-bom" || it.name == "fabric-api-catalog") {
 		return
 	}
 
@@ -46,21 +46,21 @@ class ValidateModuleTask extends DefaultTask {
 			def quiltModJson = new JsonSlurper().parse(quiltModJsonFile)
 
 			def moduleLifecycle = quiltModJson.get("fabric-api:module-lifecycle")
-			validateModuleLifecycle(moduleLifecycle)
+			validateModuleLifecycle(moduleLifecycle, quiltModJson)
 			// TODO - It would be nice if it also ensured that all modules had Mod Menu metadata
 		} else {
-			def fabricModJson = new JsonSlurper().parse(project.file("src/main/resources/fabric.mod.json") as File)
+			def fabricModJson = new JsonSlurper().parse(project.file("src/main/resources/quilt.mod.json") as File)
 
 			if (fabricModJson.custom == null) {
 				throw new GradleException("Module ${project} does not have a custom value containing module lifecycle!")
 			}
 
 			def moduleLifecycle = fabricModJson.custom.get("fabric-api:module-lifecycle")
-			validateModuleLifecycle(moduleLifecycle)
+			validateModuleLifecycle(moduleLifecycle, fabricModJson)
 		}
 	}
 
-	def validateModuleLifecycle(moduleLifecycle) {
+	def validateModuleLifecycle(moduleLifecycle, json) {
 		if (moduleLifecycle == null) {
 			throw new GradleException("Module ${project} does not have module lifecycle in custom values!")
 		}
@@ -83,6 +83,10 @@ class ValidateModuleTask extends DefaultTask {
 				break
 			default:
 				throw new GradleException("Module ${project} has an invalid module lifecycle ${json.custom.get('fabric-api:module-lifecycle')}")
+		}
+
+		if (json.quilt_loader.depends == null) {
+			throw new GradleException("Module ${project} does not have a depends value!")
 		}
 	}
 }

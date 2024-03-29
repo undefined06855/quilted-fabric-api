@@ -341,7 +341,7 @@ public final class ClientConfigurationNetworking {
 				actualHandler.receive(packet, responseSender);
 			} else {
 				client.execute(() -> {
-					if (((org.quiltmc.qsl.networking.mixin.accessor.AbstractServerPacketHandlerAccessor) handler).getConnection().isOpen()) {
+					if (((org.quiltmc.qsl.networking.mixin.accessor.AbstractClientNetworkHandlerAccessor) handler).getConnection().isOpen()) {
 						actualHandler.receive(packet, responseSender);
 					}
 				});

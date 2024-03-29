@@ -33,7 +33,7 @@ public final class DebugMessages {
 	}
 
 	public static String forPlayer(PlayerEntity player) {
-		return player.getEntityName() + "/" + player.getUuidAsString();
+		return player.getDisplayName() + "/" + player.getUuidAsString();
 	}
 
 	public static String forInventory(@Nullable Inventory inventory) {

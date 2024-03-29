@@ -4,6 +4,21 @@ upstream_version = getSubprojectUpstreamVersion(project)
 
 loom {
 	accessWidenerPath = file("src/main/resources/quilted_fabric_gametest_api_v1.accesswidener")
+
+	runs {
+		testmodClient {
+			client()
+			name = "Testmod Client"
+			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/testmod/resources/data/quilted_fabric_gametest_api_v1_testmod/gametest/structures")}"
+
+			ideConfigGenerated = false
+			source sourceSets.testmodClient
+		}
+	}
+}
+
+dependencies {
+	modApi(getQslModule('core', 'testing'))
 }
 
 moduleDependencies(project, [

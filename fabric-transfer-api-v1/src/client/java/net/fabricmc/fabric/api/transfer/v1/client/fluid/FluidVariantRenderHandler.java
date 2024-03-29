@@ -19,7 +19,6 @@ package net.fabricmc.fabric.api.transfer.v1.client.fluid;
 
 import java.util.List;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.item.TooltipContext;
@@ -35,11 +34,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 /**
  * Defines how {@linkplain FluidVariant fluid variants} of a given Fluid should be displayed to clients.
  * Register with {@link FluidVariantRendering#register}.
- *
- * <p><b>Experimental feature</b>, we reserve the right to remove or change it without further notice.
- * The transfer API is a complex addition, and we want to be able to correct possible design mistakes.
  */
-@ApiStatus.Experimental
 public interface FluidVariantRenderHandler {
 	/**
 	 * Append additional tooltips to the passed list if additional information is contained in the fluid variant.

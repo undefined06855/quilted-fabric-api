@@ -17,6 +17,7 @@
 
 package net.fabricmc.fabric.test.lookup;
 
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
@@ -30,6 +31,11 @@ import net.minecraft.world.World;
 public class ChuteBlock extends BlockWithEntity {
 	public ChuteBlock(Settings settings) {
 		super(settings);
+	}
+
+	@Override
+	protected MapCodec<? extends BlockWithEntity> getCodec() {
+		throw new UnsupportedOperationException("not implemented yet");
 	}
 
 	@Nullable

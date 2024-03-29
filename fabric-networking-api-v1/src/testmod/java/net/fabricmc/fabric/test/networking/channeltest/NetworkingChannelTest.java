@@ -106,7 +106,7 @@ public final class NetworkingChannelTest implements ModInitializer {
 			System.out.printf("Received packet on channel %s%n", channel);
 		});
 
-		context.getSource().sendFeedback(() -> Text.literal(String.format("Registered channel %s for %s", channel, executor.getEntityName())), false);
+		context.getSource().sendFeedback(() -> Text.literal(String.format("Registered channel %s for %s", channel, executor.getDisplayName())), false);
 
 		return 1;
 	}
@@ -119,7 +119,7 @@ public final class NetworkingChannelTest implements ModInitializer {
 		}
 
 		ServerPlayNetworking.unregisterReceiver(player.networkHandler, channel);
-		context.getSource().sendFeedback(() -> Text.literal(String.format("Unregistered channel %s for %s", getIdentifier(context, "channel"), player.getEntityName())), false);
+		context.getSource().sendFeedback(() -> Text.literal(String.format("Unregistered channel %s for %s", getIdentifier(context, "channel"), player.getDisplayName())), false);
 
 		return 1;
 	}

@@ -34,6 +34,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectList;
+import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public abstract class SimpleRegistryMixin<T> implements MutableRegistry<T>, Rema
 	private ObjectList<RegistryEntry.Reference<T>> rawIdToEntry;
 	@Shadow
 	@Final
-	private Object2IntMap<T> entryToRawId;
+	private Reference2IntMap<T> entryToRawId;
 	@Shadow
 	@Final
 	private Map<Identifier, RegistryEntry.Reference<T>> idToEntry;

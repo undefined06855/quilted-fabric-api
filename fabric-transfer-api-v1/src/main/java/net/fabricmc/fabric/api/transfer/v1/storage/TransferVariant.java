@@ -19,7 +19,6 @@ package net.fabricmc.fabric.api.transfer.v1.storage;
 
 import java.util.Objects;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.nbt.NbtCompound;
@@ -35,11 +34,7 @@ import net.minecraft.network.PacketByteBuf;
  * {@code hashCode} is guaranteed to be correct and constant time independently of the size of the NBT.
  *
  * @param <O> The type of the immutable object instance, for example {@code Item} or {@code Fluid}.
- *
- * <b>Experimental feature</b>, we reserve the right to remove or change it without further notice.
- * The transfer API is a complex addition, and we want to be able to correct possible design mistakes.
  */
-@ApiStatus.Experimental
 public interface TransferVariant<O> {
 	/**
 	 * Return true if this variant is blank, and false otherwise.

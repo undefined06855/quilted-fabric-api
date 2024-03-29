@@ -17,48 +17,107 @@
 
 package net.fabricmc.fabric.impl.resource.loader;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.resource.metadata.PackResourceMetadata;
 import net.minecraft.text.Text;
 
+import net.fabricmc.fabric.api.resource.ModResourcePack;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 
 /**
  * Internal utilities for managing resource packs.
  */
 public final class ModResourcePackUtil {
-	private static final Gson GSON = new Gson();
+	public static final Gson GSON = new Gson();
 
 	private ModResourcePackUtil() {
 	}
 
-	public static boolean containsDefault(ModMetadata info, String filename) {
-		return "pack.mcmeta".equals(filename);
+	/**
+	 * Appends mod resource packs to the given list.
+	 *
+	 * @param packs   the resource pack list to append
+	 * @param type    the type of resource
+	 * @param subPath the resource pack sub path directory in mods, may be {@code null}
+	 */
+	public static void appendModResourcePacks(List<ModResourcePack> packs, ResourceType type, @Nullable String subPath) {
+		for (ModContainer container : FabricLoader.getInstance().getAllMods()) {
+			if (container.getMetadata().getType().equals("builtin")) {
+				continue;
+			}
+
+			ModResourcePack pack = ModNioResourcePack.create(container.getMetadata().getId(), container, subPath, type, ResourcePackActivationType.ALWAYS_ENABLED, true);
+
+			if (pack != null) {
+				packs.add(pack);
+			}
+		}
 	}
 
-	public static InputStream openDefault(ModMetadata info, ResourceType type, String filename) {
+	public static boolean containsDefault(String filename, boolean modBundled) {
+		return "pack.mcmeta".equals(filename) || (modBundled && "pack.png".equals(filename));
+	}
+
+	public static InputStream getDefaultIcon() throws IOException {
+		Optional<Path> loaderIconPath = FabricLoader.getInstance().getModContainer("fabric-resource-loader-v0")
+				.flatMap(resourceLoaderContainer -> resourceLoaderContainer.getMetadata().getIconPath(512).flatMap(resourceLoaderContainer::findPath));
+
+		if (loaderIconPath.isPresent()) {
+			return Files.newInputStream(loaderIconPath.get());
+		}
+
+		// Should never happen in practice
+		return null;
+	}
+
+	public static InputStream openDefault(ModContainer container, ResourceType type, String filename) throws IOException {
 		switch (filename) {
 		case "pack.mcmeta":
-			String description = Objects.requireNonNullElse(info.getName(), "");
+			String description = Objects.requireNonNullElse(container.getMetadata().getName(), "");
 			String metadata = serializeMetadata(SharedConstants.getGameVersion().getResourceVersion(type), description);
 			return IOUtils.toInputStream(metadata, Charsets.UTF_8);
+		case "pack.png":
+			Optional<Path> path = container.getMetadata().getIconPath(512).flatMap(container::findPath);
+
+			if (path.isPresent()) {
+				return Files.newInputStream(path.get());
+			} else {
+				return getDefaultIcon();
+			}
 		default:
 			return null;
 		}
 	}
 
+	public static PackResourceMetadata getMetadataPack(int packVersion, Text description) {
+		return new PackResourceMetadata(description, packVersion, Optional.empty());
+	}
+
+	public static JsonObject getMetadataPackJson(int packVersion, Text description) {
+		return PackResourceMetadata.SERIALIZER.toJson(getMetadataPack(packVersion, description));
+	}
+
 	public static String serializeMetadata(int packVersion, String description) {
-		JsonObject pack = new JsonObject();
-		pack.addProperty("pack_format", packVersion);
-		pack.addProperty("description", description);
+		// This seems to be still manually deserialized
+		JsonObject pack = getMetadataPackJson(packVersion, Text.literal(description));
 		JsonObject metadata = new JsonObject();
 		metadata.add("pack", pack);
 		return GSON.toJson(metadata);

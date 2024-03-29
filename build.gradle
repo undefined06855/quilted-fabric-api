@@ -4,19 +4,25 @@ plugins {
 	id "idea"
 	id "maven-publish"
 	id 'jacoco'
-	id "org.quiltmc.loom" version "1.4.1" apply false
+	id "org.quiltmc.loom" version "1.5.3" apply false
 	id "dev.yumi.gradle.licenser" version "1.0.+"
 	id "com.diffplug.spotless" version "6.20.0"
 	id "org.ajoberstar.grgit" version "3.1.0"
 	id "me.modmuss50.remotesign" version "0.4.0" apply false
 	id "io.github.p03w.machete" version "2.0.1"
-	id "me.modmuss50.mod-publish-plugin" version "0.4.0"
+	id "me.modmuss50.mod-publish-plugin" version "0.4.5"
 }
 
 def ENV = System.getenv()
 
 version = "$project.version+${ENV.GITHUB_RUN_NUMBER ? '' : 'local-'}$project.upstream_version-${getBranch()}${ENV.SNAPSHOTS_URL ? '-SNAPSHOT' : ''}"
 logger.lifecycle("Building Quilted Fabric API: $version")
+
+def metaProjects = [
+	'deprecated',
+	'fabric-api-bom',
+	'fabric-api-catalog'
+]
 
 import net.fabricmc.loom.util.gradle.SourceSetHelper
 import java.util.stream.Collectors
@@ -131,7 +137,7 @@ allprojects {
 		setupRepositories(repositories)
 	}
 
-	if (it.name == "deprecated") {
+	if (metaProjects.contains(it.name)) {
 		return
 	}
 
@@ -151,6 +157,9 @@ allprojects {
 
 	loom {
 		splitEnvironmentSourceSets()
+		mixin {
+			useLegacyMixinAp = true
+		}
 	}
 
 	sourceSets {
@@ -199,7 +208,7 @@ allprojects {
 	}
 
 	allprojects.each { p ->
-		if (project.name == "deprecated") {
+		if (metaProjects.contains(project.name)) {
 			return
 		}
 
@@ -232,6 +241,9 @@ allprojects {
 	test {
 		useJUnitPlatform()
 
+		// We know we can do this because these tests run in CI
+		systemProperty("loader.side", "SERVER")
+
 		afterEvaluate {
 			// See: https://github.com/FabricMC/fabric-loader/pull/585
 			def classPathGroups = loom.mods.stream()
@@ -250,7 +262,7 @@ allprojects {
 		inputs.property "version", project.version
 		inputs.property "upstream_version", project.upstream_version
 
-		filesMatching(["fabric.mod.json", "quilt.mod.json"]) {
+		filesMatching(["quilt.mod.json", "quilt.mod.json"]) {
 			expand "version": project.version, "upstream_version": project.upstream_version
 		}
 	}
@@ -326,7 +338,7 @@ remapTestmodJar {
 	def testModJarTasks = []
 
 	subprojects {
-		if (it.name == "deprecated" || !(it.file("src/testmod").exists() || it.file("src/testmodClient").exists())) {
+		if (metaProjects.contains(it.name) || !(it.file("src/testmod").exists() || it.file("src/testmodClient").exists())) {
 			return
 		}
 
@@ -367,7 +379,7 @@ javadoc {
 	}
 
 	allprojects.each {
-		if (it.name == "deprecated") {
+		if (metaProjects.contains(it.name)) {
 			return
 		}
 
@@ -543,7 +555,7 @@ def addPomMetadataInformation(Project project, MavenPom pom) {
 }
 
 subprojects {
-	if (it.name == 'deprecated') {
+	if (metaProjects.contains(it.name)) {
 		return
 	}
 
@@ -635,7 +647,7 @@ publishing {
 				}
 				subprojects.each {
 					// The maven BOM containing all of the deprecated modules is added manually below.
-					if (it.path.startsWith(":deprecated")) {
+					if (it.path.startsWith(":deprecated") || metaProjects.contains(it.name)) {
 						return
 					}
 
@@ -690,7 +702,7 @@ void setupRepositories(RepositoryHandler repositories) {
 }
 
 subprojects.each {
-	if (it.name == "deprecated") {
+	if (metaProjects.contains(it.name)) {
 		return
 	}
 
@@ -714,7 +726,7 @@ dependencies {
 			include "$it.moduleGroup:$it.moduleName:$it.moduleVersion"
 		}
 		subprojects.each {
-			if (it.name == "deprecated") {
+			if (metaProjects.contains(it.name)) {
 				return
 			}
 
@@ -748,7 +760,7 @@ java.util.stream.Stream<ResolvedDependency> getAllQslModules() {
 remapJar {
 	afterEvaluate {
 		subprojects.each {
-			if (it.name in devOnlyModules || it.name == "deprecated") {
+			if (it.name in devOnlyModules || metaProjects.contains(it.name)) {
 				return
 			}
 

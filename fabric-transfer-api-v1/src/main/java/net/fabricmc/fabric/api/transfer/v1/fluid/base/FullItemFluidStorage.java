@@ -19,8 +19,6 @@ package net.fabricmc.fabric.api.transfer.v1.fluid.base;
 
 import java.util.function.Function;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import net.minecraft.item.Item;
 
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
@@ -38,11 +36,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
  * however there is a second constructor that allows customizing the mapping.
  *
  * <p>This is used similarly to {@link EmptyItemFluidStorage}.
- *
- * <p><b>Experimental feature</b>, we reserve the right to remove or change it without further notice.
- * The transfer API is a complex addition, and we want to be able to correct possible design mistakes.
  */
-@ApiStatus.Experimental
 public final class FullItemFluidStorage implements ExtractionOnlyStorage<FluidVariant>, SingleSlotStorage<FluidVariant> {
 	private final ContainerItemContext context;
 	private final Item fullItem;
