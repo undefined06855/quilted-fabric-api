@@ -241,6 +241,9 @@ allprojects {
 	test {
 		useJUnitPlatform()
 
+		// We know we can do this because these tests run in CI
+		systemProperty("loader.side", "SERVER")
+
 		afterEvaluate {
 			// See: https://github.com/FabricMC/fabric-loader/pull/585
 			def classPathGroups = loom.mods.stream()

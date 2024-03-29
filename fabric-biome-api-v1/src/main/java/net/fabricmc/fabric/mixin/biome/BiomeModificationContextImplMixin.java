@@ -22,4 +22,4 @@ import org.spongepowered.asm.mixin.Mixin;
 import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
 
 @Mixin(BiomeModificationContextImpl.class)
-public class BiomeModificationContextImplMixin implements BiomeModificationContext { }
+public abstract class BiomeModificationContextImplMixin implements BiomeModificationContext { }
