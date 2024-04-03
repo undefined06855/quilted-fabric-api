@@ -18,6 +18,7 @@
 package net.fabricmc.fabric.api.item.v1;
 
 import org.jetbrains.annotations.Nullable;
+import org.quiltmc.qsl.item.setting.api.RecipeRemainderLocation;
 import org.quiltmc.qsl.item.setting.api.RecipeRemainderLogicHandler;
 
 import net.minecraft.item.FoodComponent;
@@ -39,7 +40,7 @@ public interface FabricItemStack {
 	 * @return the leftover item
 	 */
 	default ItemStack getRecipeRemainder() {
-		return RecipeRemainderLogicHandler.getRemainder((ItemStack) (Object) this, null);
+		return RecipeRemainderLogicHandler.getRemainder((ItemStack) (Object) this, null, RecipeRemainderLocation.DEFAULT_LOCATIONS);
 	}
 
 	/**
