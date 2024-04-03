@@ -24,6 +24,9 @@ def metaProjects = [
 	'fabric-api-catalog'
 ]
 
+// uncomment to use local dependencies
+//allprojects { repositories { mavenLocal() } }
+
 import net.fabricmc.loom.util.gradle.SourceSetHelper
 import java.util.stream.Collectors
 import groovy.json.JsonSlurper
@@ -676,7 +679,7 @@ publishing {
 loom.disableDeprecatedPomGeneration(publishing.publications.mavenJava)
 
 void setupRepositories(RepositoryHandler repositories) {
-	//repositories.mavenLocal() // uncomment for testing
+	repositories.mavenLocal() // uncomment for testing
 	def ENV = System.getenv()
 	if (ENV.MAVEN_URL) {
 		repositories.maven {
