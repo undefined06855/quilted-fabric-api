@@ -38,7 +38,10 @@
 	},
 	"mixin": [
 		"quilted_fabric_object_builder_api_v1.mixins.json",
-		"quilted_fabric_object_builder_api_v1.client.mixins.json"
+		{
+			"config": "quilted_fabric_object_builder_api_v1.client.mixins.json",
+			"environment": "client"
+		}
 	],
 	"access_widener": "quilted_fabric_object_builder_api_v1.accesswidener",
 	"fabric-api:module-lifecycle": "deprecated",
@@ -47,6 +50,12 @@
 			"library"
 		],
 		"parent": "quilted_fabric_api"
+	},
+	"quilt_loom": {
+		"injected_interfaces": {
+			"net/minecraft/class_1299\u0024class_1300": ["net/fabricmc/fabric/api/object/builder/v1/entity/FabricEntityType\u0024Builder<TT;>"],
+			"net/minecraft/class_2591\u0024class_2592": ["net/fabricmc/fabric/api/object/builder/v1/block/entity/FabricBlockEntityType\u0024Builder<TT;>"]
+		}
 	}
 }
 

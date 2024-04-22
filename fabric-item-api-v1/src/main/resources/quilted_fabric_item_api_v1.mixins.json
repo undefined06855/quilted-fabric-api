@@ -3,9 +3,20 @@
   "package": "net.fabricmc.fabric.mixin.item",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "RecipeRemainderLogicHandler",
+    "AnvilScreenHandlerMixin",
+    "BlockItemMixin",
+    "CatEntityMixin",
+    "CookingRecipeJsonBuilderMixin",
+    "EnchantCommandMixin",
+    "EnchantmentHelperMixin",
+    "EnchantRandomlyLootFunctionMixin",
+    "FoxEntityMixin",
+    "HungerManagerMixin",
     "ItemMixin",
-    "ItemStackMixin"
+    "ItemPredicateMixin",
+    "ItemStackMixin",
+    "RecipeRemainderLogicHandler",
+    "WolfEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
