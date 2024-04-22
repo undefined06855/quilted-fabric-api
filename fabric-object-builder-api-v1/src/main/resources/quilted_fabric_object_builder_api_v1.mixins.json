@@ -7,8 +7,15 @@
     "quilt.QuiltEntityTypeBuilderMobAccessor",
     "AbstractBlockAccessor",
     "AbstractBlockSettingsAccessor",
+    "BlockEntityTypeBuilderMixin",
+    "DefaultAttributeRegistryAccessor",
+    "DefaultAttributeRegistryMixin",
+    "DetectorRailBlockMixin",
+    "EntityTypeBuilderMixin",
+    "EntityTypeMixin",
     "MinecartComparatorLogicMixin",
-    "PersistentStateManagerMixin"
+    "PersistentStateManagerMixin",
+    "TradeOffersTypeAwareBuyForOneEmeraldFactoryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

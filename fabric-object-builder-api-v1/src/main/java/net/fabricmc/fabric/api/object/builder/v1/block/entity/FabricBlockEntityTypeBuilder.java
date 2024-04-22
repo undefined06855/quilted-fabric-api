@@ -47,6 +47,10 @@ public final class FabricBlockEntityTypeBuilder<T extends BlockEntity> {
 		this.blocks = blocks;
 	}
 
+	/**
+	 * @deprecated Use {@link BlockEntityType.Builder#create(BlockEntityType.BlockEntityFactory, Block...)}.
+	 */
+	@Deprecated
 	public static <T extends BlockEntity> FabricBlockEntityTypeBuilder<T> create(Factory<? extends T> factory, Block... blocks) {
 		List<Block> blocksList = new ArrayList<>(blocks.length);
 		Collections.addAll(blocksList, blocks);
@@ -59,7 +63,9 @@ public final class FabricBlockEntityTypeBuilder<T extends BlockEntity> {
 	 *
 	 * @param block the supported block
 	 * @return this builder
+	 * @deprecated Use {@link BlockEntityType.Builder#create(BlockEntityType.BlockEntityFactory, Block...)}.
 	 */
+	@Deprecated
 	public FabricBlockEntityTypeBuilder<T> addBlock(Block block) {
 		this.blocks.add(block);
 		return this;
@@ -70,22 +76,36 @@ public final class FabricBlockEntityTypeBuilder<T extends BlockEntity> {
 	 *
 	 * @param blocks the supported blocks
 	 * @return this builder
+	 * @deprecated Use {@link BlockEntityType.Builder#create(BlockEntityType.BlockEntityFactory, Block...)}.
 	 */
+	@Deprecated
 	public FabricBlockEntityTypeBuilder<T> addBlocks(Block... blocks) {
 		Collections.addAll(this.blocks, blocks);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link BlockEntityType.Builder#build()}.
+	 */
+	@Deprecated
 	public BlockEntityType<T> build() {
 		return build(null);
 	}
 
+	/**
+	 * @deprecated Use {@link BlockEntityType.Builder#build(Type)}.
+	 */
+	@Deprecated
 	public BlockEntityType<T> build(Type<?> type) {
 		return BlockEntityType.Builder.<T>create(factory::create, blocks.toArray(new Block[0]))
 				.build(type);
 	}
 
+	/**
+	 * @deprecated Use {@link BlockEntityType.BlockEntityFactory}.
+	 */
 	@FunctionalInterface
+	@Deprecated
 	public interface Factory<T extends BlockEntity> {
 		T create(BlockPos blockPos, BlockState blockState);
 	}

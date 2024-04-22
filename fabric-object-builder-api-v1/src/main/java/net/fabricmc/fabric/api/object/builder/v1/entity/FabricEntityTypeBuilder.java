@@ -18,6 +18,7 @@
 package net.fabricmc.fabric.api.object.builder.v1.entity;
 
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import com.google.common.collect.ImmutableSet;
 import org.quiltmc.qsl.entity.extensions.api.QuiltEntityTypeBuilder;
@@ -61,7 +62,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * @param <T> the type of entity
 	 *
 	 * @return a new entity type builder
+	 * @deprecated use {@link EntityType.Builder#create(SpawnGroup)}
 	 */
+	@Deprecated
 	public static <T extends Entity> FabricEntityTypeBuilder<T> create() {
 		return create(SpawnGroup.MISC);
 	}
@@ -73,7 +76,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * @param <T> the type of entity
 	 *
 	 * @return a new entity type builder
+	 * @deprecated use {@link EntityType.Builder#create(SpawnGroup)}
 	 */
+	@Deprecated
 	public static <T extends Entity> FabricEntityTypeBuilder<T> create(SpawnGroup spawnGroup) {
 		return create(spawnGroup, FabricEntityTypeBuilder::emptyFactory);
 	}
@@ -86,7 +91,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * @param <T> the type of entity
 	 *
 	 * @return a new entity type builder
+	 * @deprecated use {@link EntityType.Builder#create(EntityType.EntityFactory, SpawnGroup)}
 	 */
+	@Deprecated
 	public static <T extends Entity> FabricEntityTypeBuilder<T> create(SpawnGroup spawnGroup, EntityType.EntityFactory<T> factory) {
 		return new FabricEntityTypeBuilder<>(spawnGroup, factory);
 	}
@@ -99,7 +106,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * @param <T> the type of entity
 	 *
 	 * @return a new living entity type builder
+	 * @deprecated use {@link FabricEntityType.Builder#createLiving(UnaryOperator)}
 	 */
+	@Deprecated
 	public static <T extends LivingEntity> FabricEntityTypeBuilder.Living<T> createLiving() {
 		return new FabricEntityTypeBuilder.Living<>(SpawnGroup.MISC, FabricEntityTypeBuilder::emptyFactory);
 	}
@@ -110,6 +119,7 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * @param <T> the type of entity
 	 *
 	 * @return a new mob entity type builder
+	 * @deprecated use {@link FabricEntityType.Builder#createMob(UnaryOperator)}
 	 */
 	public static <T extends MobEntity> FabricEntityTypeBuilder.Mob<T> createMob() {
 		return new FabricEntityTypeBuilder.Mob<>(SpawnGroup.MISC, FabricEntityTypeBuilder::emptyFactory);
@@ -119,11 +129,13 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 		return null;
 	}
 
+	@Deprecated
 	public FabricEntityTypeBuilder<T> spawnGroup(SpawnGroup group) {
 		this.quiltBuilder.spawnGroup(group);
 		return this;
 	}
 
+	@Deprecated
 	public <N extends T> FabricEntityTypeBuilder<N> entityFactory(EntityType.EntityFactory<N> factory) {
 		this.quiltBuilder.entityFactory(factory);
 		return (FabricEntityTypeBuilder<N>) this;
@@ -133,12 +145,18 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * Whether this entity type is summonable using the {@code /summon} command.
 	 *
 	 * @return this builder for chaining
+	 * @deprecated use {@link EntityType.Builder#disableSummon()}
 	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> disableSummon() {
 		this.quiltBuilder.disableSummon();
 		return this;
 	}
 
+	/**
+	 * @deprecated use {@link EntityType.Builder#disableSaving()}
+	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> disableSaving() {
 		this.quiltBuilder.disableSaving();
 		return this;
@@ -148,7 +166,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * Sets this entity type to be fire immune.
 	 *
 	 * @return this builder for chaining
+	 * @deprecated use {@link EntityType.Builder#makeFireImmune()}
 	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> fireImmune() {
 		this.quiltBuilder.makeFireImmune();
 		return this;
@@ -158,7 +178,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * Sets whether this entity type can be spawned far away from a player.
 	 *
 	 * @return this builder for chaining
+	 * @deprecated use {@link EntityType.Builder#spawnableFarFromPlayer()}
 	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> spawnableFarFromPlayer() {
 		this.quiltBuilder.spawnableFarFromPlayer();
 		return this;
@@ -170,7 +192,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * @param dimensions the dimensions representing the entity's size
 	 *
 	 * @return this builder for chaining
+	 * @deprecated use {@link EntityType.Builder#setDimensions(float, float)}
 	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> dimensions(EntityDimensions dimensions) {
 		this.quiltBuilder.setDimensions(dimensions);
 		return this;
@@ -201,7 +225,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * @param range the tracking range in chunks
 	 *
 	 * @return this builder for chaining
+	 * @deprecated use {@link FabricEntityTypeBuilder#trackRangeBlocks(int)}
 	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> trackRangeChunks(int range) {
 		this.quiltBuilder.maxChunkTrackingRange(range);
 		return this;
@@ -213,16 +239,26 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * @param range the tracking range in blocks
 	 *
 	 * @return this builder for chaining
+	 * @deprecated use {@link FabricEntityTypeBuilder#trackRangeChunks(int)}
 	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> trackRangeBlocks(int range) {
 		return trackRangeChunks((range + 15) / 16);
 	}
 
+	/**
+	 * @deprecated use {@link FabricEntityTypeBuilder#trackRangeBlocks(int)}
+	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> trackedUpdateRate(int rate) {
 		this.quiltBuilder.trackingTickInterval(rate);
 		return this;
 	}
 
+	/**
+	 * @deprecated use {@link FabricEntityTypeBuilder#trackRangeBlocks(int)}
+	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> forceTrackedVelocityUpdates(boolean forceTrackedVelocityUpdates) {
 		this.quiltBuilder.alwaysUpdateVelocity(forceTrackedVelocityUpdates);
 		return this;
@@ -233,7 +269,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 *
 	 * @param blocks the blocks the entity can spawn on
 	 * @return this builder for chaining
+	 * @deprecated use {@link EntityType.Builder#allowSpawningInside(Block...)}
 	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> specificSpawnBlocks(Block... blocks) {
 		this.quiltBuilder.allowSpawningInside(blocks);
 		return this;
@@ -244,7 +282,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * the entity cannot be spawned, and existing ones will despawn immediately.
 	 * @param requiredFeatures the features
 	 * @return this builder for chaining
+	 * @deprecated use {@link EntityType.Builder#requires(FeatureFlag...)}
 	 */
+	@Deprecated
 	public FabricEntityTypeBuilder<T> requires(FeatureFlag... requiredFeatures) {
 		this.quiltBuilder.requiredFlags(requiredFeatures);
 		return this;
@@ -254,7 +294,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 	 * Creates the entity type.
 	 *
 	 * @return a new {@link EntityType}
+	 * @deprecated use {@link EntityType.Builder#build()}
 	 */
+	@Deprecated
 	public EntityType<T> build() {
 		return this.quiltBuilder.build();
 	}
@@ -385,12 +427,15 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 		 *
 		 * @param defaultAttributeBuilder a function to generate the default attribute builder from the entity type
 		 * @return this builder for chaining
+		 * @deprecated use {@link FabricEntityType.Builder.Living#defaultAttributes(Supplier)}
 		 */
+		@Deprecated
 		public FabricEntityTypeBuilder.Living<T> defaultAttributes(Supplier<DefaultAttributeContainer.Builder> defaultAttributeBuilder) {
 			this.quiltBuilder.defaultAttributes(defaultAttributeBuilder.get());
 			return this;
 		}
 
+		@Deprecated
 		@Override
 		public EntityType<T> build() {
 			return this.quiltBuilder.build();
@@ -520,7 +565,9 @@ public class FabricEntityTypeBuilder<T extends Entity> {
 		 * <p>This is used by mobs to determine whether Minecraft should spawn an entity within a certain context.
 		 *
 		 * @return this builder for chaining.
+		 * @deprecated use {@link FabricEntityType.Builder.Mob#spawnRestriction(SpawnRestriction.Location, Heightmap.Type, SpawnRestriction.SpawnPredicate)}
 		 */
+		@Deprecated
 		public FabricEntityTypeBuilder.Mob<T> spawnRestriction(SpawnRestriction.Location location, Heightmap.Type heightmap, SpawnRestriction.SpawnPredicate<T> spawnPredicate) {
 			this.quiltBuilder.spawnRestriction(location, heightmap, spawnPredicate);
 			return this;
