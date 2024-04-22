@@ -46,9 +46,9 @@ public final class ClientConfigurationConnectionEvents {
 	 *
 	 * <p>No packets should be sent when this event is invoked.
 	 */
-	public static final Event<ClientConfigurationConnectionEvents.Ready> READY = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientConfigurationConnectionEvents.READY,
-			init -> (handler, sender, client) -> init.onConfigurationReady(handler, client),
-			invokerGetter -> (handler, client) -> invokerGetter.get().onConfigurationReady(handler, org.quiltmc.qsl.networking.impl.client.ClientNetworkingImpl.getClientConfigurationAddon(), client)
+	public static final Event<ClientConfigurationConnectionEvents.Ready> READY = QuiltCompatEvent.fromQuilt(org.quiltmc.qsl.networking.api.client.ClientConfigurationConnectionEvents.CONFIGURED,
+			init -> init::onConfigurationReady,
+			invokerGetter -> invokerGetter.get()::onConfigured
 	);
 
 	/**
